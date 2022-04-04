@@ -9,6 +9,8 @@ import androidx.lifecycle.ViewModelProvider
 import com.saverio.finapp.MainActivity
 import com.saverio.finapp.databinding.FragmentHomeBinding
 import com.saverio.finapp.db.ChaptersModel
+import com.saverio.finapp.db.QuizzesModel
+import com.saverio.finapp.db.SectionsModel
 
 class HomeFragment : Fragment() {
 
@@ -33,29 +35,49 @@ class HomeFragment : Fragment() {
         binding.button.setOnClickListener {
             //SHOW
 
-            println("Checking")
+            //println("Checking")
             (activity as MainActivity).checkChapters()
-            println("Checked")
+            (activity as MainActivity).checkSections()
+            (activity as MainActivity).checkQuizzes()
+            //println("Checked")
         }
         binding.button2.setOnClickListener {
             //SHOW
 
-            println("Showing")
+            //println("Showing")
             val allChapters = (activity as MainActivity).getChapters()
             allChapters.forEach {
                 println("${it.chapter} | ${it.title}")
             }
-            println("Shown")
+            val allSections = (activity as MainActivity).getSections()
+            allSections.forEach {
+                println("${it.section} | ${it.title}")
+            }
+            val allQuizzes = (activity as MainActivity).getQuizzes()
+            allQuizzes.forEach {
+                println("${it.id} | ${it.question}")
+            }
+            //println("Shown")
         }
         binding.button3.setOnClickListener {
             //DELETE
 
-            println("Deleting")
+            //println("Deleting")
             val allChapters = (activity as MainActivity).getChapters()
             allChapters.forEach {
                 (activity as MainActivity).delete(ChaptersModel(it.chapter, null))
             }
-            println("Deleted")
+            val allSections = (activity as MainActivity).getSections()
+            allSections.forEach {
+                (activity as MainActivity).delete(SectionsModel(it.section, null, null, null, null))
+            }
+            val allQuizzes = (activity as MainActivity).getQuizzes()
+            allQuizzes.forEach {
+                (activity as MainActivity).delete(
+                    QuizzesModel(it.id, null, null, null, null, null, null, null)
+                )
+            }
+            //println("Deleted")
         }
         return root
     }
