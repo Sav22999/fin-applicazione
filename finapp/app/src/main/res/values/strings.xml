@@ -6,7 +6,11 @@
     <string name="title_settings">Settings</string>
     <string name="title_account">Account</string>
 
-    <string name="check_element">Check element</string>
+    <string name="load_database">Load database</string>
+    <string name="check_database">Check database</string>
+    <string name="show_database">Show database</string>
+    <string name="update_database">Update database</string>
+    <string name="delete_database">Delete database</string>
 
     <!-- Preference Titles -->
     <string name="messages_header">Messages</string>

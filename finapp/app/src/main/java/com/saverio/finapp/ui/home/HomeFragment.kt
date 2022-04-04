@@ -4,13 +4,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.saverio.finapp.MainActivity
-import com.saverio.finapp.R
 import com.saverio.finapp.databinding.FragmentHomeBinding
+import com.saverio.finapp.db.ChaptersModel
 
 class HomeFragment : Fragment() {
 
@@ -31,22 +29,34 @@ class HomeFragment : Fragment() {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        val textView: TextView = binding.textHome
-        textView.text = getText(R.string.title_home)
+        //TODO: Don't work the following methods
+        binding.button.setOnClickListener {
+            //SHOW
 
-        val button: Button = binding.button
-        button.text = getText(R.string.check_element)
-        button.setOnClickListener {
-            println("-------------------")
-            try {
-                val main = (activity as MainActivity)
-                main.getChapters("2")
-            } catch (e: Exception) {
-                error(e.toString())
-            }
-
+            println("Checking")
+            (activity as MainActivity).checkChapters()
+            println("Checked")
         }
+        binding.button2.setOnClickListener {
+            //SHOW
 
+            println("Showing")
+            val allChapters = (activity as MainActivity).getChapters()
+            allChapters.forEach {
+                println("${it.chapter} | ${it.title}")
+            }
+            println("Shown")
+        }
+        binding.button3.setOnClickListener {
+            //DELETE
+
+            println("Deleting")
+            val allChapters = (activity as MainActivity).getChapters()
+            allChapters.forEach {
+                (activity as MainActivity).delete(ChaptersModel(it.chapter, null))
+            }
+            println("Deleted")
+        }
         return root
     }
 
