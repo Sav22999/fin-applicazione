@@ -33,7 +33,7 @@ class HomeFragment : Fragment() {
 
         //TODO: Don't work the following methods
         binding.button.setOnClickListener {
-            //SHOW
+            //CHECK
 
             //println("Checking")
             (activity as MainActivity).checkChapters()
