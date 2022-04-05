@@ -12,6 +12,8 @@
     <string name="update_database">Update database</string>
     <string name="delete_database">Delete database</string>
 
+    <string name="no_news_available_text">No news are available. Please, swipe down to refresh the page.</string>
+
     <!-- Preference Titles -->
     <string name="messages_header">Messages</string>
     <string name="sync_header">Sync</string>

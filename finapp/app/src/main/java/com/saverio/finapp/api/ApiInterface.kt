@@ -1,6 +1,7 @@
 package com.saverio.finapp.api
 
 import com.saverio.finapp.api.chapters.ChaptersList
+import com.saverio.finapp.api.news.NewsList
 import com.saverio.finapp.api.quizzes.QuizzesList
 import com.saverio.finapp.api.sections.SectionsList
 import retrofit2.Call
@@ -22,4 +23,10 @@ interface ApiInterface {
         @Query("chapter") chapter: String = "",
         @Query("question") question: String = ""
     ): Call<QuizzesList>
+
+    @GET("news/get")
+    fun getNewsInfo(
+        @Query("type") type: String = "",
+        @Query("limit") limit: String = ""
+    ): Call<NewsList>
 }

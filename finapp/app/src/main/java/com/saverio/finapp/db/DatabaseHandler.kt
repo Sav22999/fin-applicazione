@@ -34,12 +34,24 @@ class DatabaseHandler(context: Context) :
         query = "CREATE TABLE `${TABLE_NAME_QUIZZES}` (" +
                 "  `${COLUMN_ID_PK_QUIZZES}` INT NOT NULL PRIMARY KEY," +
                 "  `${COLUMN_CHAPTER_INDEX_QUIZZES}` INT NOT NULL," +
-                "  `${COLUMN_QUESTION_QUIZZES}`  NOT NULL," +
+                "  `${COLUMN_QUESTION_QUIZZES}` TEXT NOT NULL," +
                 "  `${COLUMN_A_QUIZZES}` TEXT NOT NULL," +
                 "  `${COLUMN_B_QUIZZES}` TEXT NOT NULL," +
                 "  `${COLUMN_C_QUIZZES}` TEXT NOT NULL," +
                 "  `${COLUMN_D_QUIZZES}` TEXT NOT NULL," +
                 "  `${COLUMN_CORRECT_QUIZZES}` VARCHAR(5) NOT NULL" +
+                ")"
+        database.execSQL(query)
+
+        //Create "news" table
+        query = "CREATE TABLE `${TABLE_NAME_NEWS}` (" +
+                "  `${COLUMN_ID_PK_NEWS}` INT NOT NULL PRIMARY KEY," +
+                "  `${COLUMN_TYPE_NEWS}` INT NOT NULL," +
+                "  `${COLUMN_DATE_NEWS}` VARCHAR(50) NOT NULL," +
+                "  `${COLUMN_TITLE_NEWS}` TEXT NOT NULL," +
+                "  `${COLUMN_IMAGE_NEWS}` TEXT NOT NULL," +
+                "  `${COLUMN_LINK_NEWS}` TEXT NOT NULL," +
+                "  `${COLUMN_TEXT_NEWS}` TEXT NOT NULL" +
                 ")"
         database.execSQL(query)
     }
@@ -405,10 +417,146 @@ class DatabaseHandler(context: Context) :
     }
     //End || Quizzes
 
+
+    //News
+    fun addNews(news: NewsModel): Long {
+        val database = writableDatabase
+
+        val contentValues = ContentValues()
+        contentValues.put(COLUMN_ID_PK_NEWS, news.id)
+        contentValues.put(COLUMN_TYPE_NEWS, news.type)
+        contentValues.put(COLUMN_DATE_NEWS, news.date)
+        if (news.title == null) contentValues.put(COLUMN_TITLE_NEWS, "NULL")
+        else contentValues.put(COLUMN_TITLE_NEWS, news.title)
+        if (news.image == null) contentValues.put(COLUMN_IMAGE_NEWS, "NULL")
+        else contentValues.put(COLUMN_IMAGE_NEWS, news.image)
+        if (news.link == null) contentValues.put(COLUMN_LINK_NEWS, "NULL")
+        else contentValues.put(COLUMN_LINK_NEWS, news.link)
+        contentValues.put(COLUMN_TEXT_NEWS, news.text)
+        val success = database.insert(TABLE_NAME_NEWS, null, contentValues)
+        database.close()
+
+        return success
+    }
+
+    @SuppressLint("Range")
+    fun getNews(): ArrayList<NewsModel> {
+        val newsList = ArrayList<NewsModel>()
+        val query = "SELECT * FROM `${TABLE_NAME_NEWS}`"
+        val database = readableDatabase
+        var cursor: Cursor? = null
+
+        try {
+            cursor = database.rawQuery(query, null)
+        } catch (e: SQLException) {
+            database.execSQL(query)
+            return ArrayList()
+        }
+
+        if (cursor.moveToFirst()) {
+            do {
+                val id = cursor.getInt(cursor.getColumnIndex(COLUMN_ID_PK_NEWS))
+                val type = cursor.getInt(cursor.getColumnIndex(COLUMN_TYPE_NEWS))
+                val date = cursor.getString(cursor.getColumnIndex(COLUMN_DATE_NEWS))
+                val title = cursor.getString(cursor.getColumnIndex(COLUMN_TITLE_NEWS))
+                val image = cursor.getString(cursor.getColumnIndex(COLUMN_IMAGE_NEWS))
+                val link = cursor.getString(cursor.getColumnIndex(COLUMN_LINK_NEWS))
+                val text = cursor.getString(cursor.getColumnIndex(COLUMN_TEXT_NEWS))
+
+                val newsToAdd = NewsModel(
+                    id = id,
+                    type = type,
+                    date = date,
+                    title = title,
+                    image = image,
+                    link = link,
+                    text = text
+                )
+                newsList.add(newsToAdd)
+            } while (cursor.moveToNext())
+        }
+        return newsList
+    }
+
+    @SuppressLint("Range")
+    fun getNews(id: Int): NewsModel {
+        var newsToReturn = NewsModel(id, 0, "", null, null, null, "")
+        val query =
+            "SELECT * FROM `${TABLE_NAME_NEWS}` WHERE `${COLUMN_ID_PK_NEWS}` = $id"
+        val database = readableDatabase
+        var cursor: Cursor? = null
+
+        try {
+            cursor = database.rawQuery(query, null)
+        } catch (e: SQLException) {
+            database.execSQL(query)
+            return newsToReturn
+        }
+
+        if (cursor.moveToFirst()) {
+            val id = cursor.getInt(cursor.getColumnIndex(COLUMN_ID_PK_NEWS))
+            val type = cursor.getInt(cursor.getColumnIndex(COLUMN_TYPE_NEWS))
+            val date = cursor.getString(cursor.getColumnIndex(COLUMN_DATE_NEWS))
+            val title = cursor.getString(cursor.getColumnIndex(COLUMN_TITLE_NEWS))
+            val image = cursor.getString(cursor.getColumnIndex(COLUMN_IMAGE_NEWS))
+            val link = cursor.getString(cursor.getColumnIndex(COLUMN_LINK_NEWS))
+            val text = cursor.getString(cursor.getColumnIndex(COLUMN_TEXT_NEWS))
+            newsToReturn.id = id
+            newsToReturn.type = type
+            newsToReturn.date = date
+            newsToReturn.title = title
+            newsToReturn.image = image
+            newsToReturn.link = link
+            newsToReturn.text = text
+        }
+        return newsToReturn
+    }
+
+    fun updateNews(news: NewsModel): Int {
+        val database = writableDatabase
+
+        val contentValues = ContentValues()
+        contentValues.put(COLUMN_ID_PK_NEWS, news.id)
+        contentValues.put(COLUMN_TYPE_NEWS, news.type)
+        contentValues.put(COLUMN_DATE_NEWS, news.date)
+        if (news.title == null) contentValues.put(COLUMN_TITLE_NEWS, "NULL")
+        else contentValues.put(COLUMN_TITLE_NEWS, news.title)
+        if (news.image == null) contentValues.put(COLUMN_IMAGE_NEWS, "NULL")
+        else contentValues.put(COLUMN_IMAGE_NEWS, news.image)
+        if (news.link == null) contentValues.put(COLUMN_LINK_NEWS, "NULL")
+        else contentValues.put(COLUMN_LINK_NEWS, news.link)
+        contentValues.put(COLUMN_TEXT_NEWS, news.text)
+
+        val success = database.update(
+            TABLE_NAME_NEWS,
+            contentValues,
+            "$COLUMN_ID_PK_NEWS = '${news.id}'",
+            null
+        ) //we need the primary key to update a record
+        database.close()
+        return success
+    }
+
+    fun deleteNews(news: NewsModel): Int {
+        val database = writableDatabase
+        val contentValues = ContentValues()
+        contentValues.put(COLUMN_ID_PK_NEWS, news.id)
+        //this is not necessary because we need only the primary key
+
+        val success = database.delete(
+            TABLE_NAME_NEWS,
+            "$COLUMN_ID_PK_NEWS = '${news.id}'",
+            null
+        )
+        database.close()
+        return success
+    }
+    //End || News
+
     companion object {
         //general
         private val DATABASE_NAME = "QuizNuoto"
-        private val DATABASE_VERSION = 4 //TODO: change this manually
+        private val DATABASE_VERSION = 5 //TODO: change this manually
 
         //chapters table
         public val TABLE_NAME_CHAPTERS = "chapters"
@@ -433,5 +581,15 @@ class DatabaseHandler(context: Context) :
         public val COLUMN_C_QUIZZES = "C"
         public val COLUMN_D_QUIZZES = "D"
         public val COLUMN_CORRECT_QUIZZES = "correct"
+
+        //news table
+        public val TABLE_NAME_NEWS = "news"
+        public val COLUMN_ID_PK_NEWS = "id"
+        public val COLUMN_TYPE_NEWS = "type"
+        public val COLUMN_DATE_NEWS = "date"
+        public val COLUMN_TITLE_NEWS = "title"
+        public val COLUMN_IMAGE_NEWS = "image"
+        public val COLUMN_LINK_NEWS = "link"
+        public val COLUMN_TEXT_NEWS = "text"
     }
 }

@@ -7,6 +7,7 @@ import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
@@ -14,13 +15,13 @@ import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.saverio.finapp.api.ApiClient
 import com.saverio.finapp.api.chapters.ChaptersList
+import com.saverio.finapp.api.news.NewsList
 import com.saverio.finapp.api.quizzes.QuizzesList
 import com.saverio.finapp.api.sections.SectionsList
 import com.saverio.finapp.databinding.ActivityMainBinding
-import com.saverio.finapp.db.ChaptersModel
-import com.saverio.finapp.db.DatabaseHandler
-import com.saverio.finapp.db.QuizzesModel
-import com.saverio.finapp.db.SectionsModel
+import com.saverio.finapp.db.*
+import com.saverio.finapp.ui.home.HomeFragment
+import com.saverio.finapp.ui.home.HomeViewModel
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -52,10 +53,19 @@ class MainActivity : AppCompatActivity() {
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
 
+        val homeViewModel =
+            ViewModelProvider(this).get(HomeViewModel::class.java)
+        /*homeViewModel.newsChanged.observe(this) { o ->
+            if (o) {
+                println("Changed! MM")
+            }
+        }*/
+
         if (checkForInternetConnection(this)) {
             checkChapters("")
             checkSections("", "")
             checkQuizzes("", "")
+            checkNews("", "")
         } else {
             //println("Internet is not available")
         }
@@ -120,13 +130,10 @@ class MainActivity : AppCompatActivity() {
                             //Data are updated server-side, so I update data saved in the local database
                             //println("Updating")
                             setVariable(DATETIME_CHAPTERS_PREF, chaptersList.lastUpdate?.datetime)
-
-                            var counter = 0
-                            chaptersList.chapters?.forEach {
+                            chaptersList.chapters?.forEachIndexed { counter, it ->
                                 if (chaptersSaved[counter].title != it.title) {
                                     update(ChaptersModel(it.chapter, it.title))
                                 }
-                                counter++
                             }
                             //println("Updated")
                         } else {
@@ -180,9 +187,7 @@ class MainActivity : AppCompatActivity() {
                             //Data are updated server-side, so I update data saved in the local database
                             //println("Updating")
                             setVariable(DATETIME_SECTIONS_PREF, sectionsList.lastUpdate?.datetime)
-
-                            var counter = 0
-                            sectionsList.sections?.forEach {
+                            sectionsList.sections?.forEachIndexed { counter, it ->
                                 if (sectionsSaved[counter].chapter != it.chapter || sectionsSaved[counter].title != it.title || sectionsSaved[counter].author != it.author || sectionsSaved[counter].text != it.text) {
                                     update(
                                         SectionsModel(
@@ -194,7 +199,6 @@ class MainActivity : AppCompatActivity() {
                                         )
                                     )
                                 }
-                                counter++
                             }
                             //println("Updated")
                         } else {
@@ -259,9 +263,7 @@ class MainActivity : AppCompatActivity() {
                             //Data are updated server-side, so I update data saved in the local database
                             //println("Updating")
                             setVariable(DATETIME_QUIZZES_PREF, quizzesList.lastUpdate?.datetime)
-
-                            var counter = 0
-                            quizzesList.questions?.forEach {
+                            quizzesList.questions?.forEachIndexed { counter, it ->
                                 if (quizzesSaved[counter].chapter != it.chapter || quizzesSaved[counter].question != it.question || quizzesSaved[counter].A != it.A || quizzesSaved[counter].B != it.B || quizzesSaved[counter].C != it.C || quizzesSaved[counter].D != it.D || quizzesSaved[counter].correct != it.correct) {
                                     update(
                                         QuizzesModel(
@@ -276,7 +278,6 @@ class MainActivity : AppCompatActivity() {
                                         )
                                     )
                                 }
-                                counter++
                             }
                             //println("Updated")
                         } else {
@@ -289,6 +290,98 @@ class MainActivity : AppCompatActivity() {
             override fun onFailure(call: Call<QuizzesList>?, t: Throwable?) {
                 //progerssProgressDialog.dismiss()
                 Log.v("Error", t.toString())
+            }
+
+        })
+    }
+
+    fun checkNews(type: String = "", limit: String = "") {
+        val newsSaved = getNews()
+
+        val datetimeSaved = getVariable(DATETIME_NEWS_PREF)
+        if (datetimeSaved != null) {
+            //println("Saved (News): $datetimeSaved")
+        } else {
+            //println("Not yet saved")
+        }
+        val homeViewModel =
+            ViewModelProvider(this@MainActivity).get(HomeViewModel::class.java)
+
+        homeViewModel.setLoading(load = true)
+        println("Started loading")
+
+        val call: Call<NewsList> =
+            ApiClient.getClient.getNewsInfo(type = type, limit = limit)
+        call.enqueue(object : Callback<NewsList> {
+
+            override fun onResponse(
+                call: Call<NewsList>?,
+                response: Response<NewsList>?
+            ) {
+                //println("Response:\n" + response!!.body()!!)
+                homeViewModel.setLoading(load = false)
+                println("Loaded")
+                if (response!!.isSuccessful && response.body() != null) {
+                    val newsList = response.body()!!
+
+                    if (newsSaved.isEmpty()) {
+                        //First time download data from server
+                        //println("Adding")
+                        setVariable(DATETIME_NEWS_PREF, newsList.lastUpdate?.datetime)
+                        newsList.news?.forEach {
+                            add(
+                                NewsModel(
+                                    it.id,
+                                    it.type,
+                                    it.date,
+                                    it.title,
+                                    it.image,
+                                    it.link,
+                                    it.text
+                                )
+                            )
+                        }
+                        homeViewModel.setNewsChanged(changed = true)
+                        //println("Changing")
+                        //println("Added")
+                    } else {
+                        if (datetimeSaved == null || datetimeSaved != newsList.lastUpdate?.datetime) {
+                            //Data are updated server-side, so I update data saved in the local database
+                            //println("Updating")
+                            setVariable(DATETIME_NEWS_PREF, newsList.lastUpdate?.datetime)
+
+                            newsList.news?.forEachIndexed { counter, it ->
+                                if (newsSaved[counter].type != it.type || newsSaved[counter].date != it.date || newsSaved[counter].title != it.title || newsSaved[counter].image != it.image || newsSaved[counter].link != it.link || newsSaved[counter].text != it.text) {
+                                    update(
+                                        NewsModel(
+                                            it.id,
+                                            it.type,
+                                            it.date,
+                                            it.title,
+                                            it.image,
+                                            it.link,
+                                            it.text
+                                        )
+                                    )
+                                }
+                            }
+                            //println("Updated")
+                            homeViewModel.setNewsChanged(changed = true)
+                            //println("Changing")
+                        } else {
+                            //println("Already updated")
+                            homeViewModel.setNewsChanged(changed = false)
+                            //println("(Not) changing")
+                        }
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<NewsList>?, t: Throwable?) {
+                //progerssProgressDialog.dismiss()
+                Log.v("Error", t.toString())
+                homeViewModel.setLoading(load = false)
+                println("Loaded")
             }
 
         })
@@ -329,6 +422,19 @@ class MainActivity : AppCompatActivity() {
                 //println("${quiz.id}|${quiz.question} added correctly")
             } else {
                 //println("${quiz.id}|${quiz.question} NOT added correctly")
+            }
+        }
+    }
+
+    private fun add(news: NewsModel) {
+        //add || news
+        val databaseHandler = DatabaseHandler(this)
+        if (news.id != 0 && news.type != -1 && news.text != "") {
+            val status = databaseHandler.addNews(news)
+            if (status > -1) {
+                //println("${news.id}|${news.type}|${news.text} added correctly")
+            } else {
+                //println("${news.id}|${news.type}|${news.text} NOT added correctly")
             }
         }
     }
@@ -375,6 +481,20 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun update(news: NewsModel) {
+        //update || news
+        val databaseHandler = DatabaseHandler(this)
+        if (news.id != 0 && news.type != -1 && news.date != "" && news.text != "") {
+            val oldNews = databaseHandler.getNews(id = news.id)
+            val status = databaseHandler.updateNews(news)
+            if (status > -1) {
+                //println("${oldNews.id}|${oldNews.type}|${oldNews.text} updated correctly with ${news.id}|${news.type}|${news.text}")
+            } else {
+                //println("${news.id}|${news.type}|${news.text} NOT updated correctly")
+            }
+        }
+    }
+
     fun delete(chapter: ChaptersModel) {
         //delete || chapter
         val databaseHandler = DatabaseHandler(this)
@@ -414,6 +534,19 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    fun delete(news: NewsModel) {
+        //delete || news
+        val databaseHandler = DatabaseHandler(this)
+        if (news.id != 0) {
+            val status = databaseHandler.deleteNews(news)
+            if (status > -1) {
+                //println("${news.id} deleted correctly")
+            } else {
+                //println("${news.id} NOT deleted correctly")
+            }
+        }
+    }
+
     fun getChapters(): ArrayList<ChaptersModel> {
         //get all chapters
         val databaseHandler = DatabaseHandler(this)
@@ -432,6 +565,12 @@ class MainActivity : AppCompatActivity() {
         return databaseHandler.getQuizzes()
     }
 
+    fun getNews(): ArrayList<NewsModel> {
+        //get all news
+        val databaseHandler = DatabaseHandler(this)
+        return databaseHandler.getNews()
+    }
+
     private fun setVariable(variable: String, value: String?) {
         getPreferences(MODE_PRIVATE).edit().putString(variable, value).apply()
     }
@@ -444,5 +583,6 @@ class MainActivity : AppCompatActivity() {
         const val DATETIME_CHAPTERS_PREF = "DATETIME_CHAPTERS_PREF"
         const val DATETIME_SECTIONS_PREF = "DATETIME_SECTIONS_PREF"
         const val DATETIME_QUIZZES_PREF = "DATETIME_QUIZZES_PREF"
+        const val DATETIME_NEWS_PREF = "DATETIME_NEWS_PREF"
     }
 }

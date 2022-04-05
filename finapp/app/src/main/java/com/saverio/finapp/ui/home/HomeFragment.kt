@@ -1,14 +1,23 @@
 package com.saverio.finapp.ui.home
 
+import android.graphics.Color
 import android.os.Bundle
+import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.saverio.finapp.MainActivity
+import com.saverio.finapp.R
 import com.saverio.finapp.databinding.FragmentHomeBinding
 import com.saverio.finapp.db.ChaptersModel
+import com.saverio.finapp.db.NewsModel
 import com.saverio.finapp.db.QuizzesModel
 import com.saverio.finapp.db.SectionsModel
 
@@ -19,6 +28,7 @@ class HomeFragment : Fragment() {
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
+    lateinit var swipeRefreshLayout: SwipeRefreshLayout
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -26,36 +36,55 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         val homeViewModel =
-            ViewModelProvider(this).get(HomeViewModel::class.java)
+            ViewModelProvider(requireActivity()).get(HomeViewModel::class.java)
 
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        //TODO: Don't work the following methods
+        val main = activity as MainActivity
+        swipeRefreshLayout = binding.swipeRefreshLayout
+        homeViewModel.newsChanged.observe(requireActivity()) { o ->
+            if (o) {
+                setupRecyclerView(main)
+            }
+        }
+        homeViewModel.loading.observe(requireActivity()) { o ->
+            swipeRefreshLayout.isRefreshing = o
+        }
+
+        swipeRefreshLayout.setColorSchemeColors(
+            ContextCompat.getColor(
+                requireContext(),
+                R.color.white
+            )
+        )
+
+        var number = 0;
+        swipeRefreshLayout.setOnRefreshListener {
+            checkNews(main)
+            checkLoading()
+        }
+        setupRecyclerView(main)
+        Handler().postDelayed(Runnable {
+            if (main.checkForInternetConnection(requireContext())) {
+                checkNews(main)
+            }
+        }, 1000)
+
         binding.button.setOnClickListener {
             //CHECK
 
             //println("Checking")
-            (activity as MainActivity).checkChapters()
-            (activity as MainActivity).checkSections()
-            (activity as MainActivity).checkQuizzes()
+            (activity as MainActivity).checkNews()
             //println("Checked")
         }
         binding.button2.setOnClickListener {
             //SHOW
 
             //println("Showing")
-            val allChapters = (activity as MainActivity).getChapters()
-            allChapters.forEach {
-                println("${it.chapter} | ${it.title}")
-            }
-            val allSections = (activity as MainActivity).getSections()
-            allSections.forEach {
-                println("${it.section} | ${it.title}")
-            }
-            val allQuizzes = (activity as MainActivity).getQuizzes()
-            allQuizzes.forEach {
-                println("${it.id} | ${it.question}")
+            val allNews = (activity as MainActivity).getNews()
+            allNews.forEach {
+                println("${it.id} | ${it.type} | ${it.text}")
             }
             //println("Shown")
         }
@@ -63,18 +92,10 @@ class HomeFragment : Fragment() {
             //DELETE
 
             //println("Deleting")
-            val allChapters = (activity as MainActivity).getChapters()
-            allChapters.forEach {
-                (activity as MainActivity).delete(ChaptersModel(it.chapter, null))
-            }
-            val allSections = (activity as MainActivity).getSections()
-            allSections.forEach {
-                (activity as MainActivity).delete(SectionsModel(it.section, null, null, null, null))
-            }
-            val allQuizzes = (activity as MainActivity).getQuizzes()
-            allQuizzes.forEach {
+            val allNews = (activity as MainActivity).getNews()
+            allNews.forEach {
                 (activity as MainActivity).delete(
-                    QuizzesModel(it.id, null, null, null, null, null, null, null)
+                    NewsModel(it.id, 0, "", null, null, null, "")
                 )
             }
             //println("Deleted")
@@ -85,5 +106,43 @@ class HomeFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    fun checkLoading() {
+        val homeViewModel =
+            ViewModelProvider(requireActivity()).get(HomeViewModel::class.java)
+        if (homeViewModel.loading.value == false) {
+            swipeRefreshLayout.isRefreshing = false
+        } else {
+            Handler().postDelayed(Runnable {
+                checkLoading()
+            }, 1000)
+        }
+    }
+
+    fun checkNews(main: MainActivity) {
+        Handler().postDelayed(
+            {
+                checkNews(main)
+            },
+            (60000 * 10)
+        ) //(1minute*10)=10 minutes (in milliseconds)  60000milliseconds=1minute//TODO
+        main.checkNews()
+    }
+
+    fun setupRecyclerView(main: MainActivity) {
+        if (main.getNews().size > 0) {
+            binding.noNewsAvailableText.visibility = View.GONE
+            binding.newsItemsList.visibility = View.VISIBLE
+
+            binding.newsItemsList.layoutManager = LinearLayoutManager(requireContext())
+            //binding.newsItemsList.setHasFixedSize(true)
+            val itemAdapter = ItemAdapter(requireContext(), main.getNews())
+            binding.newsItemsList.adapter = itemAdapter
+
+        } else {
+            binding.noNewsAvailableText.visibility = View.VISIBLE
+            binding.newsItemsList.visibility = View.GONE
+        }
     }
 }

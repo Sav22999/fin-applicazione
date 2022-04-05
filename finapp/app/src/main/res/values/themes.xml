@@ -15,5 +15,13 @@
         <item name="android:windowBackground">@color/white</item>
         <item name="android:colorBackground">@color/darkwhite</item>
         <item name="actionBarSize">1dp</item>
+        <item name="swipeRefreshLayoutProgressSpinnerBackgroundColor">@color/primary</item>
+    </style>
+
+    <style name="NoActionBar">
+        <item name="windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowContentOverlay">@null</item>
     </style>
 </resources>
