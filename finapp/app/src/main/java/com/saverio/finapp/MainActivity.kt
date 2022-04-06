@@ -25,6 +25,8 @@ import com.saverio.finapp.ui.home.HomeViewModel
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 class MainActivity : AppCompatActivity() {
@@ -131,8 +133,10 @@ class MainActivity : AppCompatActivity() {
                             //println("Updating")
                             setVariable(DATETIME_CHAPTERS_PREF, chaptersList.lastUpdate?.datetime)
                             chaptersList.chapters?.forEachIndexed { counter, it ->
-                                if (chaptersSaved[counter].title != it.title) {
+                                if (chaptersSaved.size > (counter + 1) && (chaptersSaved[counter].title != it.title)) {
                                     update(ChaptersModel(it.chapter, it.title))
+                                } else {
+                                    add(ChaptersModel(it.chapter, it.title))
                                 }
                             }
                             //println("Updated")
@@ -188,8 +192,18 @@ class MainActivity : AppCompatActivity() {
                             //println("Updating")
                             setVariable(DATETIME_SECTIONS_PREF, sectionsList.lastUpdate?.datetime)
                             sectionsList.sections?.forEachIndexed { counter, it ->
-                                if (sectionsSaved[counter].chapter != it.chapter || sectionsSaved[counter].title != it.title || sectionsSaved[counter].author != it.author || sectionsSaved[counter].text != it.text) {
+                                if (sectionsSaved.size > (counter + 1) && (sectionsSaved[counter].chapter != it.chapter || sectionsSaved[counter].title != it.title || sectionsSaved[counter].author != it.author || sectionsSaved[counter].text != it.text)) {
                                     update(
+                                        SectionsModel(
+                                            it.id,
+                                            it.chapter,
+                                            it.title,
+                                            it.author,
+                                            it.text
+                                        )
+                                    )
+                                } else {
+                                    add(
                                         SectionsModel(
                                             it.id,
                                             it.chapter,
@@ -264,8 +278,21 @@ class MainActivity : AppCompatActivity() {
                             //println("Updating")
                             setVariable(DATETIME_QUIZZES_PREF, quizzesList.lastUpdate?.datetime)
                             quizzesList.questions?.forEachIndexed { counter, it ->
-                                if (quizzesSaved[counter].chapter != it.chapter || quizzesSaved[counter].question != it.question || quizzesSaved[counter].A != it.A || quizzesSaved[counter].B != it.B || quizzesSaved[counter].C != it.C || quizzesSaved[counter].D != it.D || quizzesSaved[counter].correct != it.correct) {
+                                if (quizzesSaved.size > (counter + 1) && (quizzesSaved[counter].chapter != it.chapter || quizzesSaved[counter].question != it.question || quizzesSaved[counter].A != it.A || quizzesSaved[counter].B != it.B || quizzesSaved[counter].C != it.C || quizzesSaved[counter].D != it.D || quizzesSaved[counter].correct != it.correct)) {
                                     update(
+                                        QuizzesModel(
+                                            it.id,
+                                            it.chapter,
+                                            it.question,
+                                            it.A,
+                                            it.B,
+                                            it.C,
+                                            it.D,
+                                            it.correct
+                                        )
+                                    )
+                                } else {
+                                    add(
                                         QuizzesModel(
                                             it.id,
                                             it.chapter,
@@ -308,7 +335,7 @@ class MainActivity : AppCompatActivity() {
             ViewModelProvider(this@MainActivity).get(HomeViewModel::class.java)
 
         homeViewModel.setLoading(load = true)
-        println("Started loading")
+        //println("Started loading")
 
         val call: Call<NewsList> =
             ApiClient.getClient.getNewsInfo(type = type, limit = limit)
@@ -320,7 +347,7 @@ class MainActivity : AppCompatActivity() {
             ) {
                 //println("Response:\n" + response!!.body()!!)
                 homeViewModel.setLoading(load = false)
-                println("Loaded")
+                //println("Loaded")
                 if (response!!.isSuccessful && response.body() != null) {
                     val newsList = response.body()!!
 
@@ -351,8 +378,20 @@ class MainActivity : AppCompatActivity() {
                             setVariable(DATETIME_NEWS_PREF, newsList.lastUpdate?.datetime)
 
                             newsList.news?.forEachIndexed { counter, it ->
-                                if (newsSaved[counter].type != it.type || newsSaved[counter].date != it.date || newsSaved[counter].title != it.title || newsSaved[counter].image != it.image || newsSaved[counter].link != it.link || newsSaved[counter].text != it.text) {
+                                if (newsSaved.size > (counter + 1) && (newsSaved[counter].type != it.type || newsSaved[counter].date != it.date || newsSaved[counter].title != it.title || newsSaved[counter].image != it.image || newsSaved[counter].link != it.link || newsSaved[counter].text != it.text)) {
                                     update(
+                                        NewsModel(
+                                            it.id,
+                                            it.type,
+                                            it.date,
+                                            it.title,
+                                            it.image,
+                                            it.link,
+                                            it.text
+                                        )
+                                    )
+                                } else {
+                                    add(
                                         NewsModel(
                                             it.id,
                                             it.type,
@@ -381,7 +420,7 @@ class MainActivity : AppCompatActivity() {
                 //progerssProgressDialog.dismiss()
                 Log.v("Error", t.toString())
                 homeViewModel.setLoading(load = false)
-                println("Loaded")
+                //println("Loaded")
             }
 
         })

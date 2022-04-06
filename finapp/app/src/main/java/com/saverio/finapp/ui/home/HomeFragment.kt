@@ -69,7 +69,7 @@ class HomeFragment : Fragment() {
             if (main.checkForInternetConnection(requireContext())) {
                 checkNews(main)
             }
-        }, 1000)
+        }, 500)
 
         binding.button.setOnClickListener {
             //CHECK

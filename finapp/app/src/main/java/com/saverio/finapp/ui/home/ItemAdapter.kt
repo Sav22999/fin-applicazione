@@ -31,6 +31,7 @@ class ItemAdapter(private val context: Context, private val items: ArrayList<New
 
         holder.button.text = item.id.toString()
 
+
         /*
         holder.cardView.setOnTouchListener(
             View.OnTouchListener { view, event ->
@@ -58,6 +59,7 @@ class ItemAdapter(private val context: Context, private val items: ArrayList<New
                         }
                     }
                     MotionEvent.ACTION_UP -> {
+                        //Go back to the start position when the action is up
                         val POSITION_TO_ARRIVE_WITH_ERROR =
                             POSITION_TO_ARRIVE - (POSITION_TO_ARRIVE / 25)
                         if (view.x <= POSITION_TO_ARRIVE_WITH_ERROR) {
@@ -98,8 +100,8 @@ class ItemAdapter(private val context: Context, private val items: ArrayList<New
         //val background = view.
         val button: Button = view.findViewById(R.id.button5)
         val cardView: CardView = view.findViewById(R.id.cardView)
-        val constraintLayoutRecycler: ConstraintLayout =
-            view.findViewById(R.id.constraintLayoutRecycler)
+        val constraintLayoutRecyclerCard: ConstraintLayout =
+            view.findViewById(R.id.constraintLayoutRecyclerCard)
     }
 
     companion object {
