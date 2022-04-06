@@ -442,7 +442,7 @@ class DatabaseHandler(context: Context) :
     @SuppressLint("Range")
     fun getNews(): ArrayList<NewsModel> {
         val newsList = ArrayList<NewsModel>()
-        val query = "SELECT * FROM `${TABLE_NAME_NEWS}`"
+        val query = "SELECT * FROM `${TABLE_NAME_NEWS}` ORDER BY `${COLUMN_DATE_NEWS}` DESC, `${COLUMN_ID_PK_NEWS}` DESC"
         val database = readableDatabase
         var cursor: Cursor? = null
 
@@ -482,7 +482,7 @@ class DatabaseHandler(context: Context) :
     fun getNews(id: Int): NewsModel {
         var newsToReturn = NewsModel(id, 0, "", null, null, null, "")
         val query =
-            "SELECT * FROM `${TABLE_NAME_NEWS}` WHERE `${COLUMN_ID_PK_NEWS}` = $id"
+            "SELECT * FROM `${TABLE_NAME_NEWS}` WHERE `${COLUMN_ID_PK_NEWS}` = $id ORDER BY `${COLUMN_DATE_NEWS}` DESC, `${COLUMN_ID_PK_NEWS}` DESC"
         val database = readableDatabase
         var cursor: Cursor? = null
 
@@ -510,6 +510,27 @@ class DatabaseHandler(context: Context) :
             newsToReturn.text = text
         }
         return newsToReturn
+    }
+
+    @SuppressLint("Range")
+    fun checkNews(id: Int): Boolean {
+        var returnValue = false
+        val query =
+            "SELECT * FROM `${TABLE_NAME_NEWS}` WHERE `${COLUMN_ID_PK_NEWS}` = $id"
+        val database = readableDatabase
+        var cursor: Cursor? = null
+
+        try {
+            cursor = database.rawQuery(query, null)
+        } catch (e: SQLException) {
+            database.execSQL(query)
+            return returnValue
+        }
+
+        if (cursor.moveToFirst()) {
+            returnValue = true
+        }
+        return returnValue
     }
 
     fun updateNews(news: NewsModel): Int {

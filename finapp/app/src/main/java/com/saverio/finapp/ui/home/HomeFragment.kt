@@ -45,7 +45,7 @@ class HomeFragment : Fragment() {
         swipeRefreshLayout = binding.swipeRefreshLayout
         homeViewModel.newsChanged.observe(requireActivity()) { o ->
             if (o) {
-                setupRecyclerView(main)
+                setupRecyclerView(main, clear = true)
             }
         }
         homeViewModel.loading.observe(requireActivity()) { o ->
@@ -64,7 +64,7 @@ class HomeFragment : Fragment() {
             checkNews(main)
             checkLoading()
         }
-        setupRecyclerView(main)
+        setupRecyclerView(main, clear = true)
         Handler().postDelayed(Runnable {
             if (main.checkForInternetConnection(requireContext())) {
                 checkNews(main)
@@ -126,11 +126,12 @@ class HomeFragment : Fragment() {
                 checkNews(main)
             },
             (60000 * 10)
-        ) //(1minute*10)=10 minutes (in milliseconds)  60000milliseconds=1minute//TODO
+        ) //(1minute*10)=10 minutes (in milliseconds)  60000milliseconds=1minute
         main.checkNews()
     }
 
-    fun setupRecyclerView(main: MainActivity) {
+    fun setupRecyclerView(main: MainActivity, clear: Boolean = false) {
+        if (clear) println("Try to clear")
         if (main.getNews().size > 0) {
             binding.noNewsAvailableText.visibility = View.GONE
             binding.newsItemsList.visibility = View.VISIBLE

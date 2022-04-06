@@ -20,12 +20,10 @@ import com.saverio.finapp.api.quizzes.QuizzesList
 import com.saverio.finapp.api.sections.SectionsList
 import com.saverio.finapp.databinding.ActivityMainBinding
 import com.saverio.finapp.db.*
-import com.saverio.finapp.ui.home.HomeFragment
 import com.saverio.finapp.ui.home.HomeViewModel
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.util.*
 import kotlin.collections.ArrayList
 
 
@@ -378,7 +376,7 @@ class MainActivity : AppCompatActivity() {
                             setVariable(DATETIME_NEWS_PREF, newsList.lastUpdate?.datetime)
 
                             newsList.news?.forEachIndexed { counter, it ->
-                                if (newsSaved.size > (counter + 1) && (newsSaved[counter].type != it.type || newsSaved[counter].date != it.date || newsSaved[counter].title != it.title || newsSaved[counter].image != it.image || newsSaved[counter].link != it.link || newsSaved[counter].text != it.text)) {
+                                if (newsSaved.size > (counter + 1) && checkNews(it.id) && (newsSaved[counter].type != it.type || newsSaved[counter].date != it.date || newsSaved[counter].title != it.title || newsSaved[counter].image != it.image || newsSaved[counter].link != it.link || newsSaved[counter].text != it.text)) {
                                     update(
                                         NewsModel(
                                             it.id,
@@ -608,6 +606,12 @@ class MainActivity : AppCompatActivity() {
         //get all news
         val databaseHandler = DatabaseHandler(this)
         return databaseHandler.getNews()
+    }
+
+    fun checkNews(id: Int): Boolean {
+        //get all news
+        val databaseHandler = DatabaseHandler(this)
+        return databaseHandler.checkNews(id = id)
     }
 
     private fun setVariable(variable: String, value: String?) {
