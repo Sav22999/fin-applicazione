@@ -131,7 +131,7 @@ class HomeFragment : Fragment() {
     }
 
     fun setupRecyclerView(main: MainActivity, clear: Boolean = false) {
-        if (clear) println("Try to clear")
+        if (clear) binding.newsItemsList.adapter = null
         if (main.getNews().size > 0) {
             binding.noNewsAvailableText.visibility = View.GONE
             binding.newsItemsList.visibility = View.VISIBLE
@@ -140,7 +140,6 @@ class HomeFragment : Fragment() {
             //binding.newsItemsList.setHasFixedSize(true)
             val itemAdapter = ItemAdapter(requireContext(), main.getNews())
             binding.newsItemsList.adapter = itemAdapter
-
         } else {
             binding.noNewsAvailableText.visibility = View.VISIBLE
             binding.newsItemsList.visibility = View.GONE

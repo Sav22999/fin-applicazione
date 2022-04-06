@@ -442,7 +442,8 @@ class DatabaseHandler(context: Context) :
     @SuppressLint("Range")
     fun getNews(): ArrayList<NewsModel> {
         val newsList = ArrayList<NewsModel>()
-        val query = "SELECT * FROM `${TABLE_NAME_NEWS}` ORDER BY `${COLUMN_DATE_NEWS}` DESC, `${COLUMN_ID_PK_NEWS}` DESC"
+        val query =
+            "SELECT * FROM `${TABLE_NAME_NEWS}` ORDER BY `${COLUMN_DATE_NEWS}` DESC, `${COLUMN_ID_PK_NEWS}` DESC"
         val database = readableDatabase
         var cursor: Cursor? = null
 
