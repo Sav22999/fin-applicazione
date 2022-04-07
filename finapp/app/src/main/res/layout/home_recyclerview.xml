@@ -2,21 +2,20 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/linearLayout"
+    android:id="@+id/linearLayoutNews"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constraintLayoutRecycler"
+        android:id="@+id/constraintLayoutRecyclerNews"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="0dp"
         android:overScrollMode="never">
 
         <androidx.cardview.widget.CardView
-            android:id="@+id/cardViewBehind"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             android:layout_marginStart="10dp"
             android:layout_marginTop="5dp"
             android:layout_marginEnd="10dp"
@@ -31,7 +30,6 @@
             tools:visibility="gone">
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/constraintLayoutRecyclerCardBehind"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginEnd="10dp">
@@ -41,7 +39,7 @@
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
-            android:id="@+id/cardView"
+            android:id="@+id/cardViewNews"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginStart="10dp"
@@ -57,7 +55,7 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/constraintLayoutRecyclerCard"
+                android:id="@+id/constraintLayoutRecyclerCardNews"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="0dp">
@@ -77,27 +75,28 @@
                 <TextView
                     android:id="@+id/textViewType"
                     android:layout_width="0dp"
-                    android:layout_height="22dp"
-                    android:layout_marginStart="5dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginEnd="5dp"
+                    android:layout_height="wrap_content"
                     android:gravity="start|center_vertical"
-                    android:paddingBottom="5dp"
+                    android:paddingStart="30dp"
+                    android:paddingTop="5dp"
+                    android:paddingEnd="50dp"
+                    android:paddingBottom="7dp"
                     android:text="@string/type_0_general_news_text"
                     android:textAlignment="gravity"
                     android:textColor="?attr/colorPrimary"
                     android:textSize="12sp"
-                    app:layout_constraintEnd_toStartOf="@+id/textViewDate"
-                    app:layout_constraintStart_toEndOf="@+id/imageViewType"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
                     android:id="@+id/textViewDate"
                     android:layout_width="wrap_content"
-                    android:layout_height="15dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:layout_marginEnd="5dp"
                     android:gravity="start|center_vertical"
+                    android:padding="1dp"
                     android:textAlignment="gravity"
                     android:textColor="?attr/colorPrimary"
                     android:textSize="10sp"
@@ -108,7 +107,7 @@
                 <ImageView
                     android:id="@+id/imageViewImage"
                     android:layout_width="0dp"
-                    android:layout_height="100dp"
+                    android:layout_height="150sp"
                     android:scaleType="centerCrop"
                     android:visibility="gone"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -153,6 +152,7 @@
                     android:layout_marginBottom="5dp"
                     android:background="@drawable/border_radius"
                     android:backgroundTint="?attr/colorPrimary"
+                    android:contentDescription="@string/open_link_description"
                     android:padding="5dp"
                     android:visibility="gone"
                     app:icon="@drawable/ic_forward"
@@ -161,6 +161,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textViewTitle"
                     app:layout_constraintVertical_bias="0.0"
+                    tools:ignore="TouchTargetSizeCheck"
                     tools:visibility="visible" />
 
                 <TextView

@@ -4,14 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.theory.TheoryFragment">
+    tools:context=".ui.theory.AllSectionsActivity">
 
     <TextView
-        android:id="@+id/titleChapters"
+        android:id="@+id/titleSections"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:padding="10dp"
-        android:text="@string/title_chapters"
+        android:text="@string/title_sections"
         android:textSize="34sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
@@ -19,7 +19,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/editTextSearchChapters"
+        android:id="@+id/editTextSearchSections"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
@@ -30,12 +30,12 @@
         android:inputType="text"
         android:padding="10dp"
         android:singleLine="true"
-        app:layout_constraintEnd_toEndOf="@+id/titleChapters"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/titleChapters" />
+        app:layout_constraintTop_toBottomOf="@+id/titleSections" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/chapters_items_list"
+        android:id="@+id/sections_items_list"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="5dp"
@@ -45,24 +45,24 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextSearchChapters"
+        app:layout_constraintTop_toBottomOf="@+id/editTextSearchSections"
         tools:visibility="visible">
 
     </androidx.recyclerview.widget.RecyclerView>
 
     <TextView
-        android:id="@+id/no_chapters_available_text"
+        android:id="@+id/no_sections_available_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
-        android:text="@string/no_chapters_available_text"
+        android:text="@string/no_sections_available_text"
         android:textAlignment="center"
         android:textSize="20sp"
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextSearchChapters"
+        app:layout_constraintTop_toBottomOf="@+id/editTextSearchSections"
         tools:visibility="visible" />
 </androidx.constraintlayout.widget.ConstraintLayout>

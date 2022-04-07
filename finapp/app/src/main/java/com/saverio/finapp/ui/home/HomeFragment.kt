@@ -1,25 +1,19 @@
 package com.saverio.finapp.ui.home
 
-import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.saverio.finapp.MainActivity
 import com.saverio.finapp.R
 import com.saverio.finapp.databinding.FragmentHomeBinding
-import com.saverio.finapp.db.ChaptersModel
 import com.saverio.finapp.db.NewsModel
-import com.saverio.finapp.db.QuizzesModel
-import com.saverio.finapp.db.SectionsModel
 
 class HomeFragment : Fragment() {
 
@@ -59,7 +53,6 @@ class HomeFragment : Fragment() {
             )
         )
 
-        var number = 0;
         swipeRefreshLayout.setOnRefreshListener {
             checkNews(main)
             checkLoading()
@@ -138,7 +131,7 @@ class HomeFragment : Fragment() {
 
             binding.newsItemsList.layoutManager = LinearLayoutManager(requireContext())
             //binding.newsItemsList.setHasFixedSize(true)
-            val itemAdapter = ItemAdapter(requireContext(), main.getNews())
+            val itemAdapter = NewsItemAdapter(requireContext(), main.getNews())
             binding.newsItemsList.adapter = itemAdapter
         } else {
             binding.noNewsAvailableText.visibility = View.VISIBLE

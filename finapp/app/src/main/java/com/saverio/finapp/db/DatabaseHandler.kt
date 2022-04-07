@@ -179,9 +179,14 @@ class DatabaseHandler(context: Context) :
     }
 
     @SuppressLint("Range")
-    fun getSections(): ArrayList<SectionsModel> {
+    fun getSections(chapter: Int? = null): ArrayList<SectionsModel> {
         val sectionsList = ArrayList<SectionsModel>()
-        val query = "SELECT * FROM `${TABLE_NAME_SECTIONS}`"
+        var query = ""
+        if (chapter != null) {
+            query = "SELECT * FROM `${TABLE_NAME_SECTIONS}` WHERE `chapter` = '${chapter}'"
+        } else {
+            query = "SELECT * FROM `${TABLE_NAME_SECTIONS}`"
+        }
         val database = readableDatabase
         var cursor: Cursor? = null
 
@@ -217,7 +222,7 @@ class DatabaseHandler(context: Context) :
     fun getSection(section: String): SectionsModel {
         var sectionToReturn = SectionsModel(section, null, null, null, null)
         val query =
-            "SELECT * FROM `${TABLE_NAME_SECTIONS}` WHERE `${COLUMN_SECTION_PK_SECTIONS}` = $section"
+            "SELECT * FROM `${TABLE_NAME_SECTIONS}` WHERE `${COLUMN_SECTION_PK_SECTIONS}` = '$section'"
         val database = readableDatabase
         var cursor: Cursor? = null
 
@@ -280,6 +285,60 @@ class DatabaseHandler(context: Context) :
     }
     //End || Sections
 
+
+    //Search in the Theory
+    @SuppressLint("Range")
+    fun searchInTheory(
+        chapter: Int? = null,
+        section: String? = null,
+        expression: String
+    ): ArrayList<SectionsModel> {
+        val sectionsList = ArrayList<SectionsModel>()
+        var query = ""
+        val expressionToUse = expression.replace("'", " ").replace(" ", "%")
+        if (chapter != null && section == null) {
+            //in a specific chapter
+            query =
+                "SELECT * FROM `${TABLE_NAME_SECTIONS}` WHERE `chapter` = '${chapter}' AND `text` LIKE '%${expressionToUse}%' OR `title` LIKE '%${expressionToUse}%'"
+        } else if (section != null) {
+            //in a specific section
+            query =
+                "SELECT * FROM `${TABLE_NAME_SECTIONS}` WHERE `section` = '${section}' AND `text` LIKE '%${expressionToUse}%' OR `title` LIKE '%${expressionToUse}%'"
+        } else {
+            //in general
+            query =
+                "SELECT * FROM `${TABLE_NAME_SECTIONS}` WHERE `text` LIKE '%${expressionToUse}%' OR `title` LIKE '%${expressionToUse}%'"
+        }
+        val database = readableDatabase
+        var cursor: Cursor? = null
+
+        try {
+            cursor = database.rawQuery(query, null)
+        } catch (e: SQLException) {
+            database.execSQL(query)
+            return ArrayList()
+        }
+
+        if (cursor.moveToFirst()) {
+            do {
+                val section = cursor.getString(cursor.getColumnIndex(COLUMN_SECTION_PK_SECTIONS))
+                val chapter = cursor.getInt(cursor.getColumnIndex(COLUMN_CHAPTER_INDEX_SECTIONS))
+                val title = cursor.getString(cursor.getColumnIndex(COLUMN_TITLE_SECTIONS))
+                val author = cursor.getString(cursor.getColumnIndex(COLUMN_AUTHOR_SECTIONS))
+                val text = cursor.getString(cursor.getColumnIndex(COLUMN_TEXT_SECTIONS))
+
+                val sectionToAdd = SectionsModel(
+                    section = section,
+                    chapter = chapter,
+                    title = title,
+                    author = author,
+                    text = text
+                )
+                sectionsList.add(sectionToAdd)
+            } while (cursor.moveToNext())
+        }
+        return sectionsList
+    }
 
     //Quizzes
     fun addQuiz(quiz: QuizzesModel): Long {

@@ -6,6 +6,7 @@ import android.net.NetworkCapabilities
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
@@ -51,6 +52,11 @@ class MainActivity : AppCompatActivity() {
         } else {
             //println("Internet is not available")
         }
+    }
+
+    override fun onResume() {
+        supportActionBar?.hide()
+        super.onResume()
     }
 
     fun checkForInternetConnection(context: Context): Boolean {

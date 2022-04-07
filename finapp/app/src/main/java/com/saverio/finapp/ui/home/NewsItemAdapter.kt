@@ -14,6 +14,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat.startActivity
 import androidx.core.view.isGone
 import androidx.recyclerview.widget.RecyclerView
@@ -21,8 +22,8 @@ import com.saverio.finapp.R
 import com.saverio.finapp.db.NewsModel
 
 
-class ItemAdapter(private val context: Context, private val items: ArrayList<NewsModel>) :
-    RecyclerView.Adapter<ItemAdapter.ItemViewHolder>() {
+class NewsItemAdapter(private val context: Context, private val items: ArrayList<NewsModel>) :
+    RecyclerView.Adapter<NewsItemAdapter.ItemViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, type: Int): ItemViewHolder {
         //change the home_recyclerview layout
@@ -111,13 +112,14 @@ class ItemAdapter(private val context: Context, private val items: ArrayList<New
         holder.description.text = first50Words
 
         /*
-        holder.cardView.setOnTouchListener(
+        holder.cardViewNews.setOnTouchListener(
             View.OnTouchListener { view, event ->
                 val displayMetrics = view.resources.displayMetrics
                 val cardWidth = view.width
                 val cardStart = (displayMetrics.widthPixels.toFloat() / 2) - (cardWidth / 2)
-                val MAX_SWIPE_LEFT_DISTANCE = 100
+                val MAX_SWIPE_LEFT_DISTANCE = 50
                 val POSITION_TO_ARRIVE = MAX_SWIPE_LEFT_DISTANCE.toFloat() - (cardWidth / 2)
+                val POSITION_ALL_TO_LEFT = -(cardWidth + cardStart)
                 when (event.action) {
                     MotionEvent.ACTION_MOVE -> {
                         // get the new co-ordinate of X-axis
@@ -137,16 +139,26 @@ class ItemAdapter(private val context: Context, private val items: ArrayList<New
                         }
                     }
                     MotionEvent.ACTION_UP -> {
-                        //Go back to the start position when the action is up
+                        //when the action is up
                         val POSITION_TO_ARRIVE_WITH_ERROR =
                             POSITION_TO_ARRIVE - (POSITION_TO_ARRIVE / 25)
                         if (view.x <= POSITION_TO_ARRIVE_WITH_ERROR) {
                             //TODO Activated || Enable the sharing
+                            //Go back to the start position
+                            view.animate().x(cardStart).setDuration(500).start()
+                            //Go all to left
+                            view.animate().x(POSITION_ALL_TO_LEFT).setDuration(500).start()
+                            Handler().postDelayed(
+                                {
+                                    /*view.animate().x(-(POSITION_ALL_TO_LEFT * 2)).setDuration(0)
+                                        .start()*/
+                                    view.animate().x(cardStart).setDuration(100).start()
+                                }, 500
+                            )
                         } else {
                             //TODO Not activated (cancelled)
+                            view.animate().x(cardStart).setDuration(500).start()
                         }
-                        view.animate().x(cardStart)
-                            .setDuration(500).start()
                     }
                 }
 
@@ -182,6 +194,7 @@ class ItemAdapter(private val context: Context, private val items: ArrayList<New
         val link: Button = view.findViewById(R.id.buttonLink)
         val description: TextView = view.findViewById(R.id.textViewDescription)
         val readMore: TextView = view.findViewById(R.id.textViewReadMore)
+        val cardViewNews: CardView = view.findViewById(R.id.cardViewNews)
 
         val type0 = view.resources.getString(R.string.type_0_general_news_text)
         val type1 = view.resources.getString(R.string.type_1_pill_news_text)

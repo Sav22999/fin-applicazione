@@ -6,8 +6,8 @@ import androidx.lifecycle.ViewModel
 
 class TheoryViewModel : ViewModel() {
 
-    private val _text = MutableLiveData<String>().apply {
-        value = "This is theory Fragment"
+    val chaptersChanged = MutableLiveData<Boolean>()
+    fun setChaptersChanged(changed: Boolean) {
+        chaptersChanged.value = changed
     }
-    val text: LiveData<String> = _text
 }
