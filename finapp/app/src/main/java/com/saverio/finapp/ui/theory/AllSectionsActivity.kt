@@ -39,7 +39,11 @@ class AllSectionsActivity : AppCompatActivity() {
         val searchBox: EditText = findViewById(R.id.editTextSearchSections)
         searchBox.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable) {
-                search(expression = s.toString(), chapterId = chapterId, sectionId = sectionId)
+                if (s.toString() != "") {
+                    search(expression = s.toString(), chapterId = chapterId, sectionId = sectionId)
+                } else {
+                    setupRecyclerView(clear = true, chapter = chapterId, getSections = getSections)
+                }
             }
 
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}

@@ -51,7 +51,11 @@ class TheoryFragment : Fragment() {
 
         binding.editTextSearchChapters.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable) {
-                search(expression = s.toString())
+                if (s.toString() != "") {
+                    search(expression = s.toString())
+                } else {
+                    setupRecyclerView(clear = true, search = false, getChapters)
+                }
             }
 
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
