@@ -50,6 +50,7 @@ class AllSectionsActivity : AppCompatActivity() {
             if (keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_UP) {
                 //when tap "enter" or "go"
                 v.hideSoftInput()
+                v.clearFocus()
                 return@OnKeyListener true
             }
             false
@@ -64,6 +65,7 @@ class AllSectionsActivity : AppCompatActivity() {
     }
 
     fun View.hideSoftInput() {
+        //hide the keyboard
         val inputMethodManager =
             context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         inputMethodManager.hideSoftInputFromWindow(windowToken, 0)
