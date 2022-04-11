@@ -22,7 +22,7 @@
         <activity
             android:name=".ui.quiz.QuestionsQuizActivity"
             android:exported="false"
-            android:launchMode="singleInstance" />
+            android:launchMode="singleInstancePerTask" />
         <activity
             android:name=".ui.theory.AllSectionsActivity"
             android:exported="false" />
