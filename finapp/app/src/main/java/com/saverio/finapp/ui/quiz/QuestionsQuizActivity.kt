@@ -9,6 +9,7 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.isGone
 import com.saverio.finapp.R
 import com.saverio.finapp.db.DatabaseHandler
 import com.saverio.finapp.db.QuizzesModel
@@ -24,18 +25,22 @@ class QuestionsQuizActivity : AppCompatActivity() {
 
         var chapterId: Int? = null
         var questionId: Int = 0
+        var questionNumber: Int = 0
 
         val databaseHandler = DatabaseHandler(this)
 
         if (bundle != null) {
             chapterId = bundle.getInt("chapter_id")
             questionId = bundle.getInt("question_id")
+            questionNumber = bundle.getInt("question_number")
             selectedQuestion = bundle.getInt("selected_question")
         }
+        if (questionNumber == -1) questionNumber = 1
         val getQuiz = databaseHandler.getQuiz(id = questionId)
         setupQuiz(
             chapter = chapterId,
             getQuiz = getQuiz,
+            number = questionNumber,
             total = databaseHandler.getQuizzes(chapter = chapterId).size
         )
 
@@ -66,8 +71,11 @@ class QuestionsQuizActivity : AppCompatActivity() {
     fun setupQuiz(
         chapter: Int? = null,
         getQuiz: QuizzesModel,
+        number: Int,
         total: Int
     ) {
+        val questionNumber: TextView = findViewById(R.id.textViewQuestionNumber)
+        val questionTime: TextView = findViewById(R.id.textViewTimeUsed)
         val question: TextView = findViewById(R.id.textViewQuestionQuestion)
         val question1: TextView = findViewById(R.id.textViewQuestion1)
         val question2: TextView = findViewById(R.id.textViewQuestion2)
@@ -77,11 +85,31 @@ class QuestionsQuizActivity : AppCompatActivity() {
         val theoryButton: Button = findViewById(R.id.buttonTheory)
         val exitTestButton: Button = findViewById(R.id.buttonExitTest)
 
+        val buttonBack: Button = findViewById(R.id.buttonGoBack)
+        val buttonForward: Button = findViewById(R.id.buttonGoForward)
+
+        buttonBack.setOnClickListener {
+        }
+
+        buttonForward.setOnClickListener {
+        }
+
+        if (number == 1) buttonBack.isGone = true
+        else buttonBack.isGone = false
+        if (number == total) buttonForward.isGone = true
+        else buttonForward.isGone = false
+
+        questionNumber.text =
+            getString(R.string.question_number_text).replace("{{n}}", number.toString())
+                .replace("{{tot}}", total.toString())
+
         theoryButton.setOnClickListener {
             val intent = Intent(this, SectionActivity::class.java)
             intent.putExtra("chapter_id", getQuiz.chapter)
             intent.putExtra("section_id", getQuiz.section)
             this.startActivity(intent)
+        }
+        exitTestButton.setOnClickListener {
         }
 
         val questionsLayout = arrayOf(
