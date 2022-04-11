@@ -406,6 +406,51 @@ class DatabaseHandler(context: Context) :
     }
 
     @SuppressLint("Range")
+    fun getQuizzes(chapter: Int?): ArrayList<QuizzesModel> {
+        val quizzesList = ArrayList<QuizzesModel>()
+        var query = ""
+        if (chapter == null) query = "SELECT * FROM `${TABLE_NAME_QUIZZES}`"
+        else query = "SELECT * FROM `${TABLE_NAME_QUIZZES}` WHERE `chapter` = '${chapter}'"
+        val database = readableDatabase
+        var cursor: Cursor? = null
+
+        try {
+            cursor = database.rawQuery(query, null)
+        } catch (e: SQLException) {
+            database.execSQL(query)
+            return ArrayList()
+        }
+
+        if (cursor.moveToFirst()) {
+            do {
+                val id = cursor.getInt(cursor.getColumnIndex(COLUMN_ID_PK_QUIZZES))
+                val chapter = cursor.getInt(cursor.getColumnIndex(COLUMN_CHAPTER_INDEX_QUIZZES))
+                val section = cursor.getString(cursor.getColumnIndex(COLUMN_SECTION_INDEX_QUIZZES))
+                val question = cursor.getString(cursor.getColumnIndex(COLUMN_QUESTION_QUIZZES))
+                val A = cursor.getString(cursor.getColumnIndex(COLUMN_A_QUIZZES))
+                val B = cursor.getString(cursor.getColumnIndex(COLUMN_B_QUIZZES))
+                val C = cursor.getString(cursor.getColumnIndex(COLUMN_C_QUIZZES))
+                val D = cursor.getString(cursor.getColumnIndex(COLUMN_D_QUIZZES))
+                val correct = cursor.getString(cursor.getColumnIndex(COLUMN_CORRECT_QUIZZES))
+
+                val quizToAdd = QuizzesModel(
+                    id = id,
+                    chapter = chapter,
+                    section = section,
+                    question = question,
+                    A = A,
+                    B = B,
+                    C = C,
+                    D = D,
+                    correct = correct
+                )
+                quizzesList.add(quizToAdd)
+            } while (cursor.moveToNext())
+        }
+        return quizzesList
+    }
+
+    @SuppressLint("Range")
     fun getQuiz(id: Int): QuizzesModel {
         var quizToReturn = QuizzesModel(id, null, null, null, null, null, null, null, null)
         val query =

@@ -13,6 +13,7 @@ import androidx.core.view.isGone
 import androidx.recyclerview.widget.RecyclerView
 import com.saverio.finapp.R
 import com.saverio.finapp.db.ChaptersModel
+import com.saverio.finapp.db.DatabaseHandler
 
 
 class ChaptersItemAdapter(
@@ -41,12 +42,14 @@ class ChaptersItemAdapter(
         holder.chapterId.text =
             holder.chapter_text.replace("{{chapter_id}}", item.chapter.toString())
 
+        val databaseHandler = DatabaseHandler(context)
+
         holder.chapterCard.setOnClickListener {
-            /*
-            val intent = Intent(context, AllSectionsActivity::class.java)
+            val intent = Intent(context, QuestionsQuizActivity::class.java)
             intent.putExtra("chapter_id", item.chapter)
+            intent.putExtra("question_id", databaseHandler.getQuizzes(chapter = item.chapter)[0].id)
+            intent.putExtra("selected_question", -1)
             context.startActivity(intent)
-            */
         }
 
         /*
