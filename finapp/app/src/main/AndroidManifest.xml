@@ -15,10 +15,12 @@
         android:usesCleartextTraffic="true">
         <activity
             android:name=".ui.quiz.MistakesQuizActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:launchMode="singleInstancePerTask" />
         <activity
             android:name=".ui.quiz.SimulationQuizActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:launchMode="singleInstancePerTask" />
         <activity
             android:name=".ui.quiz.QuestionsQuizActivity"
             android:exported="false"
