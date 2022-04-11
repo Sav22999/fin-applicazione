@@ -55,6 +55,17 @@ class DatabaseHandler(context: Context) :
                 "  `${COLUMN_TEXT_NEWS}` TEXT NOT NULL" +
                 ")"
         database.execSQL(query)
+
+        //Create "statistics" table
+        query = "CREATE TABLE `${TABLE_NAME_STATISTICS}` (" +
+                "  `${COLUMN_ID_PK_STATISTICS}` INT NOT NULL PRIMARY KEY," +
+                "  `${COLUMN_TYPE_STATISTICS}` INT NOT NULL," +
+                "  `${COLUMN_DATETIME_STATISTICS}` TEXT NOT NULL," +
+                "  `${COLUMN_CORRECT_ANSWER_STATISTICS}` TEXT NOT NULL," +
+                "  `${COLUMN_USER_ANSWER_STATISTICS}` TEXT NOT NULL," +
+                "  `${COLUMN_QUESTION_ID_STATISTICS}` TEXT NOT NULL" +
+                ")"
+        database.execSQL(query)
     }
 
     override fun onUpgrade(database: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
@@ -63,6 +74,7 @@ class DatabaseHandler(context: Context) :
         database.execSQL("DROP TABLE IF EXISTS `${TABLE_NAME_SECTIONS}`")
         database.execSQL("DROP TABLE IF EXISTS `${TABLE_NAME_QUIZZES}`")
         database.execSQL("DROP TABLE IF EXISTS `${TABLE_NAME_NEWS}`")
+        database.execSQL("DROP TABLE IF EXISTS `${TABLE_NAME_STATISTICS}`")
         onCreate(database)
     }
 
@@ -687,44 +699,223 @@ class DatabaseHandler(context: Context) :
     }
     //End || News
 
+    //Statistics
+    fun addStatistics(statistics: StatisticsModel): Long {
+        val database = writableDatabase
+
+        val contentValues = ContentValues()
+        contentValues.put(COLUMN_ID_PK_STATISTICS, statistics.id)
+        contentValues.put(COLUMN_TYPE_STATISTICS, statistics.type)
+        contentValues.put(COLUMN_DATETIME_STATISTICS, statistics.datetime)
+        if (statistics.correct_answer == null)
+            contentValues.put(COLUMN_CORRECT_ANSWER_STATISTICS, "NULL")
+        else contentValues.put(COLUMN_CORRECT_ANSWER_STATISTICS, statistics.correct_answer)
+        if (statistics.user_answer == null) contentValues.put(COLUMN_USER_ANSWER_STATISTICS, "NULL")
+        else contentValues.put(COLUMN_USER_ANSWER_STATISTICS, statistics.user_answer)
+        contentValues.put(COLUMN_QUESTION_ID_STATISTICS, statistics.question_id)
+        val success = database.insert(TABLE_NAME_STATISTICS, null, contentValues)
+        database.close()
+
+        return success
+    }
+
+    @SuppressLint("Range")
+    fun getNewIdStatistics(): Int {
+        var valueToReturn = 0
+        val query =
+            "SELECT * FROM `${TABLE_NAME_STATISTICS}` ORDER BY `${COLUMN_ID_PK_STATISTICS}` DESC LIMIT 1"
+        val database = readableDatabase
+        var cursor: Cursor? = null
+
+        try {
+            cursor = database.rawQuery(query, null)
+        } catch (e: SQLException) {
+            database.execSQL(query)
+            return valueToReturn
+        }
+
+        if (cursor.moveToFirst()) {
+            valueToReturn = cursor.getInt(cursor.getColumnIndex(COLUMN_ID_PK_STATISTICS)) + 1
+        }
+        return valueToReturn
+    }
+
+    @SuppressLint("Range")
+    fun getStatistics(question_id: Int? = null, type: Int? = null): ArrayList<StatisticsModel> {
+        val statisticsList = ArrayList<StatisticsModel>()
+        var query = ""
+
+        if (question_id == null && type == null) query =
+            "SELECT * FROM `${TABLE_NAME_STATISTICS}` ORDER BY `${COLUMN_DATETIME_STATISTICS}` DESC"
+        else if (question_id == null && type != null) query =
+            "SELECT * FROM `${TABLE_NAME_STATISTICS}` WHERE `${COLUMN_TYPE_STATISTICS}` = '${type}' ORDER BY `${COLUMN_DATETIME_STATISTICS}` DESC"
+        else if (question_id != null && type == null) query =
+            "SELECT * FROM `${TABLE_NAME_STATISTICS}` WHERE `${COLUMN_QUESTION_ID_STATISTICS}` = '${question_id}' ORDER BY `${COLUMN_DATETIME_STATISTICS}` DESC"
+        else query =
+            "SELECT * FROM `${TABLE_NAME_STATISTICS}` WHERE `${COLUMN_QUESTION_ID_STATISTICS}` = '${question_id}' AND `${COLUMN_TYPE_STATISTICS}` = '${type}' ORDER BY `${COLUMN_DATETIME_STATISTICS}` DESC"
+
+        val database = readableDatabase
+        var cursor: Cursor? = null
+
+        try {
+            cursor = database.rawQuery(query, null)
+        } catch (e: SQLException) {
+            database.execSQL(query)
+            return ArrayList()
+        }
+
+        if (cursor.moveToFirst()) {
+            do {
+                val id = cursor.getInt(cursor.getColumnIndex(COLUMN_ID_PK_STATISTICS))
+                val type = cursor.getInt(cursor.getColumnIndex(COLUMN_TYPE_STATISTICS))
+                val datetime = cursor.getString(cursor.getColumnIndex(COLUMN_DATETIME_STATISTICS))
+                val questionId =
+                    cursor.getInt(cursor.getColumnIndex(COLUMN_QUESTION_ID_STATISTICS))
+                val correctAnswer =
+                    cursor.getString(cursor.getColumnIndex(COLUMN_CORRECT_ANSWER_STATISTICS))
+                val userAnswer =
+                    cursor.getString(cursor.getColumnIndex(COLUMN_USER_ANSWER_STATISTICS))
+
+                val statisticsToAdd = StatisticsModel(
+                    id = id,
+                    type = type,
+                    datetime = datetime,
+                    question_id = questionId,
+                    correct_answer = correctAnswer,
+                    user_answer = userAnswer
+                )
+                statisticsList.add(statisticsToAdd)
+            } while (cursor.moveToNext())
+        }
+        return statisticsList
+    }
+
+    @SuppressLint("Range")
+    fun getStatistics(id: Int): StatisticsModel {
+        var statisticsToReturn = StatisticsModel(id, 0, 0, "", null, null)
+        val query =
+            "SELECT * FROM `${TABLE_NAME_STATISTICS}` WHERE `${COLUMN_ID_PK_STATISTICS}` = $id ORDER BY `${COLUMN_DATETIME_STATISTICS}` DESC"
+        val database = readableDatabase
+        var cursor: Cursor? = null
+
+        try {
+            cursor = database.rawQuery(query, null)
+        } catch (e: SQLException) {
+            database.execSQL(query)
+            return statisticsToReturn
+        }
+
+        if (cursor.moveToFirst()) {
+            val id = cursor.getInt(cursor.getColumnIndex(COLUMN_ID_PK_STATISTICS))
+            val type = cursor.getInt(cursor.getColumnIndex(COLUMN_TYPE_STATISTICS))
+            val datetime = cursor.getString(cursor.getColumnIndex(COLUMN_DATETIME_STATISTICS))
+            val questionId = cursor.getInt(cursor.getColumnIndex(COLUMN_QUESTION_ID_STATISTICS))
+            val correctAnswer =
+                cursor.getString(cursor.getColumnIndex(COLUMN_CORRECT_ANSWER_STATISTICS))
+            val userAnswer = cursor.getString(cursor.getColumnIndex(COLUMN_USER_ANSWER_STATISTICS))
+            statisticsToReturn.id = id
+            statisticsToReturn.type = type
+            statisticsToReturn.datetime = datetime
+            statisticsToReturn.question_id = questionId
+            statisticsToReturn.correct_answer = correctAnswer
+            statisticsToReturn.user_answer = userAnswer
+        }
+        return statisticsToReturn
+    }
+
+    @SuppressLint("Range")
+    fun checkStatistics(question: Int, type: Int): Boolean {
+        var returnValue = false
+        val query =
+            "SELECT * FROM `${TABLE_NAME_STATISTICS}` WHERE `${COLUMN_QUESTION_ID_STATISTICS}` = $question AND `${COLUMN_TYPE_STATISTICS}` = $type"
+        val database = readableDatabase
+        var cursor: Cursor? = null
+
+        try {
+            cursor = database.rawQuery(query, null)
+        } catch (e: SQLException) {
+            database.execSQL(query)
+            return returnValue
+        }
+
+        if (cursor.moveToFirst()) {
+            returnValue = true
+        }
+        return returnValue
+    }
+
+    fun updateStatistics(statistics: StatisticsModel): Int {
+        val database = writableDatabase
+
+        val contentValues = ContentValues()
+        contentValues.put(COLUMN_ID_PK_STATISTICS, statistics.id)
+        contentValues.put(COLUMN_TYPE_STATISTICS, statistics.type)
+        contentValues.put(COLUMN_DATETIME_STATISTICS, statistics.datetime)
+        if (statistics.correct_answer == null)
+            contentValues.put(COLUMN_CORRECT_ANSWER_STATISTICS, "NULL")
+        else contentValues.put(COLUMN_CORRECT_ANSWER_STATISTICS, statistics.correct_answer)
+        if (statistics.user_answer == null) contentValues.put(COLUMN_USER_ANSWER_STATISTICS, "NULL")
+        else contentValues.put(COLUMN_USER_ANSWER_STATISTICS, statistics.user_answer)
+        contentValues.put(COLUMN_QUESTION_ID_STATISTICS, statistics.question_id)
+        val success = database.update(
+            TABLE_NAME_STATISTICS,
+            contentValues,
+            "$COLUMN_ID_PK_STATISTICS = '${statistics.id}'",
+            null
+        ) //we need the primary key to update a record
+        database.close()
+
+        return success
+    }
+    //End || Statistics
+
     companion object {
         //general
         private val DATABASE_NAME = "QuizNuoto"
-        private val DATABASE_VERSION = 7 //TODO: change this manually
+        private val DATABASE_VERSION = 10 //TODO: change this manually
 
         //chapters table
-        public val TABLE_NAME_CHAPTERS = "chapters"
-        public val COLUMN_CHAPTER_PK_CHAPTERS = "chapter"
-        public val COLUMN_TITLE_CHAPTERS = "title"
+        val TABLE_NAME_CHAPTERS = "chapters"
+        val COLUMN_CHAPTER_PK_CHAPTERS = "chapter"
+        val COLUMN_TITLE_CHAPTERS = "title"
 
         //sections table
-        public val TABLE_NAME_SECTIONS = "sections"
-        public val COLUMN_SECTION_PK_SECTIONS = "section"
-        public val COLUMN_CHAPTER_INDEX_SECTIONS = "chapter"
-        public val COLUMN_TITLE_SECTIONS = "title"
-        public val COLUMN_AUTHOR_SECTIONS = "author"
-        public val COLUMN_TEXT_SECTIONS = "text"
+        val TABLE_NAME_SECTIONS = "sections"
+        val COLUMN_SECTION_PK_SECTIONS = "section"
+        val COLUMN_CHAPTER_INDEX_SECTIONS = "chapter"
+        val COLUMN_TITLE_SECTIONS = "title"
+        val COLUMN_AUTHOR_SECTIONS = "author"
+        val COLUMN_TEXT_SECTIONS = "text"
 
         //quizzes table
-        public val TABLE_NAME_QUIZZES = "quizzes"
-        public val COLUMN_ID_PK_QUIZZES = "id"
-        public val COLUMN_CHAPTER_INDEX_QUIZZES = "chapter"
-        public val COLUMN_SECTION_INDEX_QUIZZES = "section"
-        public val COLUMN_QUESTION_QUIZZES = "question"
-        public val COLUMN_A_QUIZZES = "A"
-        public val COLUMN_B_QUIZZES = "B"
-        public val COLUMN_C_QUIZZES = "C"
-        public val COLUMN_D_QUIZZES = "D"
-        public val COLUMN_CORRECT_QUIZZES = "correct"
+        val TABLE_NAME_QUIZZES = "quizzes"
+        val COLUMN_ID_PK_QUIZZES = "id"
+        val COLUMN_CHAPTER_INDEX_QUIZZES = "chapter"
+        val COLUMN_SECTION_INDEX_QUIZZES = "section"
+        val COLUMN_QUESTION_QUIZZES = "question"
+        val COLUMN_A_QUIZZES = "A"
+        val COLUMN_B_QUIZZES = "B"
+        val COLUMN_C_QUIZZES = "C"
+        val COLUMN_D_QUIZZES = "D"
+        val COLUMN_CORRECT_QUIZZES = "correct"
 
         //news table
-        public val TABLE_NAME_NEWS = "news"
-        public val COLUMN_ID_PK_NEWS = "id"
-        public val COLUMN_TYPE_NEWS = "type"
-        public val COLUMN_DATE_NEWS = "date"
-        public val COLUMN_TITLE_NEWS = "title"
-        public val COLUMN_IMAGE_NEWS = "image"
-        public val COLUMN_LINK_NEWS = "link"
-        public val COLUMN_TEXT_NEWS = "text"
+        val TABLE_NAME_NEWS = "news"
+        val COLUMN_ID_PK_NEWS = "id"
+        val COLUMN_TYPE_NEWS = "type"
+        val COLUMN_DATE_NEWS = "date"
+        val COLUMN_TITLE_NEWS = "title"
+        val COLUMN_IMAGE_NEWS = "image"
+        val COLUMN_LINK_NEWS = "link"
+        val COLUMN_TEXT_NEWS = "text"
+
+        //statistics table
+        val TABLE_NAME_STATISTICS = "statistics"
+        val COLUMN_ID_PK_STATISTICS = "id"
+        val COLUMN_TYPE_STATISTICS = "type"
+        val COLUMN_CORRECT_ANSWER_STATISTICS = "correct_answer"
+        val COLUMN_USER_ANSWER_STATISTICS = "user_answer"
+        val COLUMN_DATETIME_STATISTICS = "datetime"
+        val COLUMN_QUESTION_ID_STATISTICS = "question"
     }
 }

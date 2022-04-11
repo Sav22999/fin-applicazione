@@ -6,12 +6,9 @@ import android.net.NetworkCapabilities
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
-import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.saverio.finapp.api.ApiClient

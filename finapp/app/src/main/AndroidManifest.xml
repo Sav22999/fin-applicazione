@@ -21,7 +21,8 @@
             android:exported="false" />
         <activity
             android:name=".ui.quiz.QuestionsQuizActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:launchMode="singleInstance" />
         <activity
             android:name=".ui.theory.AllSectionsActivity"
             android:exported="false" />
