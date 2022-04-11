@@ -14,6 +14,15 @@
         android:theme="@style/Theme.FINApp"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".ui.quiz.MistakesQuizActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.quiz.SimulationQuizActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.quiz.QuestionsQuizActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.theory.AllSectionsActivity"
             android:exported="false" />
         <activity

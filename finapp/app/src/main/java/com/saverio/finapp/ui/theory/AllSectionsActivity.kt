@@ -60,6 +60,10 @@ class AllSectionsActivity : AppCompatActivity() {
             false
         })
 
+        val title: TextView = findViewById(R.id.titleSections)
+        title.text =
+            getString(R.string.chapter_id_text).replace("{{chapter_id}}", chapterId.toString())
+
         val actionBar = getSupportActionBar()
         if (actionBar != null) {
             //show the back button in the action bar

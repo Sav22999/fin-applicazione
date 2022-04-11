@@ -34,6 +34,7 @@ class DatabaseHandler(context: Context) :
         query = "CREATE TABLE `${TABLE_NAME_QUIZZES}` (" +
                 "  `${COLUMN_ID_PK_QUIZZES}` INT NOT NULL PRIMARY KEY," +
                 "  `${COLUMN_CHAPTER_INDEX_QUIZZES}` INT NOT NULL," +
+                "  `${COLUMN_SECTION_INDEX_QUIZZES}` VARCHAR(10) NOT NULL," +
                 "  `${COLUMN_QUESTION_QUIZZES}` TEXT NOT NULL," +
                 "  `${COLUMN_A_QUIZZES}` TEXT NOT NULL," +
                 "  `${COLUMN_B_QUIZZES}` TEXT NOT NULL," +
@@ -61,6 +62,7 @@ class DatabaseHandler(context: Context) :
         database.execSQL("DROP TABLE IF EXISTS `${TABLE_NAME_CHAPTERS}`")
         database.execSQL("DROP TABLE IF EXISTS `${TABLE_NAME_SECTIONS}`")
         database.execSQL("DROP TABLE IF EXISTS `${TABLE_NAME_QUIZZES}`")
+        database.execSQL("DROP TABLE IF EXISTS `${TABLE_NAME_NEWS}`")
         onCreate(database)
     }
 
@@ -347,6 +349,7 @@ class DatabaseHandler(context: Context) :
         val contentValues = ContentValues()
         contentValues.put(COLUMN_ID_PK_QUIZZES, quiz.id)
         contentValues.put(COLUMN_CHAPTER_INDEX_QUIZZES, quiz.chapter)
+        contentValues.put(COLUMN_SECTION_INDEX_QUIZZES, quiz.section)
         contentValues.put(COLUMN_QUESTION_QUIZZES, quiz.question)
         contentValues.put(COLUMN_A_QUIZZES, quiz.A)
         contentValues.put(COLUMN_B_QUIZZES, quiz.B)
@@ -377,6 +380,7 @@ class DatabaseHandler(context: Context) :
             do {
                 val id = cursor.getInt(cursor.getColumnIndex(COLUMN_ID_PK_QUIZZES))
                 val chapter = cursor.getInt(cursor.getColumnIndex(COLUMN_CHAPTER_INDEX_QUIZZES))
+                val section = cursor.getString(cursor.getColumnIndex(COLUMN_SECTION_INDEX_QUIZZES))
                 val question = cursor.getString(cursor.getColumnIndex(COLUMN_QUESTION_QUIZZES))
                 val A = cursor.getString(cursor.getColumnIndex(COLUMN_A_QUIZZES))
                 val B = cursor.getString(cursor.getColumnIndex(COLUMN_B_QUIZZES))
@@ -387,6 +391,7 @@ class DatabaseHandler(context: Context) :
                 val quizToAdd = QuizzesModel(
                     id = id,
                     chapter = chapter,
+                    section = section,
                     question = question,
                     A = A,
                     B = B,
@@ -402,7 +407,7 @@ class DatabaseHandler(context: Context) :
 
     @SuppressLint("Range")
     fun getQuiz(id: Int): QuizzesModel {
-        var quizToReturn = QuizzesModel(id, null, null, null, null, null, null, null)
+        var quizToReturn = QuizzesModel(id, null, null, null, null, null, null, null, null)
         val query =
             "SELECT * FROM `${TABLE_NAME_QUIZZES}` WHERE `${COLUMN_ID_PK_QUIZZES}` = $id"
         val database = readableDatabase
@@ -418,6 +423,7 @@ class DatabaseHandler(context: Context) :
         if (cursor.moveToFirst()) {
             val id = cursor.getInt(cursor.getColumnIndex(COLUMN_ID_PK_QUIZZES))
             val chapter = cursor.getInt(cursor.getColumnIndex(COLUMN_CHAPTER_INDEX_QUIZZES))
+            val section = cursor.getString(cursor.getColumnIndex(COLUMN_SECTION_INDEX_QUIZZES))
             val question = cursor.getString(cursor.getColumnIndex(COLUMN_QUESTION_QUIZZES))
             val A = cursor.getString(cursor.getColumnIndex(COLUMN_A_QUIZZES))
             val B = cursor.getString(cursor.getColumnIndex(COLUMN_B_QUIZZES))
@@ -426,6 +432,7 @@ class DatabaseHandler(context: Context) :
             val correct = cursor.getString(cursor.getColumnIndex(COLUMN_CORRECT_QUIZZES))
             quizToReturn.id = id
             quizToReturn.chapter = chapter
+            quizToReturn.section = section
             quizToReturn.question = question
             quizToReturn.A = A
             quizToReturn.B = B
@@ -442,6 +449,7 @@ class DatabaseHandler(context: Context) :
         val contentValues = ContentValues()
         contentValues.put(COLUMN_ID_PK_QUIZZES, quiz.id)
         contentValues.put(COLUMN_CHAPTER_INDEX_QUIZZES, quiz.chapter)
+        contentValues.put(COLUMN_SECTION_INDEX_QUIZZES, quiz.section)
         contentValues.put(COLUMN_QUESTION_QUIZZES, quiz.question)
         contentValues.put(COLUMN_A_QUIZZES, quiz.A)
         contentValues.put(COLUMN_B_QUIZZES, quiz.B)
@@ -637,7 +645,7 @@ class DatabaseHandler(context: Context) :
     companion object {
         //general
         private val DATABASE_NAME = "QuizNuoto"
-        private val DATABASE_VERSION = 5 //TODO: change this manually
+        private val DATABASE_VERSION = 7 //TODO: change this manually
 
         //chapters table
         public val TABLE_NAME_CHAPTERS = "chapters"
@@ -656,6 +664,7 @@ class DatabaseHandler(context: Context) :
         public val TABLE_NAME_QUIZZES = "quizzes"
         public val COLUMN_ID_PK_QUIZZES = "id"
         public val COLUMN_CHAPTER_INDEX_QUIZZES = "chapter"
+        public val COLUMN_SECTION_INDEX_QUIZZES = "section"
         public val COLUMN_QUESTION_QUIZZES = "question"
         public val COLUMN_A_QUIZZES = "A"
         public val COLUMN_B_QUIZZES = "B"

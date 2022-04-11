@@ -9,4 +9,7 @@
     <color name="white">#FFFFFFFF</color>
     <color name="darkwhite">#FFEEEEEE</color>
     <color name="darkdarkwhite">#FFDDDDDD</color>
+
+    <color name="colorTimeGreen">#388E3C</color>
+    <color name="colorTimeRed">#D32F2F</color>
 </resources>

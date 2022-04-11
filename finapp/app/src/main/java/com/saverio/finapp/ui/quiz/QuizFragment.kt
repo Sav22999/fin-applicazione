@@ -5,9 +5,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.view.isGone
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.tabs.TabLayout
+import com.saverio.finapp.R
 import com.saverio.finapp.databinding.FragmentQuizBinding
+import com.saverio.finapp.db.ChaptersModel
+import com.saverio.finapp.db.DatabaseHandler
+import com.saverio.finapp.ui.quiz.ChaptersItemAdapter
 
 class QuizFragment : Fragment() {
 
@@ -28,15 +35,64 @@ class QuizFragment : Fragment() {
         _binding = FragmentQuizBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
+        /*
         val textView: TextView = binding.textQuiz
         quizViewModel.text.observe(viewLifecycleOwner) {
             textView.text = it
         }
+        */
+        val databaseHandler = DatabaseHandler(requireContext())
+        val getChapters = databaseHandler.getChapters()
+        setupRecyclerView(clear = true, search = false, getChapters)
+
+        val tabs = binding.tabLayout
+        val tabsLayout = arrayOf(binding.tab1Layout, binding.tab2Layout)
+        tabsLayout[0].isGone = false
+        tabs.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            override fun onTabSelected(tab: TabLayout.Tab) {
+                tabsLayout.forEach {
+                    it.isGone = true
+                }
+                tabsLayout[tab.position].isGone = false
+            }
+
+            override fun onTabUnselected(tab: TabLayout.Tab?) {
+            }
+
+            override fun onTabReselected(tab: TabLayout.Tab?) {
+            }
+        })
         return root
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    fun setupRecyclerView(
+        clear: Boolean = false,
+        search: Boolean = false,
+        getChapters: ArrayList<ChaptersModel>
+    ) {
+        if (clear) binding.chaptersQuizItemsList.adapter = null
+
+        if (search) binding.noChaptersQuizAvailableText.text =
+            getString(R.string.no_results_chapter_text)
+        else binding.noChaptersQuizAvailableText.text =
+            getString(R.string.no_chapters_available_text)
+
+        if (getChapters.size > 0) {
+            binding.noChaptersQuizAvailableText.visibility = View.GONE
+            binding.chaptersQuizItemsList.visibility = View.VISIBLE
+
+            binding.chaptersQuizItemsList.layoutManager = LinearLayoutManager(requireContext())
+            //binding.newsItemsList.setHasFixedSize(true)
+            val itemAdapter = ChaptersItemAdapter(requireContext(), getChapters)
+            binding.chaptersQuizItemsList.adapter = itemAdapter
+        } else {
+            binding.noChaptersQuizAvailableText.visibility = View.VISIBLE
+            binding.chaptersQuizItemsList.visibility = View.GONE
+        }
     }
 }

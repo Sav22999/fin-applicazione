@@ -9,6 +9,8 @@ data class QuizzesItemsList(
     val id: Int = 0,
     @SerializedName("chapter")
     val chapter: Int = 0,
+    @SerializedName("section")
+    val section: String = "",
     @SerializedName("question")
     val question: String = "",
     @SerializedName("A")

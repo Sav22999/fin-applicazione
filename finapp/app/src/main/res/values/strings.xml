@@ -1,11 +1,11 @@
 <resources>
     <string name="app_name">Quiz Nuoto</string>
     <string name="title_home">Home</string>
-    <string name="title_theory">Theory</string>
-    <string name="title_chapters">Chapters</string>
-    <string name="title_sections">Sections</string>
+    <string name="title_theory">Teoria</string>
+    <string name="title_chapters">Capitoli</string>
+    <string name="title_sections">Sezioni</string>
     <string name="title_quiz">Quiz</string>
-    <string name="title_settings">Settings</string>
+    <string name="title_settings">Impostazioni</string>
     <string name="title_account">Account</string>
 
     <string name="load_database">Load database</string>
@@ -20,33 +20,28 @@
     <string name="type_3_news_rules_news_text">Novità sui regolamenti</string>
     <string name="type_4_news_and_alerts_news_text">Novità e avvisi sull\'app</string>
 
-    <string name="open_link_description">Open link</string>
-    <string name="read_more_text">Read more ▼</string>
-    <string name="read_less_text">Read less ▲</string>
+    <string name="open_link_description">Apri link</string>
+    <string name="read_more_text">Espandi ▼</string>
+    <string name="read_less_text">Comprimi ▲</string>
 
-    <string name="chapter_id_text">Chapter {{chapter_id}}</string>
-    <string name="section_id_text">Section {{section_id}}</string>
-    <string name="author_text">of {{author}}</string>
+    <string name="chapter_id_text">Capitolo {{chapter_id}}</string>
+    <string name="section_id_text">Sezione {{section_id}}</string>
+    <string name="author_text">di {{author}}</string>
 
-    <string name="no_news_available_text">No news are available. Please, swipe down to refresh the page.</string>
-    <string name="no_chapters_available_text">No chapters are available. Go to Settings to update data.</string>
-    <string name="no_sections_available_text">No sections are available. Go to Settings to update data.</string>
-    <string name="no_results_chapter_text">No chapters found with specified parameters. Try to search something else.</string>
-    <string name="no_results_section_text">No sections found with specified parameters. Try to search something else.</string>
-    <string name="search_hint_text">Search…</string>
+    <string name="by_chapters_tab_text">Per capitoli</string>
+    <string name="by_other_tab_text">Altro</string>
 
-    <!-- Preference Titles -->
-    <string name="messages_header">Messages</string>
-    <string name="sync_header">Sync</string>
+    <string name="simulation_test_text">Simulazione della prova d\'esame</string>
+    <string name="mistakes_text">Ripeti solo le risposte sbagliate in precedenza</string>
 
-    <!-- Messages Preferences -->
-    <string name="signature_title">Your signature</string>
-    <string name="reply_title">Default reply action</string>
+    <string name="no_news_available_text">Nessuna notizia disponibile. Per favore, fai swipe down per aggiornare la pagina.</string>
+    <string name="no_chapters_available_text">Nessun capitolo è disponibile. Vai in Impostazioni per aggiornare i dati.</string>
+    <string name="no_sections_available_text">Nessuna sezione è disponibile. Vai in Impostazioni per aggiornare i dati.</string>
+    <string name="no_results_chapter_text">Non sono stati trovati capitoli con i parametri specificati. Prova a effettuare una nuova ricerca.</string>
+    <string name="no_results_section_text">Non sono state trovate sezioni con i parametri specificati. Prova a effettuare una nuova ricerca.</string>
+    <string name="search_hint_text">Cerca…</string>
 
-    <!-- Sync Preferences -->
-    <string name="sync_title">Sync email periodically</string>
-    <string name="attachment_title">Download incoming attachments</string>
-    <string name="attachment_summary_on">Automatically download attachments for incoming emails
-    </string>
-    <string name="attachment_summary_off">Only download attachments when manually requested</string>
+    <string name="time_residual_text">Tempo rimanente: {{time}}</string>
+    <string name="time_used_text">Tempo usato: {{time}}</string>
+    <string name="question_number_text">Domanda {{n}} di {{tot}}</string>
 </resources>

@@ -39,7 +39,6 @@ class TheoryFragment : Fragment() {
         val root: View = binding.root
 
         val databaseHandler = DatabaseHandler(requireContext())
-
         val getChapters = databaseHandler.getChapters()
         theoryViewModel.chaptersChanged.observe(requireActivity()) { o ->
             if (o) {

@@ -248,6 +248,7 @@ class MainActivity : AppCompatActivity() {
                                 QuizzesModel(
                                     it.id,
                                     it.chapter,
+                                    it.section,
                                     it.question,
                                     it.A,
                                     it.B,
@@ -264,11 +265,12 @@ class MainActivity : AppCompatActivity() {
                             //println("Updating")
                             setVariable(DATETIME_QUIZZES_PREF, quizzesList.lastUpdate?.datetime)
                             quizzesList.questions?.forEachIndexed { counter, it ->
-                                if (quizzesSaved.size > (counter + 1) && (quizzesSaved[counter].chapter != it.chapter || quizzesSaved[counter].question != it.question || quizzesSaved[counter].A != it.A || quizzesSaved[counter].B != it.B || quizzesSaved[counter].C != it.C || quizzesSaved[counter].D != it.D || quizzesSaved[counter].correct != it.correct)) {
+                                if (quizzesSaved.size > (counter + 1) && (quizzesSaved[counter].chapter != it.chapter || quizzesSaved[counter].section != it.section || quizzesSaved[counter].question != it.question || quizzesSaved[counter].A != it.A || quizzesSaved[counter].B != it.B || quizzesSaved[counter].C != it.C || quizzesSaved[counter].D != it.D || quizzesSaved[counter].correct != it.correct)) {
                                     update(
                                         QuizzesModel(
                                             it.id,
                                             it.chapter,
+                                            it.section,
                                             it.question,
                                             it.A,
                                             it.B,
@@ -282,6 +284,7 @@ class MainActivity : AppCompatActivity() {
                                         QuizzesModel(
                                             it.id,
                                             it.chapter,
+                                            it.section,
                                             it.question,
                                             it.A,
                                             it.B,
@@ -441,7 +444,7 @@ class MainActivity : AppCompatActivity() {
     private fun add(quiz: QuizzesModel) {
         //add || quiz
         val databaseHandler = DatabaseHandler(this)
-        if (quiz.id != 0 && quiz.chapter != null && quiz.question != null && quiz.A != null && quiz.B != null && quiz.C != null && quiz.D != null && quiz.correct != null) {
+        if (quiz.id != 0 && quiz.chapter != null && quiz.section != null && quiz.question != null && quiz.A != null && quiz.B != null && quiz.C != null && quiz.D != null && quiz.correct != null) {
             val status = databaseHandler.addQuiz(quiz)
             if (status > -1) {
                 //println("${quiz.id}|${quiz.question} added correctly")
@@ -495,7 +498,7 @@ class MainActivity : AppCompatActivity() {
     private fun update(quiz: QuizzesModel) {
         //update || quiz
         val databaseHandler = DatabaseHandler(this)
-        if (quiz.id != 0 && quiz.chapter != null && quiz.question != null && quiz.A != null && quiz.B != null && quiz.C != null && quiz.D != null && quiz.correct != null) {
+        if (quiz.id != 0&& quiz.section != null && quiz.chapter != null && quiz.question != null && quiz.A != null && quiz.B != null && quiz.C != null && quiz.D != null && quiz.correct != null) {
             val oldQuiz = databaseHandler.getQuiz(id = quiz.id)
             val status = databaseHandler.updateQuiz(quiz)
             if (status > -1) {
