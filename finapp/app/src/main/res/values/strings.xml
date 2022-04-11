@@ -44,4 +44,6 @@
     <string name="time_residual_text">Tempo rimanente: {{time}}</string>
     <string name="time_used_text">Tempo usato: {{time}}</string>
     <string name="question_number_text">Domanda {{n}} di {{tot}}</string>
+    <string name="exit_test_button">Termina prova</string>
+    <string name="theory_button">Teoria</string>
 </resources>

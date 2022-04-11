@@ -34,13 +34,7 @@ class QuizFragment : Fragment() {
 
         _binding = FragmentQuizBinding.inflate(inflater, container, false)
         val root: View = binding.root
-
-        /*
-        val textView: TextView = binding.textQuiz
-        quizViewModel.text.observe(viewLifecycleOwner) {
-            textView.text = it
-        }
-        */
+        
         val databaseHandler = DatabaseHandler(requireContext())
         val getChapters = databaseHandler.getChapters()
         setupRecyclerView(clear = true, search = false, getChapters)
