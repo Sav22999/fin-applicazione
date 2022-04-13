@@ -20,6 +20,7 @@
         android:layout_width="0dp"
         android:layout_height="5dp"
         android:background="@color/colorTimeRed"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/progressBarQuestionsGreen"
         app:layout_constraintTop_toTopOf="parent" />
@@ -61,7 +62,6 @@
             android:background="@drawable/border_radius_25dp"
             android:backgroundTint="@color/colorTimeRed"
             android:text="@string/exit_test_button"
-            android:visibility="gone"
             app:icon="@drawable/ic_exit"
             app:iconGravity="end"
             app:iconPadding="10dp"

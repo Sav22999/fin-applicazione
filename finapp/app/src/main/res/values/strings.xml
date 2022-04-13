@@ -43,7 +43,10 @@
 
     <string name="time_residual_text">Tempo rimanente: {{time}}</string>
     <string name="time_used_text">Tempo usato: {{time}}</string>
+    <string name="question_number_chapter_text">Domanda {{n}} di {{tot}} (Capitolo {{chapter}})</string>
     <string name="question_number_text">Domanda {{n}} di {{tot}}</string>
     <string name="exit_test_button">Termina prova</string>
     <string name="theory_button">Teoria</string>
+    <string name="finish_test_simulation_button">Termina</string>
+    <string name="seconds_text">sec</string>
 </resources>

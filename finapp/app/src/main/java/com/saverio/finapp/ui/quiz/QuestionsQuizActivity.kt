@@ -162,8 +162,9 @@ class QuestionsQuizActivity : AppCompatActivity() {
         buttonCheck.isGone = false
 
         questionNumber.text =
-            getString(R.string.question_number_text).replace("{{n}}", number.toString())
+            getString(R.string.question_number_chapter_text).replace("{{n}}", number.toString())
                 .replace("{{tot}}", total.toString())
+                .replace("{{chapter}}", getQuiz.chapter.toString())
 
         theoryButton.setOnClickListener {
             val intent = Intent(this, SectionActivity::class.java)
@@ -172,6 +173,7 @@ class QuestionsQuizActivity : AppCompatActivity() {
             this.startActivity(intent)
         }
         exitTestButton.setOnClickListener {
+            onBackPressed()
         }
 
         question.text = getQuiz.question

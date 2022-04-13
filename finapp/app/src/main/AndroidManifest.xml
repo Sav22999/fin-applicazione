@@ -15,14 +15,17 @@
         android:usesCleartextTraffic="true">
         <activity
             android:name=".ui.quiz.MistakesQuizActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:exported="false"
             android:launchMode="singleInstancePerTask" />
         <activity
             android:name=".ui.quiz.SimulationQuizActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:exported="false"
             android:launchMode="singleInstancePerTask" />
         <activity
             android:name=".ui.quiz.QuestionsQuizActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:exported="false"
             android:launchMode="singleInstancePerTask" />
         <activity

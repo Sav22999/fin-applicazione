@@ -1,9 +1,11 @@
 package com.saverio.finapp.ui.quiz
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.TextView
 import androidx.core.view.isGone
 import androidx.fragment.app.Fragment
@@ -38,6 +40,12 @@ class QuizFragment : Fragment() {
         val databaseHandler = DatabaseHandler(requireContext())
         val getChapters = databaseHandler.getChapters()
         setupRecyclerView(clear = true, search = false, getChapters)
+
+        val simulationCard = binding.cardViewQuizSimulation
+        simulationCard.setOnClickListener {
+            val intent = Intent(context, SimulationQuizActivity::class.java)
+            startActivity(intent)
+        }
 
         val tabs = binding.tabLayout
         val tabsLayout = arrayOf(binding.tab1Layout, binding.tab2Layout)
