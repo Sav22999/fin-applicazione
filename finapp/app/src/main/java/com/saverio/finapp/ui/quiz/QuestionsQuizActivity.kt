@@ -159,7 +159,8 @@ class QuestionsQuizActivity : AppCompatActivity() {
         if (number == 1) buttonBack.isGone = true
         else buttonBack.isGone = false
 
-        buttonCheck.isGone = false
+        if (number == total) buttonForward.isGone = true
+        else buttonForward.isGone = false
 
         questionNumber.text =
             getString(R.string.question_number_chapter_text).replace("{{n}}", number.toString())
@@ -197,8 +198,15 @@ class QuestionsQuizActivity : AppCompatActivity() {
         questionsImage[2].setBackgroundResource(R.drawable.ic_checkbox)
         questionsImage[3].setBackgroundResource(R.drawable.ic_checkbox)
 
-        questionsImage[index].setBackgroundResource(R.drawable.ic_checkbox_checked)
-        selectedQuestion = index
+        val buttonCheck: Button = findViewById(R.id.buttonCheck)
+        if (selectedQuestion != index) {
+            questionsImage[index].setBackgroundResource(R.drawable.ic_checkbox_checked)
+            selectedQuestion = index
+            buttonCheck.isGone = false
+        } else {
+            selectedQuestion = -1
+            buttonCheck.isGone = true
+        }
     }
 
     fun checkOption(correct: Int, selected: Int, questionId: Int, update: Boolean = false) {

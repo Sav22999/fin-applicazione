@@ -7,7 +7,7 @@
     tools:context=".ui.quiz.QuestionsQuizActivity">
 
     <View
-        android:id="@+id/progressBarSimulationGreen"
+        android:id="@+id/progressBarSimulationPassed"
         android:layout_width="0dp"
         android:layout_height="5dp"
         android:background="@color/colorTimeGreen"
@@ -16,12 +16,12 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <View
-        android:id="@+id/progressBarSimulationRed"
+        android:id="@+id/progressBarSimulationResidual"
         android:layout_width="0dp"
         android:layout_height="5dp"
         android:background="@color/colorTimeRed"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/progressBarSimulationGreen"
+        app:layout_constraintStart_toEndOf="@+id/progressBarSimulationPassed"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
@@ -31,7 +31,7 @@
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/progressBarSimulationRed"
+        app:layout_constraintTop_toBottomOf="@+id/progressBarSimulationResidual"
         tools:text="@string/question_number_text" />
 
     <TextView
@@ -41,7 +41,7 @@
         android:layout_marginTop="10dp"
         android:layout_marginEnd="10dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/progressBarSimulationRed"
+        app:layout_constraintTop_toBottomOf="@+id/progressBarSimulationResidual"
         tools:text="@string/time_used_text" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -71,20 +71,6 @@
             app:layout_constraintTop_toTopOf="parent"
             tools:visibility="visible" />
 
-        <Button
-            android:id="@+id/buttonTheorySimulation"
-            android:layout_width="wrap_content"
-            android:layout_height="50dp"
-            android:background="@drawable/border_radius_25dp"
-            android:text="@string/theory_button"
-            app:icon="@drawable/ic_theory"
-            app:iconGravity="end"
-            app:iconPadding="10dp"
-            app:iconSize="20dp"
-            app:iconTint="?attr/colorOnPrimary"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.core.widget.NestedScrollView

@@ -1,6 +1,5 @@
 package com.saverio.finapp.ui.quiz
 
-import android.content.Intent
 import android.content.res.ColorStateList
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -16,10 +15,8 @@ import androidx.core.view.isGone
 import androidx.core.view.updateLayoutParams
 import com.saverio.finapp.R
 import com.saverio.finapp.db.DatabaseHandler
-import com.saverio.finapp.db.QuizzesModel
 import com.saverio.finapp.db.SimulationQuizzesModel
 import com.saverio.finapp.db.StatisticsModel
-import com.saverio.finapp.ui.theory.SectionActivity
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -86,11 +83,6 @@ class SimulationQuizActivity : AppCompatActivity() {
             )
         }
 
-        questionsSimulation.forEachIndexed { index, it ->
-            println("$index || id: ${it.id}")
-        }
-
-
         start(
             chapterId = questionsSimulation[0].chapter!!,
             number = 1,
@@ -129,7 +121,7 @@ class SimulationQuizActivity : AppCompatActivity() {
             if (!timeStopped) {
                 timePassed++
             }
-            Handler().postDelayed({ incrementTime() }, 1)//todo change to 1000 after tests
+            Handler().postDelayed({ incrementTime() }, 1000)//todo change to 1000 after tests
         } else {
             println("Time finished")
             timeFinished = true
@@ -169,8 +161,8 @@ class SimulationQuizActivity : AppCompatActivity() {
 
     fun setProgressBar() {
         val time = timePassed
-        val passedProgress: View = findViewById(R.id.progressBarSimulationGreen)
-        val residualProgress: View = findViewById(R.id.progressBarSimulationRed)
+        val passedProgress: View = findViewById(R.id.progressBarSimulationPassed)
+        val residualProgress: View = findViewById(R.id.progressBarSimulationResidual)
         passedProgress.isGone = false
         residualProgress.isGone = false
         //if the width is "0dp" android treats it as "match_constraint"
@@ -181,8 +173,12 @@ class SimulationQuizActivity : AppCompatActivity() {
         windowManager.defaultDisplay.getMetrics(displayMetrics)
         val DISPLAY_WIDTH = displayMetrics.widthPixels
         val NEW_WIDTH = (time * DISPLAY_WIDTH) / MAX_TIME
-        passedProgress.updateLayoutParams {
-            width = NEW_WIDTH
+        if (NEW_WIDTH != 0) {
+            passedProgress.updateLayoutParams {
+                width = NEW_WIDTH
+            }
+        } else {
+            passedProgress.isGone = true
         }
     }
 
@@ -212,7 +208,6 @@ class SimulationQuizActivity : AppCompatActivity() {
         //val questionTime: TextView = findViewById(R.id.textViewTimePassed)
         val question: TextView = findViewById(R.id.textViewQuestionQuestionSimulation)
 
-        val theoryButton: Button = findViewById(R.id.buttonTheorySimulation)
         val exitTestButton: Button = findViewById(R.id.buttonExitTestSimulation)
 
         val buttonBack: Button = findViewById(R.id.buttonGoBackSimulation)
@@ -261,12 +256,6 @@ class SimulationQuizActivity : AppCompatActivity() {
             getString(R.string.question_number_text).replace("{{n}}", number.toString())
                 .replace("{{tot}}", total.toString())
 
-        theoryButton.setOnClickListener {
-            val intent = Intent(this, SectionActivity::class.java)
-            intent.putExtra("chapter_id", getQuiz.chapter)
-            intent.putExtra("section_id", getQuiz.section)
-            this.startActivity(intent)
-        }
         exitTestButton.setOnClickListener {
             onBackPressed()
         }
@@ -279,8 +268,9 @@ class SimulationQuizActivity : AppCompatActivity() {
 
         if (questionsSimulation[number - 1].user_answer != "")
             selectOption(
-                questionId = number - 1,
-                index = correctListLettToNum[questionsSimulation[number - 1].user_answer]!!
+                number = number - 1,
+                index = correctListLettToNum[questionsSimulation[number - 1].user_answer]!!,
+                force = true
             )
 
         questionsLayout.forEachIndexed { index, it ->
@@ -290,15 +280,19 @@ class SimulationQuizActivity : AppCompatActivity() {
         }
     }
 
-    fun selectOption(questionId: Int, index: Int) {
+    fun selectOption(number: Int, index: Int,force:Boolean=false) {
         if (!timeFinished) {
             questionsImage[0].setBackgroundResource(R.drawable.ic_checkbox)
             questionsImage[1].setBackgroundResource(R.drawable.ic_checkbox)
             questionsImage[2].setBackgroundResource(R.drawable.ic_checkbox)
             questionsImage[3].setBackgroundResource(R.drawable.ic_checkbox)
 
-            questionsImage[index].setBackgroundResource(R.drawable.ic_checkbox_checked)
-            questionsSimulation[questionId].user_answer = correctListNumToLett[index]!!
+            if (correctListNumToLett[index] != questionsSimulation[number].user_answer || force) {
+                questionsImage[index].setBackgroundResource(R.drawable.ic_checkbox_checked)
+                questionsSimulation[number].user_answer = correctListNumToLett[index]!!
+            } else {
+                questionsSimulation[number].user_answer = ""
+            }
         }
     }
 
@@ -356,7 +350,7 @@ class SimulationQuizActivity : AppCompatActivity() {
             it.setTextColor(question.textColors)
         }
 
-        start(chapterId!!, number = number, questionId)
+        start(chapterId, number = number, questionId)
     }
 
     fun now(): String {

@@ -910,6 +910,17 @@ class DatabaseHandler(context: Context) :
 
         return success
     }
+
+    fun deleteAllStatistics() {
+        val database = writableDatabase
+
+        val success = database.delete(
+            TABLE_NAME_STATISTICS,
+            null,
+            null
+        )
+        database.close()
+    }
     //End || Statistics
 
     companion object {

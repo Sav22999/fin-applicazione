@@ -98,6 +98,11 @@ class HomeFragment : Fragment() {
                     NewsModel(it.id, 0, "", null, null, null, "")
                 )
             }
+            val databaseHandler = DatabaseHandler(requireContext())
+            val allStatistics = databaseHandler.getStatistics()
+            allStatistics.forEach {
+                databaseHandler.deleteAllStatistics()
+            }
             //println("Deleted")
         }
         return root
