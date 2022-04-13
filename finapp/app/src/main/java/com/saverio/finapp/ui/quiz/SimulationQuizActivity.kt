@@ -17,6 +17,7 @@ import androidx.core.view.updateLayoutParams
 import com.saverio.finapp.R
 import com.saverio.finapp.db.DatabaseHandler
 import com.saverio.finapp.db.QuizzesModel
+import com.saverio.finapp.db.SimulationQuizzesModel
 import com.saverio.finapp.db.StatisticsModel
 import com.saverio.finapp.ui.theory.SectionActivity
 import java.text.SimpleDateFormat
@@ -24,14 +25,14 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 class SimulationQuizActivity : AppCompatActivity() {
-    var selectedQuestion: Int = -1
-
     var questionsLayout = arrayOf<ConstraintLayout>()
     var questionsImage = arrayOf<ImageView>()
     var questions = arrayOf<TextView>()
 
     val correctListLettToNum = mapOf("A" to 0, "B" to 1, "C" to 2, "D" to 3)
     val correctListNumToLett = mapOf(0 to "A", 1 to "B", 2 to "C", 3 to "D")
+
+    var questionsSimulation = ArrayList<SimulationQuizzesModel>()
 
     var timePassed: Int = 0
     var simulationDatetime: String = ""
@@ -66,7 +67,35 @@ class SimulationQuizActivity : AppCompatActivity() {
 
         simulationDatetime = now()
 
-        //start(chapterId!!, number = questionNumber, questionId)
+        val databaseHandler = DatabaseHandler(this)
+        val questionsTemp = databaseHandler.getQuizzesRandom(limit = 50)
+        questionsTemp.forEach {
+            questionsSimulation.add(
+                SimulationQuizzesModel(
+                    id = it.id,
+                    chapter = it.chapter!!,
+                    section = it.section!!,
+                    question = it.question!!,
+                    A = it.A!!,
+                    B = it.B!!,
+                    C = it.C!!,
+                    D = it.D!!,
+                    correct = it.correct!!,
+                    user_answer = ""
+                )
+            )
+        }
+
+        questionsSimulation.forEachIndexed { index, it ->
+            println("$index || id: ${it.id}")
+        }
+
+
+        start(
+            chapterId = questionsSimulation[0].chapter!!,
+            number = 1,
+            questionId = questionsSimulation[0].id
+        )
 
         startTime()
 
@@ -79,19 +108,13 @@ class SimulationQuizActivity : AppCompatActivity() {
     }
 
     fun start(chapterId: Int, number: Int, questionId: Int) {
-        val databaseHandler = DatabaseHandler(this)
-        val getQuiz = databaseHandler.getQuiz(id = questionId)
+        val getQuiz = questionsSimulation[number - 1]
         setupQuiz(
             chapter = chapterId,
             getQuiz = getQuiz,
             number = number,
-            total = databaseHandler.getQuizzes(chapter = chapterId).size
+            total = questionsSimulation.size
         )
-        if (databaseHandler.checkStatistics(question = questionId, type = 0)) {
-            val statistics = databaseHandler.getStatistics(question_id = questionId, type = 0)[0]
-            selectedQuestion = correctListLettToNum[statistics.user_answer]!!
-            findViewById<Button>(R.id.buttonCheck).performClick()
-        }
     }
 
     fun startTime() {
@@ -105,14 +128,12 @@ class SimulationQuizActivity : AppCompatActivity() {
         if (timePassed < (MAX_TIME) && !timeFinished) {
             if (!timeStopped) {
                 timePassed++
-                println("Time incremented")
             }
             Handler().postDelayed({ incrementTime() }, 1)//todo change to 1000 after tests
         } else {
             println("Time finished")
             timeFinished = true
         }
-        println("Time passed: $timePassed")
         timeText.text =
             getString(R.string.time_residual_text).replace("{{time}}", getTimeFormatted())
         setProgressBar()
@@ -139,7 +160,6 @@ class SimulationQuizActivity : AppCompatActivity() {
                     )
                 }}"
         }
-        println(time.toString())
         return timeToReturn
     }
 
@@ -184,29 +204,28 @@ class SimulationQuizActivity : AppCompatActivity() {
 
     fun setupQuiz(
         chapter: Int? = null,
-        getQuiz: QuizzesModel,
+        getQuiz: SimulationQuizzesModel,
         number: Int,
         total: Int
     ) {
-        val questionNumber: TextView = findViewById(R.id.textViewQuestionNumber)
-        val questionTime: TextView = findViewById(R.id.textViewTimeUsed)
-        val question: TextView = findViewById(R.id.textViewQuestionQuestion)
+        val questionNumber: TextView = findViewById(R.id.textViewQuestionNumberSimulation)
+        //val questionTime: TextView = findViewById(R.id.textViewTimePassed)
+        val question: TextView = findViewById(R.id.textViewQuestionQuestionSimulation)
 
-        val theoryButton: Button = findViewById(R.id.buttonTheory)
-        val exitTestButton: Button = findViewById(R.id.buttonExitTest)
+        val theoryButton: Button = findViewById(R.id.buttonTheorySimulation)
+        val exitTestButton: Button = findViewById(R.id.buttonExitTestSimulation)
 
-        val buttonBack: Button = findViewById(R.id.buttonGoBack)
-        val buttonForward: Button = findViewById(R.id.buttonGoForward)
-        val buttonCheck: Button = findViewById(R.id.buttonCheck)
+        val buttonBack: Button = findViewById(R.id.buttonGoBackSimulation)
+        val buttonForward: Button = findViewById(R.id.buttonGoForwardSimulation)
+        val buttonFinish: Button = findViewById(R.id.buttonFinishSimulation)
 
         buttonBack.setOnClickListener {
-            val databaseHandler = DatabaseHandler(this)
-            val getQuiz =
-                databaseHandler.getQuiz(id = databaseHandler.getQuizzes(chapter = chapter)[number - 2].id)
+            val getQuiz = questionsSimulation[number - 2]
             resetQuestionsLayout(chapter!!, number - 1, questionId = getQuiz.id)
         }
 
-        buttonCheck.setOnClickListener {
+        buttonFinish.setOnClickListener {
+            /*
             if (selectedQuestion != -1) {
                 buttonCheck.isGone = true
                 if (number == total) buttonForward.isGone = true
@@ -219,24 +238,28 @@ class SimulationQuizActivity : AppCompatActivity() {
                     update = true
                 )
             }
+            */
         }
 
         buttonForward.setOnClickListener {
-            val databaseHandler = DatabaseHandler(this)
-            val getQuiz =
-                databaseHandler.getQuiz(id = databaseHandler.getQuizzes(chapter = chapter)[number].id)
+            val getQuiz = questionsSimulation[number]
             resetQuestionsLayout(chapter!!, number + 1, questionId = getQuiz.id)
         }
 
         if (number == 1) buttonBack.isGone = true
         else buttonBack.isGone = false
 
-        buttonCheck.isGone = false
+        if (number == total) {
+            buttonForward.isGone = true
+            buttonFinish.isGone = false
+        } else {
+            buttonForward.isGone = false
+            buttonFinish.isGone = true
+        }
 
         questionNumber.text =
-            getString(R.string.question_number_chapter_text).replace("{{n}}", number.toString())
+            getString(R.string.question_number_text).replace("{{n}}", number.toString())
                 .replace("{{tot}}", total.toString())
-                .replace("{{chapter}}", getQuiz.chapter.toString())
 
         theoryButton.setOnClickListener {
             val intent = Intent(this, SectionActivity::class.java)
@@ -254,23 +277,29 @@ class SimulationQuizActivity : AppCompatActivity() {
         questions[2].text = getQuiz.C
         questions[3].text = getQuiz.D
 
-        if (selectedQuestion != -1) selectOption(index = selectedQuestion)
+        if (questionsSimulation[number - 1].user_answer != "")
+            selectOption(
+                questionId = number - 1,
+                index = correctListLettToNum[questionsSimulation[number - 1].user_answer]!!
+            )
 
         questionsLayout.forEachIndexed { index, it ->
             it.setOnClickListener {
-                selectOption(index)
+                selectOption(number - 1, index)
             }
         }
     }
 
-    fun selectOption(index: Int) {
-        questionsImage[0].setBackgroundResource(R.drawable.ic_checkbox)
-        questionsImage[1].setBackgroundResource(R.drawable.ic_checkbox)
-        questionsImage[2].setBackgroundResource(R.drawable.ic_checkbox)
-        questionsImage[3].setBackgroundResource(R.drawable.ic_checkbox)
+    fun selectOption(questionId: Int, index: Int) {
+        if (!timeFinished) {
+            questionsImage[0].setBackgroundResource(R.drawable.ic_checkbox)
+            questionsImage[1].setBackgroundResource(R.drawable.ic_checkbox)
+            questionsImage[2].setBackgroundResource(R.drawable.ic_checkbox)
+            questionsImage[3].setBackgroundResource(R.drawable.ic_checkbox)
 
-        questionsImage[index].setBackgroundResource(R.drawable.ic_checkbox_checked)
-        selectedQuestion = index
+            questionsImage[index].setBackgroundResource(R.drawable.ic_checkbox_checked)
+            questionsSimulation[questionId].user_answer = correctListNumToLett[index]!!
+        }
     }
 
     fun checkOption(correct: Int, selected: Int, questionId: Int, update: Boolean = false) {
@@ -314,9 +343,7 @@ class SimulationQuizActivity : AppCompatActivity() {
     }
 
     fun resetQuestionsLayout(chapterId: Int, number: Int, questionId: Int) {
-        val question: TextView = findViewById(R.id.textViewQuestionQuestion)
-
-        selectedQuestion = -1
+        val question: TextView = findViewById(R.id.textViewQuestionQuestionSimulation)
 
         questionsLayout.forEach {
             it.isEnabled = true
