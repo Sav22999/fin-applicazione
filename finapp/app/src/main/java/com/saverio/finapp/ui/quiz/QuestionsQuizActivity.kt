@@ -17,7 +17,6 @@ import com.saverio.finapp.db.StatisticsModel
 import com.saverio.finapp.ui.theory.SectionActivity
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.ArrayList
 
 class QuestionsQuizActivity : AppCompatActivity() {
     var selectedQuestion: Int = -1
@@ -217,13 +216,18 @@ class QuestionsQuizActivity : AppCompatActivity() {
 
         questionsImage[selected].setBackgroundResource(R.drawable.ic_checkbox_checked)
         questionsImage[selected].backgroundTintList =
-            ColorStateList.valueOf(resources.getColor(R.color.colorTimeRed))
-        questions[selected].setTextColor(resources.getColor(R.color.colorTimeRed))
-
-        questionsImage[correct].setBackgroundResource(R.drawable.ic_checkbox_checked)
-        questionsImage[correct].backgroundTintList =
             ColorStateList.valueOf(resources.getColor(R.color.colorTimeGreen))
-        questions[correct].setTextColor(resources.getColor(R.color.colorTimeGreen))
+        questionsImage[selected].imageTintList =
+            ColorStateList.valueOf(resources.getColor(R.color.colorTimeGreen))
+        questions[selected].setTextColor(resources.getColor(R.color.colorTimeGreen))
+        if (correct != selected) {
+            questionsImage[correct].setBackgroundResource(R.drawable.ic_checkbox_checked)
+            questionsImage[correct].backgroundTintList =
+                ColorStateList.valueOf(resources.getColor(R.color.colorTimeRed))
+            questionsImage[correct].imageTintList =
+                ColorStateList.valueOf(resources.getColor(R.color.colorTimeRed))
+            questions[correct].setTextColor(resources.getColor(R.color.colorTimeRed))
+        }
 
         questionsLayout.forEachIndexed { index, it ->
             it.isEnabled = false
@@ -260,6 +264,7 @@ class QuestionsQuizActivity : AppCompatActivity() {
         questionsImage.forEach {
             it.setBackgroundResource(R.drawable.ic_checkbox)
             it.backgroundTintList = question.textColors
+            it.imageTintList = question.textColors
         }
         questions.forEach {
             it.setTextColor(question.textColors)

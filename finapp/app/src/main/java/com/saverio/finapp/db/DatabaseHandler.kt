@@ -784,18 +784,23 @@ class DatabaseHandler(context: Context) :
     }
 
     @SuppressLint("Range")
-    fun getStatistics(question_id: Int? = null, type: Int? = null): ArrayList<StatisticsModel> {
+    fun getStatistics(
+        question_id: Int? = null,
+        type: Int? = null,
+        datetime: String? = null
+    ): ArrayList<StatisticsModel> {
         val statisticsList = ArrayList<StatisticsModel>()
+        var details = ""
+        if (question_id != null) details += "`${COLUMN_QUESTION_ID_STATISTICS}` = '${question_id}'"
+        if (question_id != null && (type != null || datetime != null)) details += " AND "
+        if (type != null) details += "`${COLUMN_TYPE_STATISTICS}` = '${type}'"
+        if (type != null && datetime != null) details += " AND "
+        if (datetime != null) details += "`${COLUMN_DATETIME_STATISTICS}` = '${datetime}'"
         var query = ""
-
-        if (question_id == null && type == null) query =
+        if (question_id == null && type == null && datetime == null) query =
             "SELECT * FROM `${TABLE_NAME_STATISTICS}` ORDER BY `${COLUMN_DATETIME_STATISTICS}` DESC"
-        else if (question_id == null && type != null) query =
-            "SELECT * FROM `${TABLE_NAME_STATISTICS}` WHERE `${COLUMN_TYPE_STATISTICS}` = '${type}' ORDER BY `${COLUMN_DATETIME_STATISTICS}` DESC"
-        else if (question_id != null && type == null) query =
-            "SELECT * FROM `${TABLE_NAME_STATISTICS}` WHERE `${COLUMN_QUESTION_ID_STATISTICS}` = '${question_id}' ORDER BY `${COLUMN_DATETIME_STATISTICS}` DESC"
         else query =
-            "SELECT * FROM `${TABLE_NAME_STATISTICS}` WHERE `${COLUMN_QUESTION_ID_STATISTICS}` = '${question_id}' AND `${COLUMN_TYPE_STATISTICS}` = '${type}' ORDER BY `${COLUMN_DATETIME_STATISTICS}` DESC"
+            "SELECT * FROM `${TABLE_NAME_STATISTICS}` WHERE $details ORDER BY `${COLUMN_DATETIME_STATISTICS}` DESC"
 
         val database = readableDatabase
         var cursor: Cursor? = null

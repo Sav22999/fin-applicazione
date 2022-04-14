@@ -6,43 +6,22 @@
     android:layout_height="match_parent"
     tools:context=".ui.quiz.QuestionsQuizActivity">
 
-    <View
-        android:id="@+id/progressBarQuestionsGreen"
-        android:layout_width="0dp"
-        android:layout_height="5dp"
-        android:background="@color/colorTimeGreen"
-        android:visibility="gone"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <View
-        android:id="@+id/progressBarQuestionsRed"
-        android:layout_width="0dp"
-        android:layout_height="5dp"
-        android:background="@color/colorTimeRed"
-        android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/progressBarQuestionsGreen"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <TextView
         android:id="@+id/textViewQuestionNumber"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
-        android:layout_marginTop="10dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/progressBarQuestionsRed"
+        tools:layout_editor_absoluteY="10dp"
         tools:text="@string/question_number_text" />
 
     <TextView
         android:id="@+id/textViewTimeUsed"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
         android:layout_marginEnd="10dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/progressBarQuestionsRed"
+        tools:layout_editor_absoluteY="10dp"
         tools:text="@string/time_used_text" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -60,7 +39,7 @@
             android:layout_width="wrap_content"
             android:layout_height="50dp"
             android:background="@drawable/border_radius_25dp"
-            android:backgroundTint="@color/colorTimeRed"
+            android:backgroundTint="@color/colorTimeGreen"
             android:text="@string/exit_test_button"
             app:icon="@drawable/ic_exit"
             app:iconGravity="end"
@@ -107,6 +86,7 @@
                 android:id="@+id/textViewQuestionQuestion"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:minHeight="100dp"
                 android:padding="10dp"
                 android:textSize="24sp"
                 app:layout_constraintEnd_toEndOf="parent"

@@ -1,5 +1,6 @@
 package com.saverio.finapp.ui.quiz
 
+import android.content.Intent
 import android.content.res.ColorStateList
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -111,7 +112,6 @@ class SimulationQuizActivity : AppCompatActivity() {
 
     fun startTime() {
         timeStopped = false
-        println("Time started")
         incrementTime()
     }
 
@@ -123,7 +123,6 @@ class SimulationQuizActivity : AppCompatActivity() {
             }
             Handler().postDelayed({ incrementTime() }, 1000)//todo change to 1000 after tests
         } else {
-            println("Time finished")
             timeFinished = true
         }
         timeText.text =
@@ -133,7 +132,6 @@ class SimulationQuizActivity : AppCompatActivity() {
 
     fun stopTime() {
         timeStopped = true
-        println("Time stopped")
     }
 
     fun getTimeFormatted(): String {
@@ -150,7 +148,7 @@ class SimulationQuizActivity : AppCompatActivity() {
                     getValueWithZero(
                         time % 60
                     )
-                }}"
+                }"
         }
         return timeToReturn
     }
@@ -194,6 +192,7 @@ class SimulationQuizActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
+        //TODO: ask for confirmation
         finish()
         super.onBackPressed()
     }
@@ -220,20 +219,26 @@ class SimulationQuizActivity : AppCompatActivity() {
         }
 
         buttonFinish.setOnClickListener {
-            /*
-            if (selectedQuestion != -1) {
-                buttonCheck.isGone = true
-                if (number == total) buttonForward.isGone = true
-                else buttonForward.isGone = false
+            //TODO: ask for confirmation
 
-                checkOption(
-                    selected = selectedQuestion,
-                    correct = correctListLettToNum[getQuiz.correct]!!,
-                    questionId = getQuiz.id,
-                    update = true
+            questionsSimulation.forEach {
+                val databaseHandler = DatabaseHandler(this)
+                val statistics = StatisticsModel(
+                    id = databaseHandler.getNewIdStatistics(),
+                    type = 1,
+                    datetime = simulationDatetime,
+                    question_id = it.id,
+                    correct_answer = it.correct,
+                    user_answer = it.user_answer
                 )
+                databaseHandler.addStatistics(statistics)
             }
-            */
+
+            val intent = Intent(this, ResultsSimulationQuizActivity::class.java)
+            intent.putExtra("datetime", simulationDatetime)
+            startActivity(intent)
+
+            finish()
         }
 
         buttonForward.setOnClickListener {
@@ -296,46 +301,6 @@ class SimulationQuizActivity : AppCompatActivity() {
         }
     }
 
-    fun checkOption(correct: Int, selected: Int, questionId: Int, update: Boolean = false) {
-        questionsImage[0].setBackgroundResource(R.drawable.ic_checkbox)
-        questionsImage[1].setBackgroundResource(R.drawable.ic_checkbox)
-        questionsImage[2].setBackgroundResource(R.drawable.ic_checkbox)
-        questionsImage[3].setBackgroundResource(R.drawable.ic_checkbox)
-
-        questionsImage[selected].setBackgroundResource(R.drawable.ic_checkbox_checked)
-        questionsImage[selected].backgroundTintList =
-            ColorStateList.valueOf(resources.getColor(R.color.colorTimeRed))
-        questions[selected].setTextColor(resources.getColor(R.color.colorTimeRed))
-
-        questionsImage[correct].setBackgroundResource(R.drawable.ic_checkbox_checked)
-        questionsImage[correct].backgroundTintList =
-            ColorStateList.valueOf(resources.getColor(R.color.colorTimeGreen))
-        questions[correct].setTextColor(resources.getColor(R.color.colorTimeGreen))
-
-        questionsLayout.forEachIndexed { index, it ->
-            it.isEnabled = false
-        }
-
-        if (update) {
-            val databaseHandler = DatabaseHandler(this)
-            val statistics = StatisticsModel(
-                id = databaseHandler.getNewIdStatistics(),
-                type = 0,
-                datetime = now(),
-                question_id = questionId,
-                correct_answer = correctListNumToLett[correct],
-                user_answer = correctListNumToLett[selected]
-            )
-            if (!databaseHandler.checkStatistics(question = questionId, type = 0))
-                databaseHandler.addStatistics(statistics)
-            else {
-                statistics.id =
-                    databaseHandler.getStatistics(question_id = questionId, type = 0)[0].id
-                databaseHandler.updateStatistics(statistics)
-            }
-        }
-    }
-
     fun resetQuestionsLayout(chapterId: Int, number: Int, questionId: Int) {
         val question: TextView = findViewById(R.id.textViewQuestionQuestionSimulation)
 
@@ -345,6 +310,7 @@ class SimulationQuizActivity : AppCompatActivity() {
         questionsImage.forEach {
             it.setBackgroundResource(R.drawable.ic_checkbox)
             it.backgroundTintList = question.textColors
+            it.imageTintList = question.textColors
         }
         questions.forEach {
             it.setTextColor(question.textColors)
