@@ -17,7 +17,8 @@ class MistakesQuizActivity : AppCompatActivity() {
         setContentView(R.layout.activity_mistakes_quiz)
 
         val databaseHandler = DatabaseHandler(this)
-        val getStatistics = databaseHandler.getMistakesStatistics()
+        var getStatistics = databaseHandler.getMistakesStatistics()
+
         setupRecyclerView(clear = true, search = false, getStatistics = getStatistics)
 
         val actionBar = getSupportActionBar()

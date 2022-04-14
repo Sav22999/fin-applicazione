@@ -766,6 +766,7 @@ class DatabaseHandler(context: Context) :
 
     @SuppressLint("Range")
     fun getNewIdStatistics(): Int {
+        //get a new unique id for statistics (based to the last one created)
         var valueToReturn = 0
         val query =
             "SELECT * FROM `${TABLE_NAME_STATISTICS}` ORDER BY `${COLUMN_ID_PK_STATISTICS}` DESC LIMIT 1"
@@ -791,6 +792,7 @@ class DatabaseHandler(context: Context) :
         type: Int? = null,
         datetime: String? = null
     ): ArrayList<StatisticsModel> {
+        //get all statistics data filtered by some parameters (question_id and/or type and/or datetime)
         val statisticsList = ArrayList<StatisticsModel>()
         var details = ""
         if (question_id != null) details += "`${COLUMN_QUESTION_ID_STATISTICS}` = '${question_id}'"
@@ -845,9 +847,12 @@ class DatabaseHandler(context: Context) :
 
     @SuppressLint("Range")
     fun getMistakesStatistics(): ArrayList<StatisticsModel> {
+        //return (DISTINCT) mistakes quiz
         val statisticsList = ArrayList<StatisticsModel>()
         val query =
-            "SELECT DISTINCT `${COLUMN_QUESTION_ID_STATISTICS}`, * FROM `${TABLE_NAME_STATISTICS}` WHERE NOT `${COLUMN_CORRECT_ANSWER_STATISTICS}` = `${COLUMN_USER_ANSWER_STATISTICS}` ORDER BY `${COLUMN_DATETIME_STATISTICS}` DESC"
+            "SELECT DISTINCT `${COLUMN_QUESTION_ID_STATISTICS}` FROM `${TABLE_NAME_STATISTICS}` WHERE NOT `${COLUMN_CORRECT_ANSWER_STATISTICS}` = `${COLUMN_USER_ANSWER_STATISTICS}` ORDER BY `${COLUMN_DATETIME_STATISTICS}` DESC"
+
+        println(query)
 
         val database = readableDatabase
         var cursor: Cursor? = null
@@ -861,26 +866,8 @@ class DatabaseHandler(context: Context) :
 
         if (cursor.moveToFirst()) {
             do {
-                val id = cursor.getInt(cursor.getColumnIndex(COLUMN_ID_PK_STATISTICS))
-                val type = cursor.getInt(cursor.getColumnIndex(COLUMN_TYPE_STATISTICS))
-                val datetime = cursor.getString(cursor.getColumnIndex(COLUMN_DATETIME_STATISTICS))
-                val questionId =
+                val statisticsToAdd = getOneStatisticByQuestionId(
                     cursor.getInt(cursor.getColumnIndex(COLUMN_QUESTION_ID_STATISTICS))
-                val correctAnswer =
-                    cursor.getString(cursor.getColumnIndex(COLUMN_CORRECT_ANSWER_STATISTICS))
-                val userAnswer =
-                    cursor.getString(cursor.getColumnIndex(COLUMN_USER_ANSWER_STATISTICS))
-                val milliseconds =
-                    cursor.getInt(cursor.getColumnIndex(COLUMN_MILLISECONDS_STATISTICS))
-
-                val statisticsToAdd = StatisticsModel(
-                    id = id,
-                    type = type,
-                    datetime = datetime,
-                    question_id = questionId,
-                    correct_answer = correctAnswer,
-                    user_answer = userAnswer,
-                    milliseconds = milliseconds
                 )
                 statisticsList.add(statisticsToAdd)
             } while (cursor.moveToNext())
@@ -889,10 +876,10 @@ class DatabaseHandler(context: Context) :
     }
 
     @SuppressLint("Range")
-    fun getStatistics(id: Int): StatisticsModel {
-        var statisticsToReturn = StatisticsModel(id, 0, 0, "", null, null, -1)
+    fun getOneStatisticByQuestionId(question_id: Int): StatisticsModel {
+        var statisticsToReturn = StatisticsModel(-1, 0, question_id, "", null, null, -1)
         val query =
-            "SELECT * FROM `${TABLE_NAME_STATISTICS}` WHERE `${COLUMN_ID_PK_STATISTICS}` = $id ORDER BY `${COLUMN_DATETIME_STATISTICS}` DESC"
+            "SELECT * FROM `${TABLE_NAME_STATISTICS}` WHERE `${COLUMN_QUESTION_ID_STATISTICS}` = $question_id ORDER BY `${COLUMN_DATETIME_STATISTICS}` DESC LIMIT 1"
         val database = readableDatabase
         var cursor: Cursor? = null
 
