@@ -4,6 +4,7 @@
     <string name="title_theory">Teoria</string>
     <string name="title_chapters">Capitoli</string>
     <string name="title_simulation_results">Risultati simulazione</string>
+    <string name="title_mistakes">Risposte sbagliate</string>
     <string name="title_sections">Sezioni</string>
     <string name="title_quiz">Quiz</string>
     <string name="title_settings">Impostazioni</string>
@@ -39,6 +40,7 @@
     <string name="no_chapters_available_text">Nessun capitolo è disponibile. Vai in Impostazioni per aggiornare i dati.</string>
     <string name="no_sections_available_text">Nessuna sezione è disponibile. Vai in Impostazioni per aggiornare i dati.</string>
     <string name="no_results_available_text">Nessun risultato è disponibile. Si è verificato un errore.</string>
+    <string name="no_mistaks_available_text">Nessuna risposta sbagliata fino ad ora.</string>
     <string name="results_error_text">Si è verificato un errore durante il caricamento dei risultati.</string>
     <string name="no_results_chapter_text">Non sono stati trovati capitoli con i parametri specificati. Prova a effettuare una nuova ricerca.</string>
     <string name="no_results_section_text">Non sono state trovate sezioni con i parametri specificati. Prova a effettuare una nuova ricerca.</string>

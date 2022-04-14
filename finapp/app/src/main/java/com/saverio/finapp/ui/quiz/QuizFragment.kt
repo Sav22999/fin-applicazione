@@ -46,6 +46,11 @@ class QuizFragment : Fragment() {
             val intent = Intent(context, SimulationQuizActivity::class.java)
             startActivity(intent)
         }
+        val mistakesCard = binding.cardViewQuizMistakes
+        mistakesCard.setOnClickListener {
+            val intent = Intent(context, MistakesQuizActivity::class.java)
+            startActivity(intent)
+        }
 
         val tabs = binding.tabLayout
         val tabsLayout = arrayOf(binding.tab1Layout, binding.tab2Layout)
