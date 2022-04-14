@@ -56,4 +56,20 @@
     <string name="correct_text">Corretta</string>
     <string name="wrong_text">Sbagliata</string>
     <string name="skipped_text">Saltata</string>
+
+    <!--Alert dialogs-->
+    <string name="closing_alert_dialog_title">Chiusura</string>
+    <string name="time_over_alert_dialog_title">Tempo scaduto</string>
+    <string name="sure_to_close_alert_dialog_text">Sei sicuro di voler uscire?</string>
+    <string name="sure_to_close_and_cancel_simulation_alert_dialog_text">Sei sicuro di voler uscire e annullare la simulazione?\nProcedendo perderai i progressi fatti in questa sessione di simulazione.</string>
+    <string name="sure_to_finish_simulation_alert_dialog_text">Sei sicuro di voler terminare la simulazione?</string>
+    <string name="time_over_simulation_alert_dialog_text">Il tempo è finito.\nContinua per vedere i risultati della simulazione.</string>
+    <string name="im_sure_alert_dialog_button">Sono sicuro</string>
+    <string name="cancel_alert_dialog_button">Annulla</string>
+    <string name="ok_alert_dialog_button">OK</string>
+    <string name="forward_alert_dialog_button">Avanti</string>
+    <string name="back_alert_dialog_button">Indietro</string>
+    <string name="continue_alert_dialog_button">Continua</string>
+    <string name="see_results_alert_dialog_button">Vedi risultati</string>
+    <string name="confirm_alert_dialog_button">Conferma</string>
 </resources>

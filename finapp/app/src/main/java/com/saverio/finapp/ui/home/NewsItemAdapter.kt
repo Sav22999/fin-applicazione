@@ -143,7 +143,7 @@ class NewsItemAdapter(private val context: Context, private val items: ArrayList
                         val POSITION_TO_ARRIVE_WITH_ERROR =
                             POSITION_TO_ARRIVE - (POSITION_TO_ARRIVE / 25)
                         if (view.x <= POSITION_TO_ARRIVE_WITH_ERROR) {
-                            //TODO Activated || Enable the sharing
+                            //Activated || Enable the sharing
                             //Go back to the start position
                             view.animate().x(cardStart).setDuration(500).start()
                             //Go all to left
@@ -156,7 +156,7 @@ class NewsItemAdapter(private val context: Context, private val items: ArrayList
                                 }, 500
                             )
                         } else {
-                            //TODO Not activated (cancelled)
+                            //Not activated (cancelled)
                             view.animate().x(cardStart).setDuration(500).start()
                         }
                     }
