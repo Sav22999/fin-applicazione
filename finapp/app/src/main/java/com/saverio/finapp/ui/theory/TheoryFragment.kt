@@ -123,7 +123,11 @@ class TheoryFragment : Fragment() {
 
             binding.chaptersItemsList.layoutManager = LinearLayoutManager(requireContext())
             //binding.newsItemsList.setHasFixedSize(true)
-            val itemAdapter = ChaptersItemAdapter(requireContext(), getChapters)
+            val itemAdapter = ChaptersItemAdapter(
+                context = requireContext(),
+                items = getChapters,
+                search = binding.editTextSearchChapters.text.toString()
+            )
             binding.chaptersItemsList.adapter = itemAdapter
         } else {
             binding.noChaptersAvailableText.visibility = View.VISIBLE

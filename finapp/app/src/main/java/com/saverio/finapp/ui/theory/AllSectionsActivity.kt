@@ -27,9 +27,11 @@ class AllSectionsActivity : AppCompatActivity() {
 
         var chapterId: Int? = null
         var sectionId: String? = null
+        var initialSearch = ""
 
         if (bundle != null) {
             chapterId = bundle.getInt("chapter_id")
+            initialSearch = bundle.getString("search")!!
         }
         val databaseHandler = DatabaseHandler(this)
 
@@ -60,6 +62,11 @@ class AllSectionsActivity : AppCompatActivity() {
             false
         })
 
+        if (initialSearch != "") {
+            searchBox.setText(initialSearch)
+            showSoftKeyboard(searchBox)
+        }
+
         val title: TextView = findViewById(R.id.titleSections)
         title.text =
             getString(R.string.chapter_id_text).replace("{{chapter_id}}", chapterId.toString())
@@ -72,7 +79,15 @@ class AllSectionsActivity : AppCompatActivity() {
         }
     }
 
-    fun View.hideSoftInput() {
+    private fun showSoftKeyboard(view: View) {
+        if (view.requestFocus()) {
+            val inputMethodManager: InputMethodManager =
+                getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            inputMethodManager.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT)
+        }
+    }
+
+    private fun View.hideSoftInput() {
         //hide the keyboard
         val inputMethodManager =
             context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager

@@ -17,7 +17,8 @@ import com.saverio.finapp.db.ChaptersModel
 
 class ChaptersItemAdapter(
     private val context: Context,
-    private val items: ArrayList<ChaptersModel>
+    private val items: ArrayList<ChaptersModel>,
+    private val search: String = ""
 ) :
     RecyclerView.Adapter<ChaptersItemAdapter.ItemViewHolder>() {
 
@@ -27,6 +28,7 @@ class ChaptersItemAdapter(
                 .inflate(R.layout.chapter_theory_recyclerview, parent, false)
         )
     }
+
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
@@ -44,71 +46,8 @@ class ChaptersItemAdapter(
         holder.chapterCard.setOnClickListener {
             val intent = Intent(context, AllSectionsActivity::class.java)
             intent.putExtra("chapter_id", item.chapter)
+            intent.putExtra("search", search)
             context.startActivity(intent)
-        }
-
-        /*
-        holder.cardViewNews.setOnTouchListener(
-            View.OnTouchListener { view, event ->
-                val displayMetrics = view.resources.displayMetrics
-                val cardWidth = view.width
-                val cardStart = (displayMetrics.widthPixels.toFloat() / 2) - (cardWidth / 2)
-                val MAX_SWIPE_LEFT_DISTANCE = 50
-                val POSITION_TO_ARRIVE = MAX_SWIPE_LEFT_DISTANCE.toFloat() - (cardWidth / 2)
-                val POSITION_ALL_TO_LEFT = -(cardWidth + cardStart)
-                when (event.action) {
-                    MotionEvent.ACTION_MOVE -> {
-                        // get the new co-ordinate of X-axis
-                        val newX = event.rawX
-
-                        // carry out swipe only if newX < cardStart, that is,
-                        // the card is swiped to the left side, not to the right
-                        if (newX > MAX_SWIPE_LEFT_DISTANCE) {
-                            view.animate()
-                                .x(
-                                    min(cardStart, newX - (cardWidth / 2))
-                                )
-                                .setDuration(0)
-                                .start()
-                        } else {
-                            view.animate().x(POSITION_TO_ARRIVE)
-                        }
-                    }
-                    MotionEvent.ACTION_UP -> {
-                        //when the action is up
-                        val POSITION_TO_ARRIVE_WITH_ERROR =
-                            POSITION_TO_ARRIVE - (POSITION_TO_ARRIVE / 25)
-                        if (view.x <= POSITION_TO_ARRIVE_WITH_ERROR) {
-                            //Activated || Enable the sharing
-                            //Go back to the start position
-                            view.animate().x(cardStart).setDuration(500).start()
-                            //Go all to left
-                            view.animate().x(POSITION_ALL_TO_LEFT).setDuration(500).start()
-                            Handler().postDelayed(
-                                {
-                                    /*view.animate().x(-(POSITION_ALL_TO_LEFT * 2)).setDuration(0)
-                                        .start()*/
-                                    view.animate().x(cardStart).setDuration(100).start()
-                                }, 500
-                            )
-                        } else {
-                            //Not activated (cancelled)
-                            view.animate().x(cardStart).setDuration(500).start()
-                        }
-                    }
-                }
-
-                // required to by-pass lint warning
-                view.performClick()
-                return@OnTouchListener true
-            }
-        )
-        */
-
-        if (position % 2 == 0) {
-            //even position
-        } else {
-            //odd position
         }
     }
 
