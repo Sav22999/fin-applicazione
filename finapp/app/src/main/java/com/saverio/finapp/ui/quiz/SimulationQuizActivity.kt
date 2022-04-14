@@ -34,9 +34,9 @@ class SimulationQuizActivity : AppCompatActivity() {
 
     var questionsSimulation = ArrayList<SimulationQuizzesModel>()
 
-    var timePassed: Int = 0
     var simulationDatetime: String = ""
     val MAX_TIME: Int = 7200 //2 hours in seconds (2*60*60)=7200
+    var timePassed: Int = 0
     var timeStopped = true
     var timeFinished = false
 
@@ -155,7 +155,7 @@ class SimulationQuizActivity : AppCompatActivity() {
             timeToReturn = "00:00:${getValueWithZero(time)}"
         } else if (time < (60 * 60)) {
             timeToReturn =
-                "00:${getValueWithZero(time / 60)}:${getValueWithZero(time % 60)}}"
+                "00:${getValueWithZero(time / 60)}:${getValueWithZero(time % 60)}"
         } else {
             timeToReturn =
                 "${getValueWithZero(time / (60 * 60))}:${getValueWithZero((time - 60 * 60) / 60)}:${
@@ -310,6 +310,7 @@ class SimulationQuizActivity : AppCompatActivity() {
     }
 
     fun seeResults() {
+        val milliseconds = timePassed
         questionsSimulation.forEach {
             val databaseHandler = DatabaseHandler(this)
             val statistics = StatisticsModel(
@@ -318,7 +319,8 @@ class SimulationQuizActivity : AppCompatActivity() {
                 datetime = simulationDatetime,
                 question_id = it.id,
                 correct_answer = it.correct,
-                user_answer = it.user_answer
+                user_answer = it.user_answer,
+                milliseconds = milliseconds
             )
             databaseHandler.addStatistics(statistics)
         }

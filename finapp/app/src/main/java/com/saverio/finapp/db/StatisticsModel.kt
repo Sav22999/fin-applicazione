@@ -6,5 +6,6 @@ class StatisticsModel(
     var question_id: Int = 0,
     var datetime: String = "",
     var correct_answer: String? = null,
-    var user_answer: String? = null
+    var user_answer: String? = null,
+    var milliseconds: Int = -1
 )

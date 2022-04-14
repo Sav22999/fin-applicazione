@@ -79,12 +79,12 @@ class HomeFragment : Fragment() {
             //println("Showing")
             val allNews = (activity as MainActivity).getNews()
             allNews.forEach {
-                println("${it.id} | ${it.type} | ${it.text}")
+                //println("${it.id} | ${it.type} | ${it.text}")
             }
             val databaseHandler = DatabaseHandler(requireContext())
             val allStatistics = databaseHandler.getStatistics()
             allStatistics.forEach {
-                println("id:${it.id} | type:${it.type} | question:${it.question_id} | datetime:${it.datetime} | correct:${it.correct_answer} | user:${it.user_answer}")
+                println("id:${it.id} | type:${it.type} | question:${it.question_id} | datetime:${it.datetime} | correct:${it.correct_answer} | user:${it.user_answer} | milliseconds:${it.milliseconds}")
             }
             //println("Shown")
         }

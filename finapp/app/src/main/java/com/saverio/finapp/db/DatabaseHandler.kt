@@ -11,7 +11,7 @@ import android.database.sqlite.SQLiteOpenHelper
 class DatabaseHandler(context: Context) :
     SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
     override fun onCreate(database: SQLiteDatabase) {
-        println("onCreate")
+        //println("onCreate")
         var query = ""
         //Create "chapters" table
         query = "CREATE TABLE `${TABLE_NAME_CHAPTERS}` (" +
@@ -63,13 +63,14 @@ class DatabaseHandler(context: Context) :
                 "  `${COLUMN_DATETIME_STATISTICS}` TEXT NOT NULL," +
                 "  `${COLUMN_CORRECT_ANSWER_STATISTICS}` TEXT NOT NULL," +
                 "  `${COLUMN_USER_ANSWER_STATISTICS}` TEXT NOT NULL," +
-                "  `${COLUMN_QUESTION_ID_STATISTICS}` TEXT NOT NULL" +
+                "  `${COLUMN_QUESTION_ID_STATISTICS}` TEXT NOT NULL," +
+                "  `${COLUMN_MILLISECONDS_STATISTICS}` INT NOT NULL" +
                 ")"
         database.execSQL(query)
     }
 
     override fun onUpgrade(database: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
-        println("onUpgrade")
+        //println("onUpgrade")
         database.execSQL("DROP TABLE IF EXISTS `${TABLE_NAME_CHAPTERS}`")
         database.execSQL("DROP TABLE IF EXISTS `${TABLE_NAME_SECTIONS}`")
         database.execSQL("DROP TABLE IF EXISTS `${TABLE_NAME_QUIZZES}`")
@@ -756,6 +757,7 @@ class DatabaseHandler(context: Context) :
         if (statistics.user_answer == null) contentValues.put(COLUMN_USER_ANSWER_STATISTICS, "NULL")
         else contentValues.put(COLUMN_USER_ANSWER_STATISTICS, statistics.user_answer)
         contentValues.put(COLUMN_QUESTION_ID_STATISTICS, statistics.question_id)
+        contentValues.put(COLUMN_MILLISECONDS_STATISTICS, statistics.milliseconds)
         val success = database.insert(TABLE_NAME_STATISTICS, null, contentValues)
         database.close()
 
@@ -823,6 +825,8 @@ class DatabaseHandler(context: Context) :
                     cursor.getString(cursor.getColumnIndex(COLUMN_CORRECT_ANSWER_STATISTICS))
                 val userAnswer =
                     cursor.getString(cursor.getColumnIndex(COLUMN_USER_ANSWER_STATISTICS))
+                val milliseconds =
+                    cursor.getInt(cursor.getColumnIndex(COLUMN_MILLISECONDS_STATISTICS))
 
                 val statisticsToAdd = StatisticsModel(
                     id = id,
@@ -830,7 +834,8 @@ class DatabaseHandler(context: Context) :
                     datetime = datetime,
                     question_id = questionId,
                     correct_answer = correctAnswer,
-                    user_answer = userAnswer
+                    user_answer = userAnswer,
+                    milliseconds = milliseconds
                 )
                 statisticsList.add(statisticsToAdd)
             } while (cursor.moveToNext())
@@ -840,7 +845,7 @@ class DatabaseHandler(context: Context) :
 
     @SuppressLint("Range")
     fun getStatistics(id: Int): StatisticsModel {
-        var statisticsToReturn = StatisticsModel(id, 0, 0, "", null, null)
+        var statisticsToReturn = StatisticsModel(id, 0, 0, "", null, null, -1)
         val query =
             "SELECT * FROM `${TABLE_NAME_STATISTICS}` WHERE `${COLUMN_ID_PK_STATISTICS}` = $id ORDER BY `${COLUMN_DATETIME_STATISTICS}` DESC"
         val database = readableDatabase
@@ -861,12 +866,15 @@ class DatabaseHandler(context: Context) :
             val correctAnswer =
                 cursor.getString(cursor.getColumnIndex(COLUMN_CORRECT_ANSWER_STATISTICS))
             val userAnswer = cursor.getString(cursor.getColumnIndex(COLUMN_USER_ANSWER_STATISTICS))
+            val milliseconds = cursor.getInt(cursor.getColumnIndex(COLUMN_MILLISECONDS_STATISTICS))
+
             statisticsToReturn.id = id
             statisticsToReturn.type = type
             statisticsToReturn.datetime = datetime
             statisticsToReturn.question_id = questionId
             statisticsToReturn.correct_answer = correctAnswer
             statisticsToReturn.user_answer = userAnswer
+            statisticsToReturn.milliseconds = milliseconds
         }
         return statisticsToReturn
     }
@@ -876,6 +884,7 @@ class DatabaseHandler(context: Context) :
         var returnValue = false
         val query =
             "SELECT * FROM `${TABLE_NAME_STATISTICS}` WHERE `${COLUMN_QUESTION_ID_STATISTICS}` = $question AND `${COLUMN_TYPE_STATISTICS}` = $type"
+
         val database = readableDatabase
         var cursor: Cursor? = null
 
@@ -905,6 +914,7 @@ class DatabaseHandler(context: Context) :
         if (statistics.user_answer == null) contentValues.put(COLUMN_USER_ANSWER_STATISTICS, "NULL")
         else contentValues.put(COLUMN_USER_ANSWER_STATISTICS, statistics.user_answer)
         contentValues.put(COLUMN_QUESTION_ID_STATISTICS, statistics.question_id)
+        contentValues.put(COLUMN_MILLISECONDS_STATISTICS, statistics.milliseconds)
         val success = database.update(
             TABLE_NAME_STATISTICS,
             contentValues,
@@ -931,7 +941,7 @@ class DatabaseHandler(context: Context) :
     companion object {
         //general
         private val DATABASE_NAME = "QuizNuoto"
-        private val DATABASE_VERSION = 10 //TODO: change this manually
+        private val DATABASE_VERSION = 12 //TODO: change this manually
 
         //chapters table
         val TABLE_NAME_CHAPTERS = "chapters"
@@ -976,5 +986,6 @@ class DatabaseHandler(context: Context) :
         val COLUMN_USER_ANSWER_STATISTICS = "user_answer"
         val COLUMN_DATETIME_STATISTICS = "datetime"
         val COLUMN_QUESTION_ID_STATISTICS = "question"
+        val COLUMN_MILLISECONDS_STATISTICS = "milliseconds"
     }
 }
