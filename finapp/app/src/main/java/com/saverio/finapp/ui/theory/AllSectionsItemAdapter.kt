@@ -39,7 +39,7 @@ class AllSectionsItemAdapter(
         } else {
             holder.title.isGone = true
         }
-        holder.section_id.text = holder.section_text.replace("{{section_id}}", item.section)
+        holder.section_id.text = holder.section_text.replace("%s", item.section)
 
         holder.sectionCard.setOnClickListener {
             val intent = Intent(context, SectionActivity::class.java)

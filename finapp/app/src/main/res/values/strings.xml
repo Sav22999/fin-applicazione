@@ -16,6 +16,7 @@
     <string name="update_database">Update database</string>
     <string name="delete_database">Delete database</string>
 
+    <!--News-->
     <string name="type_0_general_news_text">Generale</string>
     <string name="type_1_pill_news_text">Pillola sul nuoto</string>
     <string name="type_2_did_you_know_news_text">Lo sapevi che…</string>
@@ -26,9 +27,10 @@
     <string name="read_more_text">Espandi ▼</string>
     <string name="read_less_text">Comprimi ▲</string>
 
-    <string name="chapter_id_text">Capitolo {{chapter_id}}</string>
-    <string name="section_id_text">Sezione {{section_id}}</string>
-    <string name="author_text">di {{author}}</string>
+    <!--Theory and quiz-->
+    <string name="chapter_id_text">Capitolo %d</string>
+    <string name="section_id_text">Sezione %s</string>
+    <string name="author_text">di %s</string>
 
     <string name="by_chapters_tab_text">Per capitoli</string>
     <string name="by_other_tab_text">Altro</string>
@@ -36,6 +38,7 @@
     <string name="simulation_test_text">Simulazione della prova d\'esame</string>
     <string name="mistakes_text">Ripeti solo le risposte sbagliate in precedenza</string>
 
+    <!--Messages-->
     <string name="no_news_available_text">Nessuna notizia disponibile. Per favore, fai swipe down per aggiornare la pagina.</string>
     <string name="no_chapters_available_text">Nessun capitolo è disponibile. Vai in Impostazioni per aggiornare i dati.</string>
     <string name="no_sections_available_text">Nessuna sezione è disponibile. Vai in Impostazioni per aggiornare i dati.</string>
@@ -46,18 +49,42 @@
     <string name="no_results_section_text">Non sono state trovate sezioni con i parametri specificati. Prova a effettuare una nuova ricerca.</string>
     <string name="search_hint_text">Cerca…</string>
 
-    <string name="time_residual_text">Tempo rimanente: {{time}}</string>
-    <string name="time_used_text">Tempo usato: {{time}}</string>
-    <string name="question_number_chapter_text">Domanda {{n}} di {{tot}} (Capitolo {{chapter}})</string>
-    <string name="question_number_text">Domanda {{n}} di {{tot}}</string>
+    <!--Simulation and quiz-->
+    <string name="time_residual_text">Tempo rimanente: %s</string>
+    <string name="time_used_text">Tempo impiegato: %s</string>
+    <string name="question_number_chapter_text">Domanda %d di %d (Capitolo %d)</string>
+    <string name="question_number_text">Domanda %d di %d</string>
     <string name="exit_test_button">Termina prova</string>
     <string name="theory_button">Teoria</string>
     <string name="finish_test_simulation_button">Termina</string>
 
-    <string name="question_n_text">Domanda {{n}}</string>
+    <string name="question_n_text">Domanda %d</string>
     <string name="correct_text">Corretta</string>
     <string name="wrong_text">Sbagliata</string>
     <string name="skipped_text">Saltata</string>
+    <string name="exam_passed_text">Test superato</string>
+    <string name="exam_not_passed_text">Test non superato</string>
+    <string name="show_details_results_text">Mostra dettagli ▲</string>
+    <string name="hide_details_results_text">Nascondi dettagli ▼</string>
+    <string name="time_spent_details_results_text">Tempo impiegato: %s</string>
+    <string name="time_residual_details_results_text">Tempo rimanente: %s</string>
+    <string name="total_questions_details_results_text">Domande totali: %d</string>
+    <string name="correct_answers_details_results_text">Risposte corrette: %d</string>
+    <string name="wrong_answers_details_results_text">Risposte sbagliate: %d</string>
+    <string name="skipped_questions_details_results_text">Domande saltate: %d</string>
+    <string name="estimated_time_per_question_details_results_text">Tempo stimato per singola domanda: %s</string>
+    <plurals name="seconds_text">
+        <item formatted="true" quantity="one">%d secondo</item>
+        <item formatted="true" quantity="two">%d secondi</item>
+        <item formatted="true" quantity="few">%d secondi</item>
+        <item formatted="true" quantity="other">%d secondi</item>
+    </plurals>
+    <plurals name="minutes_text">
+        <item formatted="true" quantity="one">%d minuto</item>
+        <item formatted="true" quantity="two">%d minuti</item>
+        <item formatted="true" quantity="few">%d minuti</item>
+        <item formatted="true" quantity="other">%d minuti</item>
+    </plurals>
 
     <!--Alert dialogs-->
     <string name="closing_alert_dialog_title">Chiusura</string>

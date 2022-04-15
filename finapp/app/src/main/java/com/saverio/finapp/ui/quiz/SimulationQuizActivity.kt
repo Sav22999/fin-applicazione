@@ -138,8 +138,7 @@ class SimulationQuizActivity : AppCompatActivity() {
                     })
                 builder.create().show() //create and show the alert dialog
             }
-            timeText.text =
-                getString(R.string.time_residual_text).replace("{{time}}", getTimeFormatted())
+            timeText.text = getString(R.string.time_residual_text, getTimeFormatted())
             setProgressBar()
         }
     }
@@ -281,9 +280,7 @@ class SimulationQuizActivity : AppCompatActivity() {
             buttonFinish.isGone = true
         }
 
-        questionNumber.text =
-            getString(R.string.question_number_text).replace("{{n}}", number.toString())
-                .replace("{{tot}}", total.toString())
+        questionNumber.text = getString(R.string.question_number_text, number, total)
 
         exitTestButton.setOnClickListener {
             onBackPressed()

@@ -38,7 +38,7 @@ class MistakesQuizItemAdapter(
         val item = items[position]
 
         holder.chapterIdText.text =
-            holder.chapter_n_text.replace("{{chapter_id}}", item.question_id.toString())
+            holder.chapter_n_text.replace("%d", item.question_id.toString())
 
         val databaseHandler = DatabaseHandler(context)
 

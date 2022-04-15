@@ -846,6 +846,73 @@ class DatabaseHandler(context: Context) :
     }
 
     @SuppressLint("Range")
+    fun getWrongCorrectSkippedAnswersStatistics(
+        datetime: String,
+        filter: String = "ws"
+    ): ArrayList<StatisticsModel> {
+        //get all wrong answers of a specific simulation
+        //filter can be {w|c|s|ws} -> w:wrong, c:correct, s:skipped, ws:wrong and skipped || other values will be treated as "ws"
+        val statisticsList = ArrayList<StatisticsModel>()
+        var query = ""
+        if (filter == "c") {
+            //c:correct
+            query =
+                "SELECT * FROM `${TABLE_NAME_STATISTICS}` WHERE `${COLUMN_DATETIME_STATISTICS}` = '${datetime}' AND `${COLUMN_USER_ANSWER_STATISTICS}` = `${COLUMN_CORRECT_ANSWER_STATISTICS}` ORDER BY `${COLUMN_DATETIME_STATISTICS}` DESC"
+        } else if (filter == "s") {
+            //s:skipped
+            query =
+                "SELECT * FROM `${TABLE_NAME_STATISTICS}` WHERE `${COLUMN_DATETIME_STATISTICS}` = '${datetime}' AND `${COLUMN_TYPE_STATISTICS}` = 1 AND NOT `${COLUMN_USER_ANSWER_STATISTICS}` = '' ORDER BY `${COLUMN_DATETIME_STATISTICS}` DESC"
+        } else {
+            //w:wrong or ws:wrong and skipped (or other values)
+            var details1 = ""
+            if (filter == "w") {
+                //w:wrong (only)
+                details1 += "AND NOT `${COLUMN_USER_ANSWER_STATISTICS}` = ''"
+            }
+            query =
+                "SELECT * FROM `${TABLE_NAME_STATISTICS}` WHERE `${COLUMN_DATETIME_STATISTICS}` = '${datetime}' AND `${COLUMN_TYPE_STATISTICS}` = 1 $details1 AND NOT `${COLUMN_USER_ANSWER_STATISTICS}` = `${COLUMN_CORRECT_ANSWER_STATISTICS}` ORDER BY `${COLUMN_DATETIME_STATISTICS}` DESC"
+        }
+
+        val database = readableDatabase
+        var cursor: Cursor? = null
+
+        try {
+            cursor = database.rawQuery(query, null)
+        } catch (e: SQLException) {
+            database.execSQL(query)
+            return ArrayList()
+        }
+
+        if (cursor.moveToFirst()) {
+            do {
+                val id = cursor.getInt(cursor.getColumnIndex(COLUMN_ID_PK_STATISTICS))
+                val type = cursor.getInt(cursor.getColumnIndex(COLUMN_TYPE_STATISTICS))
+                val datetime = cursor.getString(cursor.getColumnIndex(COLUMN_DATETIME_STATISTICS))
+                val questionId =
+                    cursor.getInt(cursor.getColumnIndex(COLUMN_QUESTION_ID_STATISTICS))
+                val correctAnswer =
+                    cursor.getString(cursor.getColumnIndex(COLUMN_CORRECT_ANSWER_STATISTICS))
+                val userAnswer =
+                    cursor.getString(cursor.getColumnIndex(COLUMN_USER_ANSWER_STATISTICS))
+                val milliseconds =
+                    cursor.getInt(cursor.getColumnIndex(COLUMN_MILLISECONDS_STATISTICS))
+
+                val statisticsToAdd = StatisticsModel(
+                    id = id,
+                    type = type,
+                    datetime = datetime,
+                    question_id = questionId,
+                    correct_answer = correctAnswer,
+                    user_answer = userAnswer,
+                    milliseconds = milliseconds
+                )
+                statisticsList.add(statisticsToAdd)
+            } while (cursor.moveToNext())
+        }
+        return statisticsList
+    }
+
+    @SuppressLint("Range")
     fun getMistakesStatistics(): ArrayList<StatisticsModel> {
         //return (DISTINCT) mistakes quiz
         val statisticsList = ArrayList<StatisticsModel>()
@@ -934,6 +1001,7 @@ class DatabaseHandler(context: Context) :
     }
 
     fun updateStatistics(statistics: StatisticsModel): Int {
+        //update an existing statistics using it's primary key (id)
         val database = writableDatabase
 
         val contentValues = ContentValues()

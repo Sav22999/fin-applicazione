@@ -192,9 +192,7 @@ class QuestionsQuizActivity : AppCompatActivity() {
         else buttonForward.isGone = false
 
         questionNumber.text =
-            getString(R.string.question_number_chapter_text).replace("{{n}}", number.toString())
-                .replace("{{tot}}", total.toString())
-                .replace("{{chapter}}", getQuiz.chapter.toString())
+            getString(R.string.question_number_chapter_text, number, total, getQuiz.chapter)
 
         theoryButton.setOnClickListener {
             stopTime()
@@ -381,11 +379,7 @@ class QuestionsQuizActivity : AppCompatActivity() {
             timePassed = 0
         }
         val timeText: TextView = findViewById(R.id.textViewTimeUsed)
-        timeText.text =
-            getString(R.string.time_used_text).replace(
-                "{{time}}",
-                getTimeFormatted(timePassed)
-            )
+        timeText.text = getString(R.string.time_used_text, getTimeFormatted(timePassed))
         databaseHandler.close()
     }
 

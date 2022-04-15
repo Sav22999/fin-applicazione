@@ -67,9 +67,8 @@ class SectionActivity : AppCompatActivity() {
 
         text.text = getSection.text
         title.text = getSection.title
-        author.text =
-            getString(R.string.author_text).replace("{{author}}", getSection.author.toString())
-        sectionTitle.text = getString(R.string.section_id_text).replace("{{section_id}}", section)
+        author.text = getString(R.string.author_text, getSection.author.toString())
+        sectionTitle.text = getString(R.string.section_id_text, section)
     }
 
     override fun onResume() {

@@ -68,8 +68,7 @@ class AllSectionsActivity : AppCompatActivity() {
         }
 
         val title: TextView = findViewById(R.id.titleSections)
-        title.text =
-            getString(R.string.chapter_id_text).replace("{{chapter_id}}", chapterId.toString())
+        title.text = getString(R.string.chapter_id_text,chapterId)
 
         val actionBar = getSupportActionBar()
         if (actionBar != null) {

@@ -39,7 +39,7 @@ class ResultSimulationItemAdapter(
 
 
         holder.questionNumber.text =
-            holder.question_n_text.replace("{{n}}", (position + 1).toString())
+            holder.question_n_text.replace("%d", (position + 1).toString())
 
         val databaseHandler = DatabaseHandler(context)
 
