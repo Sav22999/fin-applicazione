@@ -106,6 +106,15 @@
     <string name="statistics_all_simulations_button">Vedi tutte le simulazioni</string>
     <string name="statistics_all_simulations_title">Tutte le simulazioni</string>
     <string name="no_statistics_available_text">Non hai fatto ancora alcuna simulazione</string>
+    <string name="show_details_text">Mostra dettagli ▲</string>
+    <string name="hide_details_text">Nascondi dettagli ▼</string>
+    <string name="total_questions_details_statistics_text">Domande totali: %d</string>
+    <string name="correct_answers_details_statistics_text">Risposte corrette: %d</string>
+    <string name="wrong_answers_details_statistics_text">Risposte sbagliate: %d</string>
+    <string name="skipped_questions_details_statistics_text">Domande saltate: %d</string>
+    <string name="correct_answers_legend_statistics_text">Risposte corrette</string>
+    <string name="skipped_questions_legend_statistics_text">Domande saltate</string>
+    <string name="wrong_answers_legend_statistics_text">Risposte sbagliate</string>
 
     <!--Messages section-->
     <string name="no_messages_available_text">Non hai iniziato ancora alcuna coversazione</string>

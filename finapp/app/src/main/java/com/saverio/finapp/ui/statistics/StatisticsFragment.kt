@@ -12,6 +12,7 @@ import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.saverio.finapp.MainActivity
+import com.saverio.finapp.R
 import com.saverio.finapp.databinding.FragmentStatisticsBinding
 import com.saverio.finapp.db.DatabaseHandler
 
@@ -49,6 +50,7 @@ class StatisticsFragment : Fragment() {
         val databaseHandler = DatabaseHandler(requireContext())
 
         val noSimulation = binding.noSimulationDoneText
+        val showHideButton = binding.showHideDetailsStatisticsText
 
         val correctAnswers =
             databaseHandler.getWrongCorrectSkippedAnswersStatistics(filter = "c").size
@@ -71,8 +73,37 @@ class StatisticsFragment : Fragment() {
             skipped.isGone = widthSkipped == 0
             wrong.isGone = widthWrong == 0
             noSimulation.isGone = true
+            showHideButton.isGone = false
+
+            binding.textViewTotalQuestionsStatistics.text = getString(
+                R.string.total_questions_details_statistics_text, totalAnswers
+            )
+            binding.textViewCorrectAnswersStatistics.text = getString(
+                R.string.correct_answers_details_statistics_text, correctAnswers
+            )
+            binding.textViewSkippedQuestionsStatistics.text = getString(
+                R.string.skipped_questions_details_statistics_text, skippedQuestions
+            )
+            binding.textViewWrongAnswersStatistics.text = getString(
+                R.string.wrong_answers_details_statistics_text, wrongAnswers
+            )
+
+            showHideButton.setOnClickListener {
+                if (binding.layoutConstraintDetailsStatistics.isGone) {
+                    //show
+                    binding.showHideDetailsStatisticsText.text =
+                        getString(R.string.hide_details_text)
+                    binding.layoutConstraintDetailsStatistics.isGone = false
+                } else {
+                    //hide
+                    binding.showHideDetailsStatisticsText.text =
+                        getString(R.string.show_details_text)
+                    binding.layoutConstraintDetailsStatistics.isGone = true
+                }
+            }
         } else {
             noSimulation.isGone = false
+            showHideButton.isGone = true
         }
     }
 

@@ -985,6 +985,29 @@ class DatabaseHandler(context: Context) :
     }
 
     @SuppressLint("Range")
+    fun getAllSimulations(): ArrayList<String> {
+        var arrayToReturn = ArrayList<String>()
+        val query =
+            "SELECT `${COLUMN_DATETIME_STATISTICS}` FROM `${TABLE_NAME_STATISTICS}` WHERE `${COLUMN_TYPE_STATISTICS}` = 1 ORDER BY `${COLUMN_DATETIME_STATISTICS}` DESC"
+        val database = readableDatabase
+        var cursor: Cursor? = null
+
+        try {
+            cursor = database.rawQuery(query, null)
+        } catch (e: SQLException) {
+            database.execSQL(query)
+            return arrayToReturn
+        }
+
+        if (cursor.moveToFirst()) {
+            val datetime =
+                cursor.getInt(cursor.getColumnIndex(COLUMN_DATETIME_STATISTICS)).toString()
+            arrayToReturn.add(datetime)
+        }
+        return arrayToReturn
+    }
+
+    @SuppressLint("Range")
     fun checkStatistics(question: Int, type: Int): Boolean {
         var returnValue = false
         val query =
