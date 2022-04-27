@@ -6,6 +6,7 @@ import android.content.res.ColorStateList
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.view.MenuItem
 import android.widget.Button
 import android.widget.ImageView
@@ -32,6 +33,9 @@ class QuestionsQuizActivity : AppCompatActivity() {
     var questionsImage = arrayOf<ImageView>()
     var questions = arrayOf<TextView>()
 
+    var currentRunnable: Runnable? = null
+    val mainHandler = Handler(Looper.getMainLooper())
+
     val correctListLettToNum = mapOf("A" to 0, "B" to 1, "C" to 2, "D" to 3)
     val correctListNumToLett = mapOf(0 to "A", 1 to "B", 2 to "C", 3 to "D")
 
@@ -39,7 +43,6 @@ class QuestionsQuizActivity : AppCompatActivity() {
     var timeStopped = true
     var alreadyAnswered = false
     var lastQuestionIdUsed: Int = -1
-    var randomValueUsed: Int = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -348,27 +351,26 @@ class QuestionsQuizActivity : AppCompatActivity() {
                     statistics.milliseconds = timePassed
 
                     if (!timeStopped) {
-                        Handler().postDelayed({
-                            incrementTime(iterator, currentQuestionId)
-                        }, 1000)
+                        currentRunnable = Runnable { incrementTime(iterator, currentQuestionId) }
+                        mainHandler.postDelayed(currentRunnable!!, 1000)
                     }
-
-                    databaseHandler.updateStatistics(statistics)
                 }
-            } else {
-                //no present || add
-                val getQuiz = databaseHandler.getQuiz(currentQuestionId)
-                val statistics = StatisticsModel(
-                    id = databaseHandler.getNewIdStatistics(),
-                    type = 0,
-                    datetime = now(),
-                    question_id = currentQuestionId,
-                    correct_answer = getQuiz.correct,
-                    user_answer = "",
-                    milliseconds = timePassed
-                )
-                databaseHandler.addStatistics(statistics)
+
+                databaseHandler.updateStatistics(statistics)
             }
+        } else {
+            //no present || add
+            val getQuiz = databaseHandler.getQuiz(currentQuestionId)
+            val statistics = StatisticsModel(
+                id = databaseHandler.getNewIdStatistics(),
+                type = 0,
+                datetime = now(),
+                question_id = currentQuestionId,
+                correct_answer = getQuiz.correct,
+                user_answer = "",
+                milliseconds = timePassed
+            )
+            databaseHandler.addStatistics(statistics)
         }
         databaseHandler.close()
     }
@@ -415,6 +417,7 @@ class QuestionsQuizActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         lastQuestionIdUsed = -1
+        if (currentRunnable != null) mainHandler.removeCallbacks(currentRunnable!!)
         super.onDestroy()
     }
 }
