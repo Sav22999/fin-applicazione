@@ -5,8 +5,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.TextView
 import androidx.core.view.isGone
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -16,7 +14,6 @@ import com.saverio.finapp.R
 import com.saverio.finapp.databinding.FragmentQuizBinding
 import com.saverio.finapp.db.ChaptersModel
 import com.saverio.finapp.db.DatabaseHandler
-import com.saverio.finapp.ui.quiz.ChaptersItemAdapter
 
 class QuizFragment : Fragment() {
 
@@ -95,7 +92,7 @@ class QuizFragment : Fragment() {
 
             binding.chaptersQuizItemsList.layoutManager = LinearLayoutManager(requireContext())
             //binding.newsItemsList.setHasFixedSize(true)
-            val itemAdapter = ChaptersItemAdapter(requireContext(), getChapters)
+            val itemAdapter = ChaptersQuizItemAdapter(requireContext(), getChapters)
             binding.chaptersQuizItemsList.adapter = itemAdapter
         } else {
             binding.noChaptersQuizAvailableText.visibility = View.VISIBLE

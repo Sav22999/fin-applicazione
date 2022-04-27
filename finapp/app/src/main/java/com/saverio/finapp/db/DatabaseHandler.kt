@@ -847,21 +847,27 @@ class DatabaseHandler(context: Context) :
 
     @SuppressLint("Range")
     fun getWrongCorrectSkippedAnswersStatistics(
-        datetime: String,
+        datetime: String? = null,
         filter: String = "ws"
     ): ArrayList<StatisticsModel> {
         //get all wrong answers of a specific simulation
         //filter can be {w|c|s|ws} -> w:wrong, c:correct, s:skipped, ws:wrong and skipped || other values will be treated as "ws"
         val statisticsList = ArrayList<StatisticsModel>()
         var query = ""
+        var details = ""
+        var details2 = ""
+        if (datetime != null) {
+            details = "`${COLUMN_DATETIME_STATISTICS}` = '${datetime}' AND "
+            details2 = " ORDER BY `${COLUMN_DATETIME_STATISTICS}` DESC"
+        }
         if (filter == "c") {
             //c:correct
             query =
-                "SELECT * FROM `${TABLE_NAME_STATISTICS}` WHERE `${COLUMN_DATETIME_STATISTICS}` = '${datetime}' AND `${COLUMN_USER_ANSWER_STATISTICS}` = `${COLUMN_CORRECT_ANSWER_STATISTICS}` ORDER BY `${COLUMN_DATETIME_STATISTICS}` DESC"
+                "SELECT * FROM `${TABLE_NAME_STATISTICS}` WHERE $details`${COLUMN_TYPE_STATISTICS}` = 1 AND `${COLUMN_USER_ANSWER_STATISTICS}` = `${COLUMN_CORRECT_ANSWER_STATISTICS}`$details2"
         } else if (filter == "s") {
             //s:skipped
             query =
-                "SELECT * FROM `${TABLE_NAME_STATISTICS}` WHERE `${COLUMN_DATETIME_STATISTICS}` = '${datetime}' AND `${COLUMN_TYPE_STATISTICS}` = 1 AND NOT `${COLUMN_USER_ANSWER_STATISTICS}` = '' ORDER BY `${COLUMN_DATETIME_STATISTICS}` DESC"
+                "SELECT * FROM `${TABLE_NAME_STATISTICS}` WHERE $details`${COLUMN_TYPE_STATISTICS}` = 1 AND `${COLUMN_USER_ANSWER_STATISTICS}` = ''$details2"
         } else {
             //w:wrong or ws:wrong and skipped (or other values)
             var details1 = ""
@@ -870,7 +876,7 @@ class DatabaseHandler(context: Context) :
                 details1 += "AND NOT `${COLUMN_USER_ANSWER_STATISTICS}` = ''"
             }
             query =
-                "SELECT * FROM `${TABLE_NAME_STATISTICS}` WHERE `${COLUMN_DATETIME_STATISTICS}` = '${datetime}' AND `${COLUMN_TYPE_STATISTICS}` = 1 $details1 AND NOT `${COLUMN_USER_ANSWER_STATISTICS}` = `${COLUMN_CORRECT_ANSWER_STATISTICS}` ORDER BY `${COLUMN_DATETIME_STATISTICS}` DESC"
+                "SELECT * FROM `${TABLE_NAME_STATISTICS}` WHERE $details`${COLUMN_TYPE_STATISTICS}` = 1 $details1 AND NOT `${COLUMN_USER_ANSWER_STATISTICS}` = `${COLUMN_CORRECT_ANSWER_STATISTICS}`$details2"
         }
 
         val database = readableDatabase

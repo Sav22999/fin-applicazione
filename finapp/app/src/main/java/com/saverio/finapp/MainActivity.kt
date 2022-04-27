@@ -5,11 +5,14 @@ import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
 import android.os.Bundle
+import android.util.DisplayMetrics
 import android.util.Log
+import android.view.LayoutInflater
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
+import com.google.android.material.badge.BadgeDrawable
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.saverio.finapp.api.ApiClient
 import com.saverio.finapp.api.chapters.ChaptersList
@@ -54,6 +57,12 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         supportActionBar?.hide()
         super.onResume()
+    }
+
+    fun getScreenWidth(): Int {
+        val displayMetrics = DisplayMetrics()
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics)
+        return displayMetrics.heightPixels
     }
 
     fun checkForInternetConnection(context: Context): Boolean {
@@ -495,7 +504,7 @@ class MainActivity : AppCompatActivity() {
     private fun update(quiz: QuizzesModel) {
         //update || quiz
         val databaseHandler = DatabaseHandler(this)
-        if (quiz.id != 0&& quiz.section != null && quiz.chapter != null && quiz.question != null && quiz.A != null && quiz.B != null && quiz.C != null && quiz.D != null && quiz.correct != null) {
+        if (quiz.id != 0 && quiz.section != null && quiz.chapter != null && quiz.question != null && quiz.A != null && quiz.B != null && quiz.C != null && quiz.D != null && quiz.correct != null) {
             val oldQuiz = databaseHandler.getQuiz(id = quiz.id)
             val status = databaseHandler.updateQuiz(quiz)
             if (status > -1) {

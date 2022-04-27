@@ -6,7 +6,6 @@ import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.core.view.isGone
@@ -16,11 +15,11 @@ import com.saverio.finapp.db.ChaptersModel
 import com.saverio.finapp.db.DatabaseHandler
 
 
-class ChaptersItemAdapter(
+class ChaptersQuizItemAdapter(
     private val context: Context,
     private val items: ArrayList<ChaptersModel>
 ) :
-    RecyclerView.Adapter<ChaptersItemAdapter.ItemViewHolder>() {
+    RecyclerView.Adapter<ChaptersQuizItemAdapter.ItemViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, type: Int): ItemViewHolder {
         return ItemViewHolder(

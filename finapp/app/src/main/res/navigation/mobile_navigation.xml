@@ -24,14 +24,14 @@
         tools:layout="@layout/fragment_quiz" />
 
     <fragment
-        android:id="@+id/navigation_settings"
-        android:name="com.saverio.finapp.ui.settings.SettingsFragment"
-        android:label="@string/title_settings"
-        tools:layout="@layout/fragment_settings" />
+        android:id="@+id/navigation_messages"
+        android:name="com.saverio.finapp.ui.messages.MessagesFragment"
+        android:label="@string/title_messages"
+        tools:layout="@layout/fragment_messages" />
 
     <fragment
-        android:id="@+id/navigation_account"
-        android:name="com.saverio.finapp.ui.account.AccountFragment"
-        android:label="@string/title_account"
-        tools:layout="@layout/fragment_account" />
+        android:id="@+id/navigation_statistics"
+        android:name="com.saverio.finapp.ui.statistics.StatisticsFragment"
+        android:label="@string/title_statistics"
+        tools:layout="@layout/fragment_statistics" />
 </navigation>

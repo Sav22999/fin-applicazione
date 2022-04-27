@@ -15,8 +15,11 @@
         <entry key="..\:/Documents/GitHub/Sav22999/fin-applicazione/finapp/app/src/main/res/drawable/ic_forward.xml" value="0.1215" />
         <entry key="..\:/Documents/GitHub/Sav22999/fin-applicazione/finapp/app/src/main/res/drawable/ic_forward_quiz.xml" value="0.197" />
         <entry key="..\:/Documents/GitHub/Sav22999/fin-applicazione/finapp/app/src/main/res/drawable/ic_home.xml" value="0.197" />
+        <entry key="..\:/Documents/GitHub/Sav22999/fin-applicazione/finapp/app/src/main/res/drawable/ic_messages.xml" value="0.191" />
+        <entry key="..\:/Documents/GitHub/Sav22999/fin-applicazione/finapp/app/src/main/res/drawable/ic_quiz.xml" value="0.191" />
         <entry key="..\:/Documents/GitHub/Sav22999/fin-applicazione/finapp/app/src/main/res/drawable/ic_search.xml" value="0.197" />
         <entry key="..\:/Documents/GitHub/Sav22999/fin-applicazione/finapp/app/src/main/res/drawable/ic_settings.xml" value="0.1965" />
+        <entry key="..\:/Documents/GitHub/Sav22999/fin-applicazione/finapp/app/src/main/res/drawable/ic_statistics.xml" value="0.191" />
         <entry key="..\:/Documents/GitHub/Sav22999/fin-applicazione/finapp/app/src/main/res/drawable/ic_swimming.xml" value="0.1965" />
         <entry key="..\:/Documents/GitHub/Sav22999/fin-applicazione/finapp/app/src/main/res/drawable/ic_theory.xml" value="0.197" />
         <entry key="..\:/Documents/GitHub/Sav22999/fin-applicazione/finapp/app/src/main/res/drawable/ic_time.xml" value="0.197" />
@@ -32,8 +35,10 @@
         <entry key="..\:/Documents/GitHub/Sav22999/fin-applicazione/finapp/app/src/main/res/layout/discussion_recyclerview.xml" value="0.25052083333333336" />
         <entry key="..\:/Documents/GitHub/Sav22999/fin-applicazione/finapp/app/src/main/res/layout/fragment_account.xml" value="0.25052083333333336" />
         <entry key="..\:/Documents/GitHub/Sav22999/fin-applicazione/finapp/app/src/main/res/layout/fragment_home.xml" value="0.25052083333333336" />
+        <entry key="..\:/Documents/GitHub/Sav22999/fin-applicazione/finapp/app/src/main/res/layout/fragment_messages.xml" value="0.25052083333333336" />
         <entry key="..\:/Documents/GitHub/Sav22999/fin-applicazione/finapp/app/src/main/res/layout/fragment_quiz.xml" value="0.25052083333333336" />
         <entry key="..\:/Documents/GitHub/Sav22999/fin-applicazione/finapp/app/src/main/res/layout/fragment_settings.xml" value="0.25052083333333336" />
+        <entry key="..\:/Documents/GitHub/Sav22999/fin-applicazione/finapp/app/src/main/res/layout/fragment_statistics.xml" value="0.25052083333333336" />
         <entry key="..\:/Documents/GitHub/Sav22999/fin-applicazione/finapp/app/src/main/res/layout/fragment_theory.xml" value="0.25" />
         <entry key="..\:/Documents/GitHub/Sav22999/fin-applicazione/finapp/app/src/main/res/layout/home_recyclerview.xml" value="0.42045454545454547" />
         <entry key="..\:/Documents/GitHub/Sav22999/fin-applicazione/finapp/app/src/main/res/layout/mistakes_quiz_recyclerview.xml" value="0.25052083333333336" />

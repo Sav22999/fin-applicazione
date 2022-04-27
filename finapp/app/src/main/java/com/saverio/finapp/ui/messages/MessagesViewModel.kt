@@ -1,13 +1,13 @@
-package com.saverio.finapp.ui.account
+package com.saverio.finapp.ui.messages
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
-class AccountViewModel : ViewModel() {
+class MessagesViewModel : ViewModel() {
 
     private val _text = MutableLiveData<String>().apply {
-        value = "This is account Fragment"
+        value = "This is settings Fragment"
     }
     val text: LiveData<String> = _text
 }

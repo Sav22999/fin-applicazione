@@ -7,8 +7,8 @@
     <string name="title_mistakes">Risposte sbagliate</string>
     <string name="title_sections">Sezioni</string>
     <string name="title_quiz">Quiz</string>
-    <string name="title_settings">Impostazioni</string>
-    <string name="title_account">Account</string>
+    <string name="title_statistics">Statistiche</string>
+    <string name="title_messages">Messaggi</string>
 
     <string name="load_database">Load database</string>
     <string name="check_database">Check database</string>
@@ -36,7 +36,7 @@
     <string name="by_other_tab_text">Altro</string>
 
     <string name="simulation_test_text">Simulazione della prova d\'esame</string>
-    <string name="mistakes_text">Ripeti solo le risposte sbagliate in precedenza</string>
+    <string name="mistakes_text">Rivedi solo le risposte sbagliate in precedenza</string>
 
     <!--Messages-->
     <string name="no_news_available_text">Nessuna notizia disponibile. Per favore, fai swipe down per aggiornare la pagina.</string>
@@ -101,4 +101,12 @@
     <string name="continue_alert_dialog_button">Continua</string>
     <string name="see_results_alert_dialog_button">Vedi risultati</string>
     <string name="confirm_alert_dialog_button">Conferma</string>
+
+    <!--Statistics section-->
+    <string name="statistics_all_simulations_button">Vedi tutte le simulazioni</string>
+    <string name="statistics_all_simulations_title">Tutte le simulazioni</string>
+    <string name="no_statistics_available_text">Non hai fatto ancora alcuna simulazione</string>
+
+    <!--Messages section-->
+    <string name="no_messages_available_text">Non hai iniziato ancora alcuna coversazione</string>
 </resources>
