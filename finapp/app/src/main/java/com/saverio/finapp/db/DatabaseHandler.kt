@@ -806,6 +806,8 @@ class DatabaseHandler(context: Context) :
         else query =
             "SELECT * FROM `${TABLE_NAME_STATISTICS}` WHERE $details ORDER BY `${COLUMN_DATETIME_STATISTICS}` DESC"
 
+        //println(query)
+
         val database = readableDatabase
         var cursor: Cursor? = null
 
@@ -925,7 +927,7 @@ class DatabaseHandler(context: Context) :
         val query =
             "SELECT DISTINCT `${COLUMN_QUESTION_ID_STATISTICS}` FROM `${TABLE_NAME_STATISTICS}` WHERE NOT `${COLUMN_CORRECT_ANSWER_STATISTICS}` = `${COLUMN_USER_ANSWER_STATISTICS}` ORDER BY `${COLUMN_DATETIME_STATISTICS}` DESC"
 
-        println(query)
+        //println(query)
 
         val database = readableDatabase
         var cursor: Cursor? = null
@@ -988,7 +990,7 @@ class DatabaseHandler(context: Context) :
     fun getAllSimulations(): ArrayList<String> {
         var arrayToReturn = ArrayList<String>()
         val query =
-            "SELECT `${COLUMN_DATETIME_STATISTICS}` FROM `${TABLE_NAME_STATISTICS}` WHERE `${COLUMN_TYPE_STATISTICS}` = 1 ORDER BY `${COLUMN_DATETIME_STATISTICS}` DESC"
+            "SELECT DISTINCT `${COLUMN_DATETIME_STATISTICS}` FROM `${TABLE_NAME_STATISTICS}` WHERE `${COLUMN_TYPE_STATISTICS}` = 1 ORDER BY `${COLUMN_DATETIME_STATISTICS}` DESC"
         val database = readableDatabase
         var cursor: Cursor? = null
 
@@ -1000,9 +1002,11 @@ class DatabaseHandler(context: Context) :
         }
 
         if (cursor.moveToFirst()) {
-            val datetime =
-                cursor.getInt(cursor.getColumnIndex(COLUMN_DATETIME_STATISTICS)).toString()
-            arrayToReturn.add(datetime)
+            do {
+                val datetime = cursor.getString(cursor.getColumnIndex(COLUMN_DATETIME_STATISTICS))
+                //println(datetime)
+                arrayToReturn.add(datetime)
+            } while (cursor.moveToNext())
         }
         return arrayToReturn
     }

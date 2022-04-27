@@ -24,6 +24,7 @@
         <entry key="..\:/Documents/GitHub/Sav22999/fin-applicazione/finapp/app/src/main/res/drawable/ic_theory.xml" value="0.197" />
         <entry key="..\:/Documents/GitHub/Sav22999/fin-applicazione/finapp/app/src/main/res/drawable/ic_time.xml" value="0.197" />
         <entry key="..\:/Documents/GitHub/Sav22999/fin-applicazione/finapp/app/src/main/res/layout/activity_all_sections.xml" value="0.25052083333333336" />
+        <entry key="..\:/Documents/GitHub/Sav22999/fin-applicazione/finapp/app/src/main/res/layout/activity_all_simulations.xml" value="0.25052083333333336" />
         <entry key="..\:/Documents/GitHub/Sav22999/fin-applicazione/finapp/app/src/main/res/layout/activity_main.xml" value="0.25052083333333336" />
         <entry key="..\:/Documents/GitHub/Sav22999/fin-applicazione/finapp/app/src/main/res/layout/activity_mistakes_quiz.xml" value="0.25052083333333336" />
         <entry key="..\:/Documents/GitHub/Sav22999/fin-applicazione/finapp/app/src/main/res/layout/activity_questions_quiz.xml" value="0.25052083333333336" />
@@ -44,6 +45,7 @@
         <entry key="..\:/Documents/GitHub/Sav22999/fin-applicazione/finapp/app/src/main/res/layout/mistakes_quiz_recyclerview.xml" value="0.25052083333333336" />
         <entry key="..\:/Documents/GitHub/Sav22999/fin-applicazione/finapp/app/src/main/res/layout/result_simulation_recyclerview.xml" value="0.5490867579908676" />
         <entry key="..\:/Documents/GitHub/Sav22999/fin-applicazione/finapp/app/src/main/res/layout/section_theory_recyclerview.xml" value="0.25052083333333336" />
+        <entry key="..\:/Documents/GitHub/Sav22999/fin-applicazione/finapp/app/src/main/res/layout/simulation_recyclerview.xml" value="0.4" />
         <entry key="..\:/Documents/GitHub/Sav22999/fin-applicazione/finapp/app/src/main/res/layout/theory_recyclerview.xml" value="0.44000000000000006" />
         <entry key="..\:/Documents/GitHub/Sav22999/fin-applicazione/finapp/app/src/main/res/menu/bottom_nav_menu.xml" value="0.25052083333333336" />
         <entry key="..\:/Documents/GitHub/Sav22999/fin-applicazione/finapp/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.1965" />

@@ -1,5 +1,6 @@
 package com.saverio.finapp.ui.statistics
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.DisplayMetrics
 import android.view.LayoutInflater
@@ -15,6 +16,7 @@ import com.saverio.finapp.MainActivity
 import com.saverio.finapp.R
 import com.saverio.finapp.databinding.FragmentStatisticsBinding
 import com.saverio.finapp.db.DatabaseHandler
+import com.saverio.finapp.ui.quiz.ResultsSimulationQuizActivity
 
 
 class StatisticsFragment : Fragment() {
@@ -61,7 +63,7 @@ class StatisticsFragment : Fragment() {
         val totalAnswers = correctAnswers + skippedQuestions + wrongAnswers
         if (totalAnswers > 0) {
             val widthBar = ((activity as MainActivity).getScreenWidth() / 2) - 25
-            println(widthBar)
+
             val widthCorrect = (widthBar * correctAnswers) / totalAnswers
             val widthSkipped = (widthBar * skippedQuestions) / totalAnswers
             val widthWrong = (widthBar * wrongAnswers) / totalAnswers
@@ -74,6 +76,12 @@ class StatisticsFragment : Fragment() {
             wrong.isGone = widthWrong == 0
             noSimulation.isGone = true
             showHideButton.isGone = false
+
+            /*
+            val percentCorrect = (100 * correctAnswers) / totalAnswers
+            val percentSkipped = (100 * skippedQuestions) / totalAnswers
+            val percentWrong = (100 * wrongAnswers) / totalAnswers
+            */
 
             binding.textViewTotalQuestionsStatistics.text = getString(
                 R.string.total_questions_details_statistics_text, totalAnswers
@@ -104,6 +112,11 @@ class StatisticsFragment : Fragment() {
         } else {
             noSimulation.isGone = false
             showHideButton.isGone = true
+        }
+
+        binding.cardViewStatisticsViewAllSimulations.setOnClickListener {
+            val intent = Intent(requireContext(), AllSimulations::class.java)
+            startActivity(intent)
         }
     }
 

@@ -14,9 +14,12 @@
         android:theme="@style/Theme.FINApp"
         android:usesCleartextTraffic="true">
         <activity
-            android:name=".ui.quiz.ResultsSimulationQuizActivity"
-            android:launchMode="singleTask"
+            android:name=".ui.statistics.AllSimulations"
             android:exported="false" />
+        <activity
+            android:name=".ui.quiz.ResultsSimulationQuizActivity"
+            android:exported="false"
+            android:launchMode="singleTask" />
         <activity
             android:name=".ui.quiz.MistakesQuizActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
