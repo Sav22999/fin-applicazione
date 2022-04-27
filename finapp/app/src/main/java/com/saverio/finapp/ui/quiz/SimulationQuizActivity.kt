@@ -123,7 +123,7 @@ class SimulationQuizActivity : AppCompatActivity() {
             if (timePassed < (MAX_TIME) && !timeFinished) {
 
                 timePassed++
-                Handler().postDelayed({ incrementTime() }, 1000)//TODO change to 1000 after tests
+                Handler().postDelayed({ incrementTime() }, 1000)
             } else {
                 stopTime()
                 timeFinished = true

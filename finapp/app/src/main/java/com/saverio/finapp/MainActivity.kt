@@ -65,6 +65,10 @@ class MainActivity : AppCompatActivity() {
         return displayMetrics.heightPixels
     }
 
+    fun checkLogged(): Boolean {
+        return getVariable("username") != ""
+    }
+
     fun checkForInternetConnection(context: Context): Boolean {
         // if the android version is above M
         val connectivityManager =

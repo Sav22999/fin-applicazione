@@ -22,6 +22,7 @@ import org.w3c.dom.Text
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.random.Random
 
 class QuestionsQuizActivity : AppCompatActivity() {
     var selectedQuestion: Int = -1
@@ -38,6 +39,7 @@ class QuestionsQuizActivity : AppCompatActivity() {
     var timeStopped = true
     var alreadyAnswered = false
     var lastQuestionIdUsed: Int = -1
+    var randomValueUsed: Int = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -111,6 +113,8 @@ class QuestionsQuizActivity : AppCompatActivity() {
                 )
             }
             timePassed = statistics.milliseconds
+        } else {
+            startTime(questionId)
         }
         databaseHandler.close()
     }
@@ -273,7 +277,7 @@ class QuestionsQuizActivity : AppCompatActivity() {
                 question_id = questionId,
                 correct_answer = correctListNumToLett[correct],
                 user_answer = correctListNumToLett[selected],
-                milliseconds = timePassed //TODO implement timer (for single question)
+                milliseconds = timePassed
             )
             if (!databaseHandler.checkStatistics(question = questionId, type = 0)) {
                 //no present || add
@@ -361,7 +365,7 @@ class QuestionsQuizActivity : AppCompatActivity() {
                     question_id = currentQuestionId,
                     correct_answer = getQuiz.correct,
                     user_answer = "",
-                    milliseconds = timePassed //TODO implement timer (for single question)
+                    milliseconds = timePassed
                 )
                 databaseHandler.addStatistics(statistics)
             }
