@@ -102,23 +102,32 @@ class QuestionsQuizActivity : AppCompatActivity() {
             number = number,
             total = databaseHandler.getQuizzes(chapter = chapterId).size
         )
-        if (databaseHandler.checkStatistics(question = questionId, type = 0)) {
-            val statistics = databaseHandler.getStatistics(question_id = questionId, type = 0)[0]
-            if (statistics.user_answer != "") {
-                //already answered, so load the old value
-                alreadyAnswered = true
-                selectedQuestion = correctListLettToNum[statistics.user_answer]!!
-                checkOption(
-                    correct = correctListLettToNum[statistics.correct_answer]!!,
-                    selected = selectedQuestion,
-                    questionId = questionId,
-                    update = false
+        if (!databaseHandler.checkStatistics(question = questionId, type = 0)) {
+            databaseHandler.addStatistics(
+                StatisticsModel(
+                    id = databaseHandler.getNewIdStatistics(),
+                    type = 0,
+                    question_id = questionId,
+                    datetime = now(),
+                    correct_answer = getQuiz.correct,
+                    user_answer = "",
+                    milliseconds = 0
                 )
-            }
-            timePassed = statistics.milliseconds
-        } else {
-            startTime(questionId)
+            )
         }
+        val statistics = databaseHandler.getStatistics(question_id = questionId, type = 0)[0]
+        if (statistics.user_answer != "") {
+            //already answered, so load the old value
+            alreadyAnswered = true
+            selectedQuestion = correctListLettToNum[statistics.user_answer]!!
+            checkOption(
+                correct = correctListLettToNum[statistics.correct_answer]!!,
+                selected = selectedQuestion,
+                questionId = questionId,
+                update = false
+            )
+        }
+        timePassed = statistics.milliseconds
         databaseHandler.close()
     }
 
