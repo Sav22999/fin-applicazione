@@ -73,6 +73,7 @@
     <string name="wrong_answers_details_results_text">Risposte sbagliate: %d</string>
     <string name="skipped_questions_details_results_text">Domande saltate: %d</string>
     <string name="estimated_time_per_question_details_results_text">Tempo stimato per singola domanda: %s</string>
+    <string name="datetime_details_results_text">Data: %s</string>
     <plurals name="seconds_text">
         <item formatted="true" quantity="one">%d secondo</item>
         <item formatted="true" quantity="two">%d secondi</item>

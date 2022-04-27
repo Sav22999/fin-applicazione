@@ -74,6 +74,7 @@ class ResultsSimulationQuizActivity : AppCompatActivity() {
             val correctAnswers: TextView = findViewById(R.id.textViewCorrectAnswersResults)
             val wrongAnswers: TextView = findViewById(R.id.textViewWrongAnswersResults)
             val skippedQuestions: TextView = findViewById(R.id.textViewSkippedQuestionsResults)
+            val datetime: TextView = findViewById(R.id.textViewDateResults)
 
             timeSpent.text = getString(
                 R.string.time_spent_details_results_text,
@@ -101,6 +102,7 @@ class ResultsSimulationQuizActivity : AppCompatActivity() {
                 R.string.skipped_questions_details_results_text,
                 getSkippedAnswersStatistics.size
             )
+            datetime.text = getString(R.string.datetime_details_results_text, datetimeSimulation)
         } else {
             val noResults: TextView = findViewById(R.id.no_results_available_text)
             noResults.text = getString(R.string.results_error_text)
