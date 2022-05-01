@@ -14,6 +14,9 @@
         android:theme="@style/Theme.FINApp"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".ui.messages.MessagesActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.settings.SettingsActivity"
             android:exported="false" />
         <activity

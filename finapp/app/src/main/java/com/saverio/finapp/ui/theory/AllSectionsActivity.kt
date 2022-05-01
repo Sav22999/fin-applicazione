@@ -11,6 +11,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isGone
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.saverio.finapp.R
@@ -68,7 +69,7 @@ class AllSectionsActivity : AppCompatActivity() {
         }
 
         val title: TextView = findViewById(R.id.titleSections)
-        title.text = getString(R.string.chapter_id_text,chapterId)
+        title.text = getString(R.string.chapter_id_text, chapterId)
 
         val actionBar = getSupportActionBar()
         if (actionBar != null) {
@@ -132,6 +133,7 @@ class AllSectionsActivity : AppCompatActivity() {
     ) {
         val sectionsItemsList: RecyclerView = findViewById(R.id.sections_items_list)
         val noSectionsAvailableText: TextView = findViewById(R.id.no_sections_available_text)
+        val editTextSearchSections: EditText = findViewById(R.id.editTextSearchSections)
 
         //val getSections = DatabaseHandler(this).getSections(chapter = chapter)
 
@@ -141,6 +143,7 @@ class AllSectionsActivity : AppCompatActivity() {
         else noSectionsAvailableText.text = getString(R.string.no_sections_available_text)
 
         if (getSections.size > 0) {
+            editTextSearchSections.isGone = false
             noSectionsAvailableText.visibility = View.GONE
             sectionsItemsList.visibility = View.VISIBLE
 
@@ -149,6 +152,7 @@ class AllSectionsActivity : AppCompatActivity() {
             val itemAdapter = AllSectionsItemAdapter(this, getSections, chapter)
             sectionsItemsList.adapter = itemAdapter
         } else {
+            editTextSearchSections.isGone = true
             noSectionsAvailableText.visibility = View.VISIBLE
             sectionsItemsList.visibility = View.GONE
         }

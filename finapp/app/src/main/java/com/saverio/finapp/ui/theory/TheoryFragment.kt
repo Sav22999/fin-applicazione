@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import androidx.core.view.isGone
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -118,6 +119,7 @@ class TheoryFragment : Fragment() {
         else binding.noChaptersAvailableText.text = getString(R.string.no_chapters_available_text)
 
         if (getChapters.size > 0) {
+            binding.editTextSearchChapters.isGone = false
             binding.noChaptersAvailableText.visibility = View.GONE
             binding.chaptersItemsList.visibility = View.VISIBLE
 
@@ -130,6 +132,7 @@ class TheoryFragment : Fragment() {
             )
             binding.chaptersItemsList.adapter = itemAdapter
         } else {
+            binding.editTextSearchChapters.isGone = true
             binding.noChaptersAvailableText.visibility = View.VISIBLE
             binding.chaptersItemsList.visibility = View.GONE
         }

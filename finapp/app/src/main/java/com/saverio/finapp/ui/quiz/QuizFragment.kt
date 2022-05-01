@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.tabs.TabLayout
+import com.saverio.finapp.MainActivity
 import com.saverio.finapp.R
 import com.saverio.finapp.databinding.FragmentQuizBinding
 import com.saverio.finapp.db.ChaptersModel
@@ -48,6 +49,8 @@ class QuizFragment : Fragment() {
             val intent = Intent(context, MistakesQuizActivity::class.java)
             startActivity(intent)
         }
+
+        (activity as MainActivity).pushStatistics()
 
         val tabs = binding.tabLayout
         val tabsLayout = arrayOf(binding.tab1Layout, binding.tab2Layout)
