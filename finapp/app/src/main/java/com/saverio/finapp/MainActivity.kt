@@ -7,18 +7,18 @@ import android.os.Build
 import android.os.Bundle
 import android.util.DisplayMetrics
 import android.util.Log
-import android.view.LayoutInflater
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
-import com.google.android.material.badge.BadgeDrawable
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.saverio.finapp.api.ApiClient
+import com.saverio.finapp.api.PostResponseList
 import com.saverio.finapp.api.chapters.ChaptersList
 import com.saverio.finapp.api.news.NewsList
 import com.saverio.finapp.api.quizzes.QuizzesList
 import com.saverio.finapp.api.sections.SectionsList
+import com.saverio.finapp.api.statistics.StatisticsPostList
 import com.saverio.finapp.databinding.ActivityMainBinding
 import com.saverio.finapp.db.*
 import com.saverio.finapp.ui.home.HomeViewModel
@@ -49,6 +49,7 @@ class MainActivity : AppCompatActivity() {
             checkSections("", "")
             checkQuizzes("", "")
             checkNews("", "")
+            checkStatistics()
         } else {
             //println("Internet is not available")
         }
@@ -59,14 +60,94 @@ class MainActivity : AppCompatActivity() {
         super.onResume()
     }
 
-    fun getScreenWidth(): Int {
-        val displayMetrics = DisplayMetrics()
-        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics)
-        return displayMetrics.heightPixels
+    fun checkLogged(): Boolean {
+        return (getVariable("userid") != "" && getVariable("userid") != null)
     }
 
-    fun checkLogged(): Boolean {
-        return getVariable("username") != ""
+    fun setUseridLogged(userid: String) {
+        setVariable("userid", userid)
+    }
+
+    fun getUserid(): String {
+        return (if (checkLogged()) getVariable("userid")!! else "")
+    }
+
+    fun pushStatistics() {
+        //push all statistics to server
+        if (checkLogged()) {
+            //logged
+            val databaseHandler = DatabaseHandler(this)
+            val getStatistics = databaseHandler.getStatistics() //all statistics
+
+            getStatistics.forEach {
+                val statisticsToSend = StatisticsPostList(
+                    userid = getUserid(),
+                    type = it.type,
+                    datetime = it.datetime,
+                    correct_answer = it.correct_answer!!,
+                    user_answer = it.user_answer!!,
+                    question_id = it.question_id,
+                    milliseconds = it.milliseconds
+                )
+                sendStatistics(statisticsToSend)
+            }
+        }
+    }
+
+    fun checkStatistics() {
+        //check new data from server
+        if (checkLogged()) {
+            //logged
+            val databaseHandler = DatabaseHandler(this)
+            val getStatistics = databaseHandler.getStatistics() //all statistics
+
+            getStatistics.forEach {
+                if (databaseHandler.checkStatistics(it.question_id, it.type)) {
+                    //update
+                    databaseHandler.updateStatistics(it)
+                } else {
+                    //insert
+                    databaseHandler.addStatistics(it)
+                }
+            }
+        }
+    }
+
+    fun sendStatistics(statistics: StatisticsPostList) {
+        val call: Call<PostResponseList> =
+            ApiClient.client.postStatisticsInfo(
+                userid = statistics.userid,
+                type = statistics.type,
+                datetime = statistics.datetime,
+                correct_answer = statistics.correct_answer,
+                user_answer = statistics.user_answer,
+                question_id = statistics.question_id,
+                milliseconds = statistics.milliseconds
+            )
+        call.enqueue(object : Callback<PostResponseList> {
+
+            override fun onResponse(
+                call: Call<PostResponseList>?,
+                response: Response<PostResponseList>?
+            ) {
+                println("Response:\n" + response!!.body()!!)
+
+                if (response!!.isSuccessful && response.body() != null) {
+                    val responseList = response.body()!!
+
+                    if (responseList.code == 200) {
+                        println("${responseList.code} || ${responseList.description}")
+                    } else {
+                        Log.v("Error", responseList.description)
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<PostResponseList>?, t: Throwable?) {
+                Log.v("Error", t.toString())
+            }
+
+        })
     }
 
     fun checkForInternetConnection(context: Context): Boolean {
@@ -103,7 +184,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         val call: Call<ChaptersList> =
-            ApiClient.getClient.getChaptersInfo(chapter = chapter)
+            ApiClient.client.getChaptersInfo(chapter = chapter)
         call.enqueue(object : Callback<ChaptersList> {
 
             override fun onResponse(
@@ -162,7 +243,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         val call: Call<SectionsList> =
-            ApiClient.getClient.getSectionsInfo(chapter = chapter, section = section)
+            ApiClient.client.getSectionsInfo(chapter = chapter, section = section)
         call.enqueue(object : Callback<SectionsList> {
 
             override fun onResponse(
@@ -237,7 +318,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         val call: Call<QuizzesList> =
-            ApiClient.getClient.getQuizzesInfo(chapter = chapter, question = quiz)
+            ApiClient.client.getQuizzesInfo(chapter = chapter, question = quiz)
         call.enqueue(object : Callback<QuizzesList> {
 
             override fun onResponse(
@@ -337,7 +418,7 @@ class MainActivity : AppCompatActivity() {
         //println("Started loading")
 
         val call: Call<NewsList> =
-            ApiClient.getClient.getNewsInfo(type = type, limit = limit)
+            ApiClient.client.getNewsInfo(type = type, limit = limit)
         call.enqueue(object : Callback<NewsList> {
 
             override fun onResponse(

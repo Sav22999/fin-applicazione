@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.saverio.finapp.MainActivity
 import com.saverio.finapp.databinding.FragmentMessagesBinding
 
 class MessagesFragment : Fragment() {
@@ -27,8 +28,6 @@ class MessagesFragment : Fragment() {
 
         _binding = FragmentMessagesBinding.inflate(inflater, container, false)
         val root: View = binding.root
-
-
 
         return root
     }

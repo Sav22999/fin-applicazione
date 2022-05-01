@@ -8,7 +8,10 @@
     <string name="title_sections">Sezioni</string>
     <string name="title_quiz">Quiz</string>
     <string name="title_statistics">Statistiche</string>
-    <string name="title_messages">Messaggi</string>
+    <string name="title_account">Account</string>
+    <string name="title_settings">Impostazioni</string>
+    <string name="title_profile">Profilo</string>
+    <string name="title_messages">Discussioni</string>
 
     <string name="load_database">Load database</string>
     <string name="check_database">Check database</string>
@@ -119,5 +122,30 @@
     <string name="simulation_date_text">Simulazione del %s</string>
 
     <!--Messages section-->
+    <string name="no_logged_no_messages_text">Non hai ancora effettuato l\'accesso quindi non puoi accedere alle discussioni</string>
+    <string name="log_in_now_message_text">Accedi ora</string><!--redirect to "Account">"Login"-->
     <string name="no_messages_available_text">Non hai iniziato ancora alcuna coversazione</string>
+    <string name="last_message_text">Ultimo messaggio: %s</string>
+    <string name="sent_message_text">%s · %s</string><!--Username · DD/MM/YYYY HH:MM:SS-->
+    <string name="message_read_toast">Message marked as read</string>
+    <string name="message_unread_toast">Message marked as unread</string>
+    <string name="message_sent_text">Sent: %s</string>
+    <string name="reply_to_message_text">Reply</string>
+
+    <!--Account section-->
+    <string name="no_logged_text">Non hai ancora effettuato l\'accesso</string>
+    <string name="no_logged_log_in_button">Accedi</string>
+    <string name="no_logged_sign_up_button">Registrati</string>
+    <string name="log_in_button">Accedi</string>
+    <string name="sign_up_button">Conferma registrazione</string>
+    <string name="password_forgot_text">Ho dimenticato la password</string>
+    <string name="sign_up_form_name_text">Nome</string>
+    <string name="sign_up_form_surname_text">Cognome</string>
+    <string name="sign_up_form_born_text">Data di nascita</string>
+    <string name="sign_up_form_email_text">Email</string>
+    <string name="sign_up_form_password_text">Password</string>
+    <string name="sign_up_form_repeat_password_text">Ripeti la password</string>
+    <string name="sign_up_form_username_text">Username (pubblico)</string>
+    <string name="reset_password_forgot_text">Nuova password</string>
+    <string name="reset_password_forgot_button">Salva password</string>
 </resources>

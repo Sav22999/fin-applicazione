@@ -14,6 +14,9 @@
         android:theme="@style/Theme.FINApp"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".ui.statistics.StatisticsActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.statistics.AllSimulations"
             android:exported="false" />
         <activity

@@ -30,8 +30,8 @@
         tools:layout="@layout/fragment_messages" />
 
     <fragment
-        android:id="@+id/navigation_statistics"
-        android:name="com.saverio.finapp.ui.statistics.StatisticsFragment"
-        android:label="@string/title_statistics"
-        tools:layout="@layout/fragment_statistics" />
+        android:id="@+id/navigation_account"
+        android:name="com.saverio.finapp.ui.account.AccountFragment"
+        android:label="@string/title_account"
+        tools:layout="@layout/activity_statistics" />
 </navigation>

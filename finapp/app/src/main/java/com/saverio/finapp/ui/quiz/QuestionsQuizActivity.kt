@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.MenuItem
 import android.widget.Button
 import android.widget.ImageView
@@ -14,12 +15,19 @@ import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isGone
+import com.saverio.finapp.MainActivity
 import com.saverio.finapp.R
+import com.saverio.finapp.api.ApiClient
+import com.saverio.finapp.api.PostResponseList
+import com.saverio.finapp.api.statistics.StatisticsPostList
 import com.saverio.finapp.db.DatabaseHandler
 import com.saverio.finapp.db.QuizzesModel
 import com.saverio.finapp.db.StatisticsModel
 import com.saverio.finapp.ui.theory.SectionActivity
 import org.w3c.dom.Text
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -299,6 +307,7 @@ class QuestionsQuizActivity : AppCompatActivity() {
                 statistics.id =
                     databaseHandler.getStatistics(question_id = questionId, type = 0)[0].id
                 databaseHandler.updateStatistics(statistics)
+                sendStatistics(statistics)
             }
             databaseHandler.close()
         }
@@ -366,6 +375,7 @@ class QuestionsQuizActivity : AppCompatActivity() {
                 }
 
                 databaseHandler.updateStatistics(statistics)
+                sendStatistics(statistics)
             }
         } else {
             //no present || add
@@ -428,5 +438,78 @@ class QuestionsQuizActivity : AppCompatActivity() {
         lastQuestionIdUsed = -1
         if (currentRunnable != null) mainHandler.removeCallbacks(currentRunnable!!)
         super.onDestroy()
+    }
+
+    fun sendStatistics(statistics: StatisticsModel) {
+        if (checkLogged()) {
+            //logged
+            val statisticsToSend = StatisticsPostList(
+                userid = getUserid(),
+                type = statistics.type,
+                datetime = statistics.datetime,
+                correct_answer = statistics.correct_answer!!,
+                user_answer = statistics.user_answer!!,
+                question_id = statistics.question_id,
+                milliseconds = statistics.milliseconds
+            )
+            sendStatistics(statisticsToSend)
+        }
+    }
+
+    fun sendStatistics(statistics: StatisticsPostList) {
+        val call: Call<PostResponseList> =
+            ApiClient.client.postStatisticsInfo(
+                userid = statistics.userid,
+                type = statistics.type,
+                datetime = statistics.datetime,
+                correct_answer = statistics.correct_answer,
+                user_answer = statistics.user_answer,
+                question_id = statistics.question_id,
+                milliseconds = statistics.milliseconds
+            )
+        call.enqueue(object : Callback<PostResponseList> {
+
+            override fun onResponse(
+                call: Call<PostResponseList>?,
+                response: Response<PostResponseList>?
+            ) {
+                println("Response:\n" + response!!.body()!!)
+
+                if (response!!.isSuccessful && response.body() != null) {
+                    val responseList = response.body()!!
+
+                    if (responseList.code == 200) {
+                        println("${responseList.code} || ${responseList.description}")
+                    } else {
+                        Log.v("Error", responseList.description)
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<PostResponseList>?, t: Throwable?) {
+                Log.v("Error", t.toString())
+            }
+
+        })
+    }
+
+    fun checkLogged(): Boolean {
+        return (getVariable("userid") != "" && getVariable("userid") != null)
+    }
+
+    fun setUseridLogged(userid: String) {
+        setVariable("userid", userid)
+    }
+
+    fun getUserid(): String {
+        return (if (checkLogged()) getVariable("userid")!! else "")
+    }
+
+    private fun setVariable(variable: String, value: String?) {
+        getPreferences(MODE_PRIVATE).edit().putString(variable, value).apply()
+    }
+
+    private fun getVariable(variable: String): String? {
+        return getPreferences(MODE_PRIVATE).getString(variable, null)
     }
 }

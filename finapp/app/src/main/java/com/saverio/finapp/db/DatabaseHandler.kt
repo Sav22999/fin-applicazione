@@ -61,8 +61,8 @@ class DatabaseHandler(context: Context) :
                 "  `${COLUMN_ID_PK_STATISTICS}` INT NOT NULL PRIMARY KEY," +
                 "  `${COLUMN_TYPE_STATISTICS}` INT NOT NULL," +
                 "  `${COLUMN_DATETIME_STATISTICS}` TEXT NOT NULL," +
-                "  `${COLUMN_CORRECT_ANSWER_STATISTICS}` TEXT NOT NULL," +
-                "  `${COLUMN_USER_ANSWER_STATISTICS}` TEXT NOT NULL," +
+                "  `${COLUMN_CORRECT_ANSWER_STATISTICS}` VARCHAR(5) NOT NULL," +
+                "  `${COLUMN_USER_ANSWER_STATISTICS}` VARCHAR(5) NOT NULL," +
                 "  `${COLUMN_QUESTION_ID_STATISTICS}` TEXT NOT NULL," +
                 "  `${COLUMN_MILLISECONDS_STATISTICS}` INT NOT NULL" +
                 ")"
@@ -1074,7 +1074,7 @@ class DatabaseHandler(context: Context) :
     companion object {
         //general
         private val DATABASE_NAME = "QuizNuoto"
-        private val DATABASE_VERSION = 12 //TODO: change this manually
+        private val DATABASE_VERSION = 13 //TODO: change this manually
 
         //chapters table
         val TABLE_NAME_CHAPTERS = "chapters"

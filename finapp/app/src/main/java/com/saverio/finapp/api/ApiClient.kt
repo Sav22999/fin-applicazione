@@ -9,9 +9,8 @@ import retrofit2.converter.gson.GsonConverterFactory
 object ApiClient {
     //https://saveriomorelli.com/api/quiz-nuoto-app/v1/
     var BASE_URL: String = "https://saveriomorelli.com/api/quiz-nuoto-app/v1/"
-    val getClient: ApiInterface
+    val client: ApiInterface
         get() {
-
             val gson = GsonBuilder()
                 .setLenient()
                 .create()
@@ -26,6 +25,5 @@ object ApiClient {
                 .build()
 
             return retrofit.create(ApiInterface::class.java)
-
         }
 }
