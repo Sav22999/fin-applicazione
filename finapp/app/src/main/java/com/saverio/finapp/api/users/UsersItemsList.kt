@@ -1,8 +1,10 @@
 package com.saverio.finapp.api.users
 
+import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
+import com.saverio.finapp.api.LastUpdateList
 
-data class UserPostList(
+data class UsersItemsList(
     @SerializedName("userid")
     val userid: String,
     @SerializedName("username")

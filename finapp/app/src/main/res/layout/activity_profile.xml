@@ -120,6 +120,7 @@
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="5dp"
                 android:layout_marginEnd="10dp"
+                android:visibility="gone"
                 app:cardBackgroundColor="?android:attr/colorBackground"
                 app:cardCornerRadius="10dp"
                 app:cardElevation="0dp"
@@ -136,7 +137,7 @@
                     <ImageView
                         android:id="@+id/imageViewProfileImage"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="200dp"
                         android:scaleType="centerCrop"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -153,6 +154,7 @@
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="10dp"
+                android:visibility="gone"
                 app:cardBackgroundColor="?android:attr/colorBackground"
                 app:cardCornerRadius="10dp"
                 app:cardElevation="0dp"
@@ -191,7 +193,6 @@
                         android:paddingTop="5dp"
                         android:paddingEnd="10dp"
                         android:paddingBottom="5dp"
-                        android:text="Name"
                         android:textSize="20sp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -209,6 +210,7 @@
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="10dp"
+                android:visibility="gone"
                 app:cardBackgroundColor="?android:attr/colorBackground"
                 app:cardCornerRadius="10dp"
                 app:cardElevation="0dp"
@@ -247,7 +249,6 @@
                         android:paddingTop="5dp"
                         android:paddingEnd="10dp"
                         android:paddingBottom="5dp"
-                        android:text="Surname"
                         android:textSize="20sp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -265,6 +266,7 @@
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="10dp"
+                android:visibility="gone"
                 app:cardBackgroundColor="?android:attr/colorBackground"
                 app:cardCornerRadius="10dp"
                 app:cardElevation="0dp"
@@ -303,7 +305,6 @@
                         android:paddingTop="5dp"
                         android:paddingEnd="10dp"
                         android:paddingBottom="5dp"
-                        android:text="Username"
                         android:textSize="20sp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -321,6 +322,7 @@
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="10dp"
+                android:visibility="gone"
                 app:cardBackgroundColor="?android:attr/colorBackground"
                 app:cardCornerRadius="10dp"
                 app:cardElevation="0dp"
@@ -359,7 +361,6 @@
                         android:paddingTop="5dp"
                         android:paddingEnd="10dp"
                         android:paddingBottom="5dp"
-                        android:text="Email"
                         android:textSize="20sp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -377,6 +378,7 @@
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="10dp"
+                android:visibility="gone"
                 app:cardBackgroundColor="?android:attr/colorBackground"
                 app:cardCornerRadius="10dp"
                 app:cardElevation="0dp"
@@ -415,7 +417,6 @@
                         android:paddingTop="5dp"
                         android:paddingEnd="10dp"
                         android:paddingBottom="5dp"
-                        android:text="Born"
                         android:textSize="20sp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -454,7 +455,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toTopOf="parent"
+            tools:visibility="gone">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -470,7 +472,7 @@
                     android:ems="10"
                     android:gravity="start|top"
                     android:hint="@string/username_or_email_text"
-                    android:inputType="textMultiLine|text"
+                    android:inputType="text|textEmailAddress"
                     android:padding="10dp"
                     android:textSize="20sp"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -540,13 +542,30 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toTopOf="parent"
+            tools:visibility="visible">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="0dp"
                 android:padding="10dp">
+
+                <EditText
+                    android:id="@+id/editTextProfileLoginResetPasswordUsernameOrEmail"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:background="@drawable/border_radius_with_border"
+                    android:ems="10"
+                    android:gravity="start|top"
+                    android:hint="@string/username_or_email_text"
+                    android:inputType="text|textEmailAddress"
+                    android:padding="10dp"
+                    android:textSize="20sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <EditText
                     android:id="@+id/editTextProfileLoginResetPasswordNewPassword"
@@ -562,7 +581,7 @@
                     android:textSize="20sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toBottomOf="@+id/editTextProfileLoginResetPasswordUsernameOrEmail" />
 
                 <Button
                     android:id="@+id/buttonResetPasswordSectionLoginProfileResetPassword"

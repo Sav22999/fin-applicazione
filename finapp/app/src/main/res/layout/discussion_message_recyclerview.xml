@@ -110,7 +110,7 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        tools:text="Capitolo 1" />
+                        tools:text="Messaggio" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -184,7 +184,7 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        tools:text="Capitolo 1" />
+                        tools:text="Messaggio" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 

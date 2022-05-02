@@ -130,10 +130,10 @@
     <string name="no_messages_available_here_text">Non sono presenti messaggi in questa discussione</string>
     <string name="last_message_text">Ultimo messaggio: %s</string>
     <string name="sent_message_text">%s · %s</string><!--Username · DD/MM/YYYY HH:MM:SS-->
-    <string name="message_read_toast">Message marked as read</string>
-    <string name="message_unread_toast">Message marked as unread</string>
-    <string name="message_sent_text">Sent: %s</string>
-    <string name="reply_to_message_text">Reply</string>
+    <string name="message_read_toast">Messaggio contrassegnato come letto</string>
+    <string name="message_unread_toast">Messaggio contrassegnato come non letto</string>
+    <string name="message_sent_text">Inviato: %s</string>
+    <string name="reply_to_message_text">Rispondi</string>
     <string name="digit_something_text">Scrivi un messaggio…</string>
 
     <!--Account section-->
@@ -146,7 +146,7 @@
     <string name="password_forgot_text"><u>Ho dimenticato la password</u></string>
     <string name="sign_up_form_name_text">Nome</string>
     <string name="sign_up_form_surname_text">Cognome</string>
-    <string name="sign_up_form_born_text">Data di nascita</string>
+    <string name="sign_up_form_born_text">Data di nascita (AAAA-MM-GG)</string>
     <string name="sign_up_form_email_text">Email</string>
     <string name="sign_up_form_password_text">Password</string>
     <string name="sign_up_form_repeat_password_text">Ripeti la password</string>
@@ -154,4 +154,14 @@
     <string name="reset_password_forgot_text">Nuova password</string>
     <string name="reset_password_forgot_button">Salva password</string>
     <string name="username_or_email_text">Username o email</string>
+    <string name="user_signed_up_correctly_toast">Utente registrato correttamente</string>
+    <string name="user_logged_in_successfully_toast">Accesso avvenuto con successo</string>
+    <string name="password_changed_correctly_toast">Password modificata correttamente</string>
+    <string name="username_or_email_or_password_are_wrong_text">Username o password, o email sono sbagliati</string>
+
+    <!--Error messages-->
+    <string name="username_already_taken_text">Username già utilizzato</string>
+    <string name="email_already_taken_text">Email già utilizzata</string>
+    <string name="cannot_be_empty_text">Non può essere vuoto</string>
+    <string name="password_should_match_text">Le password devono coincidere</string>
 </resources>

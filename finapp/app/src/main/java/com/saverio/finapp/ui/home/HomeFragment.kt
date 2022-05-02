@@ -84,7 +84,7 @@ class HomeFragment : Fragment() {
             val databaseHandler = DatabaseHandler(requireContext())
             val allStatistics = databaseHandler.getStatistics()
             allStatistics.forEach {
-                println("id:${it.id} | type:${it.type} | question:${it.question_id} | datetime:${it.datetime} | correct:${it.correct_answer} | user:${it.user_answer} | milliseconds:${it.milliseconds}")
+                //println("id:${it.id} | type:${it.type} | question:${it.question_id} | datetime:${it.datetime} | correct:${it.correct_answer} | user:${it.user_answer} | milliseconds:${it.milliseconds}")
             }
             //println("Shown")
         }
