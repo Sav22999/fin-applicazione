@@ -1,6 +1,9 @@
 package com.saverio.finapp
 
+import android.app.AlarmManager
+import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
@@ -29,6 +32,7 @@ import com.saverio.finapp.ui.home.HomeViewModel
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.util.*
 import kotlin.collections.ArrayList
 
 
@@ -65,6 +69,33 @@ class MainActivity : AppCompatActivity() {
         allCheckes()
     }
 
+    fun checkNotification(hour: Int, minute: Int, second: Int) {
+        try {
+            val calendar = Calendar.getInstance()
+            calendar.set(Calendar.HOUR_OF_DAY, hour)
+            calendar.set(Calendar.MINUTE, minute)
+            calendar.set(Calendar.SECOND, second)
+
+            val notificationIntent = Intent(this, NotificationReceiver::class.java)
+
+            val pendingIntent = PendingIntent.getBroadcast(
+                applicationContext,
+                100,
+                notificationIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT
+            )
+            val alarmManager = getSystemService(ALARM_SERVICE) as AlarmManager
+            alarmManager.setRepeating(
+                AlarmManager.RTC_WAKEUP,
+                calendar.timeInMillis,
+                10000,
+                pendingIntent
+            )
+        } catch (e: Exception) {
+            //Exception
+        }
+    }
+
     fun allCheckes() {
         val networkConnection = NetworkConnection(applicationContext)
         networkConnection.observe(this, Observer { isConnected ->
@@ -80,7 +111,7 @@ class MainActivity : AppCompatActivity() {
                 println("No connection available")
             }
         })
-        LoadMessages() //load notifications
+        checkNotification(0, 0, 1) //load notifications
     }
 
     override fun onResume() {

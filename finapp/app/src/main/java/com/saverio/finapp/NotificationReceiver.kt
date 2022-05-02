@@ -86,11 +86,7 @@ class NotificationReceiver : BroadcastReceiver() {
         val currentDate =
             "${c.get(Calendar.YEAR)}-${c.get(Calendar.MONTH + 1)}-${c.get(Calendar.DAY_OF_MONTH)}"
 
-        if (c.get(Calendar.HOUR_OF_DAY) >= hour_show &&
-            (currentDate != savedDate || getSavedMessage(context) != title) || getSavedMessage(
-                context
-            ) == ""
-        ) {
+        if (currentDate != savedDate || getSavedMessage(context) != title || getSavedMessage(context) == "") {
             notificationManager!!.notify(
                 notificationNumber,
                 notificationBuilder.build()
@@ -98,7 +94,7 @@ class NotificationReceiver : BroadcastReceiver() {
             setNotificationDate(context, currentDate)
             incrementNotificationNumber(context, notificationNumber)
         } else {
-            //Notification already sent (or it's too early o'clock)
+            //Notification already sent
         }
 
         setSavedMessage(context, title)
