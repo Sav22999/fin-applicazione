@@ -58,6 +58,7 @@ class HomeFragment : Fragment() {
         swipeRefreshLayout.setOnRefreshListener {
             checkNews(main)
             checkLoading()
+            main.allCheckes()
         }
         setupRecyclerView(main, clear = true)
         Handler().postDelayed(Runnable {

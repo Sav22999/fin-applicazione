@@ -43,7 +43,7 @@ class AllSectionsActivity : AppCompatActivity() {
         searchBox.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable) {
                 if (s.toString() != "") {
-                    search(expression = s.toString(), chapterId = chapterId, sectionId = sectionId)
+                    search(expression = s.toString(), chapterId = chapterId, sectionId = null)
                 } else {
                     setupRecyclerView(clear = true, chapter = chapterId, getSections = getSections)
                 }

@@ -39,6 +39,9 @@ class QuizFragment : Fragment() {
         val getChapters = databaseHandler.getChapters()
         setupRecyclerView(clear = true, search = false, getChapters)
 
+        val main = activity as MainActivity
+        main.allCheckes()
+
         val simulationCard = binding.cardViewQuizSimulation
         simulationCard.setOnClickListener {
             val intent = Intent(context, SimulationQuizActivity::class.java)

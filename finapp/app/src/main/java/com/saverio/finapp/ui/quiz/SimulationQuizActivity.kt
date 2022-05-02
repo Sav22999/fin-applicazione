@@ -79,30 +79,32 @@ class SimulationQuizActivity : AppCompatActivity() {
         val databaseHandler = DatabaseHandler(this)
         val questionsTemp = databaseHandler.getQuizzesRandom(limit = 50)
         databaseHandler.close()
-        questionsTemp.forEach {
-            questionsSimulation.add(
-                SimulationQuizzesModel(
-                    id = it.id,
-                    chapter = it.chapter!!,
-                    section = it.section!!,
-                    question = it.question!!,
-                    A = it.A!!,
-                    B = it.B!!,
-                    C = it.C!!,
-                    D = it.D!!,
-                    correct = it.correct!!,
-                    user_answer = ""
+        if(questionsTemp.size > 0) {
+            questionsTemp.forEach {
+                questionsSimulation.add(
+                    SimulationQuizzesModel(
+                        id = it.id,
+                        chapter = it.chapter!!,
+                        section = it.section!!,
+                        question = it.question!!,
+                        A = it.A!!,
+                        B = it.B!!,
+                        C = it.C!!,
+                        D = it.D!!,
+                        correct = it.correct!!,
+                        user_answer = ""
+                    )
                 )
+            }
+
+            start(
+                chapterId = questionsSimulation[0].chapter,
+                number = 1,
+                questionId = questionsSimulation[0].id
             )
+
+            startTime()
         }
-
-        start(
-            chapterId = questionsSimulation[0].chapter!!,
-            number = 1,
-            questionId = questionsSimulation[0].id
-        )
-
-        startTime()
 
         val actionBar = getSupportActionBar()
         if (actionBar != null) {
@@ -446,10 +448,14 @@ class SimulationQuizActivity : AppCompatActivity() {
     }
 
     private fun setVariable(variable: String, value: String?) {
-        getSharedPreferences("QuizNuotoPreferences", Context.MODE_PRIVATE).edit().putString(variable, value).apply()
+        getSharedPreferences("QuizNuotoPreferences", Context.MODE_PRIVATE).edit()
+            .putString(variable, value).apply()
     }
 
     private fun getVariable(variable: String): String? {
-        return getSharedPreferences("QuizNuotoPreferences", Context.MODE_PRIVATE).getString(variable, null)
+        return getSharedPreferences(
+            "QuizNuotoPreferences",
+            Context.MODE_PRIVATE
+        ).getString(variable, null)
     }
 }

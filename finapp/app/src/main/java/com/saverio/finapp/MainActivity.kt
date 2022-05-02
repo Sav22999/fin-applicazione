@@ -47,6 +47,10 @@ class MainActivity : AppCompatActivity() {
         val homeViewModel =
             ViewModelProvider(this).get(HomeViewModel::class.java)
 
+        allCheckes()
+    }
+
+    fun allCheckes() {
         if (checkForInternetConnection(this)) {
             checkChapters("")
             checkSections("", "")
@@ -338,6 +342,7 @@ class MainActivity : AppCompatActivity() {
             override fun onFailure(call: Call<SectionsList>?, t: Throwable?) {
                 //progerssProgressDialog.dismiss()
                 Log.v("Error", t.toString())
+                setVariable(DATETIME_SECTIONS_PREF, "")
             }
 
         })

@@ -314,11 +314,11 @@ class DatabaseHandler(context: Context) :
         if (chapter != null && section == null) {
             //in a specific chapter
             query =
-                "SELECT * FROM `${TABLE_NAME_SECTIONS}` WHERE `chapter` = '${chapter}' AND `text` LIKE '%${expressionToUse}%' OR `title` LIKE '%${expressionToUse}%'"
-        } else if (section != null) {
+                "SELECT * FROM `${TABLE_NAME_SECTIONS}` WHERE `chapter` = '${chapter}' AND (`text` LIKE '%${expressionToUse}%' OR `title` LIKE '%${expressionToUse}%')"
+        } else if (chapter != null && section != null) {
             //in a specific section
             query =
-                "SELECT * FROM `${TABLE_NAME_SECTIONS}` WHERE `section` = '${section}' AND `text` LIKE '%${expressionToUse}%' OR `title` LIKE '%${expressionToUse}%'"
+                "SELECT * FROM `${TABLE_NAME_SECTIONS}` WHERE `section` = '${section}' AND (`text` LIKE '%${expressionToUse}%' OR `title` LIKE '%${expressionToUse}%')"
         } else {
             //in general
             query =
