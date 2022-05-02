@@ -126,13 +126,9 @@
     <!--Messages section-->
     <string name="no_logged_no_messages_text">Non hai ancora effettuato l\'accesso quindi non puoi accedere alle discussioni</string>
     <string name="log_in_now_message_text">Accedi ora</string><!--redirect to "Account">"Login"-->
-    <string name="no_messages_available_text">Non hai iniziato ancora alcuna coversazione</string>
-    <string name="no_messages_available_here_text">Non sono presenti messaggi in questa discussione</string>
-    <string name="last_message_text">Ultimo messaggio: %s</string>
+    <string name="no_messages_available_text">Non sono presenti altre conversazioni alle quali potersi unire</string>
+    <string name="no_messages_available_here_text">Non sono presenti messaggi in questa discussione.\n<b>Scrivine uno tu per primo!</b></string>
     <string name="sent_message_text">%s · %s</string><!--Username · DD/MM/YYYY HH:MM:SS-->
-    <string name="message_read_toast">Messaggio contrassegnato come letto</string>
-    <string name="message_unread_toast">Messaggio contrassegnato come non letto</string>
-    <string name="message_sent_text">Inviato: %s</string>
     <string name="reply_to_message_text">Rispondi</string>
     <string name="digit_something_text">Scrivi un messaggio…</string>
 

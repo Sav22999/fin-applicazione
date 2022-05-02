@@ -15,6 +15,8 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.saverio.finapp.api.ApiClient
 import com.saverio.finapp.api.PostResponseList
 import com.saverio.finapp.api.chapters.ChaptersList
+import com.saverio.finapp.api.messages.AllMessagesList
+import com.saverio.finapp.api.messages.MessagesSectionsList
 import com.saverio.finapp.api.news.NewsList
 import com.saverio.finapp.api.quizzes.QuizzesList
 import com.saverio.finapp.api.sections.SectionsList
