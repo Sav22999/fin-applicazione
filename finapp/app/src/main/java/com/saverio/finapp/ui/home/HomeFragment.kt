@@ -67,45 +67,6 @@ class HomeFragment : Fragment() {
             }
         }, 500)
 
-        binding.button.setOnClickListener {
-            //CHECK
-
-            //println("Checking")
-            (activity as MainActivity).checkNews()
-            //println("Checked")
-        }
-        binding.button2.setOnClickListener {
-            //SHOW
-
-            //println("Showing")
-            val allNews = (activity as MainActivity).getNews()
-            allNews.forEach {
-                //println("${it.id} | ${it.type} | ${it.text}")
-            }
-            val databaseHandler = DatabaseHandler(requireContext())
-            val allStatistics = databaseHandler.getStatistics()
-            allStatistics.forEach {
-                //println("id:${it.id} | type:${it.type} | question:${it.question_id} | datetime:${it.datetime} | correct:${it.correct_answer} | user:${it.user_answer} | milliseconds:${it.milliseconds}")
-            }
-            //println("Shown")
-        }
-        binding.button3.setOnClickListener {
-            //DELETE
-
-            //println("Deleting")
-            val allNews = (activity as MainActivity).getNews()
-            allNews.forEach {
-                (activity as MainActivity).delete(
-                    NewsModel(it.id, 0, "", null, null, null, "")
-                )
-            }
-            val databaseHandler = DatabaseHandler(requireContext())
-            val allStatistics = databaseHandler.getStatistics()
-            allStatistics.forEach {
-                databaseHandler.deleteAllStatistics()
-            }
-            //println("Deleted")
-        }
         return root
     }
 

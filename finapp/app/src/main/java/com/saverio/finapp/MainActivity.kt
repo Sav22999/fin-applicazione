@@ -236,30 +236,17 @@ class MainActivity : AppCompatActivity() {
                 if (response!!.isSuccessful && response.body() != null) {
                     val chaptersList = response.body()!!
 
-                    if (chaptersSaved.isEmpty()) {
-                        //First time download data from server
-                        //println("Adding")
+                    if (datetimeSaved == null || datetimeSaved != chaptersList.lastUpdate?.datetime) {
+                        //Data are updated server-side, so I update data saved in the local database
+                        //println("Updating")
+                        deleteAllChapters()
                         setVariable(DATETIME_CHAPTERS_PREF, chaptersList.lastUpdate?.datetime)
-                        chaptersList.chapters?.forEach {
+                        chaptersList.chapters?.forEachIndexed { counter, it ->
                             add(ChaptersModel(it.chapter, it.title))
                         }
-                        //println("Added")
+                        //println("Updated")
                     } else {
-                        if (datetimeSaved == null || datetimeSaved != chaptersList.lastUpdate?.datetime) {
-                            //Data are updated server-side, so I update data saved in the local database
-                            //println("Updating")
-                            setVariable(DATETIME_CHAPTERS_PREF, chaptersList.lastUpdate?.datetime)
-                            chaptersList.chapters?.forEachIndexed { counter, it ->
-                                if (chaptersSaved.size > (counter + 1) && (chaptersSaved[counter].title != it.title)) {
-                                    update(ChaptersModel(it.chapter, it.title))
-                                } else {
-                                    add(ChaptersModel(it.chapter, it.title))
-                                }
-                            }
-                            //println("Updated")
-                        } else {
-                            //println("Already updated")
-                        }
+                        //println("Already updated")
                     }
                 }
             }
@@ -295,46 +282,25 @@ class MainActivity : AppCompatActivity() {
                 if (response!!.isSuccessful && response.body() != null) {
                     val sectionsList = response.body()!!
 
-                    if (sectionsSaved.isEmpty()) {
-                        //First time download data from server
-                        //println("Adding")
+                    if (datetimeSaved == null || datetimeSaved != sectionsList.lastUpdate?.datetime) {
+                        //Data are updated server-side, so I update data saved in the local database
+                        //println("Updating")
+                        deleteAllSections()
                         setVariable(DATETIME_SECTIONS_PREF, sectionsList.lastUpdate?.datetime)
-                        sectionsList.sections?.forEach {
-                            add(SectionsModel(it.id, it.chapter, it.title, it.author, it.text))
+                        sectionsList.sections?.forEachIndexed { counter, it ->
+                            add(
+                                SectionsModel(
+                                    it.id,
+                                    it.chapter,
+                                    it.title,
+                                    it.author,
+                                    it.text
+                                )
+                            )
                         }
-                        //println("Added")
+                        //println("Updated")
                     } else {
-                        if (datetimeSaved == null || datetimeSaved != sectionsList.lastUpdate?.datetime) {
-                            //Data are updated server-side, so I update data saved in the local database
-                            //println("Updating")
-                            setVariable(DATETIME_SECTIONS_PREF, sectionsList.lastUpdate?.datetime)
-                            sectionsList.sections?.forEachIndexed { counter, it ->
-                                if (sectionsSaved.size > (counter + 1) && (sectionsSaved[counter].chapter != it.chapter || sectionsSaved[counter].title != it.title || sectionsSaved[counter].author != it.author || sectionsSaved[counter].text != it.text)) {
-                                    update(
-                                        SectionsModel(
-                                            it.id,
-                                            it.chapter,
-                                            it.title,
-                                            it.author,
-                                            it.text
-                                        )
-                                    )
-                                } else {
-                                    add(
-                                        SectionsModel(
-                                            it.id,
-                                            it.chapter,
-                                            it.title,
-                                            it.author,
-                                            it.text
-                                        )
-                                    )
-                                }
-                            }
-                            //println("Updated")
-                        } else {
-                            //println("Already updated")
-                        }
+                        //println("Already updated")
                     }
                 }
             }
@@ -371,9 +337,10 @@ class MainActivity : AppCompatActivity() {
                 if (response!!.isSuccessful && response.body() != null) {
                     val quizzesList = response.body()!!
 
-                    if (quizzesSaved.isEmpty()) {
+                    if (datetimeSaved == null || datetimeSaved != quizzesList.lastUpdate?.datetime) {
                         //First time download data from server
                         //println("Adding")
+                        deleteAllQuizzes()
                         setVariable(DATETIME_QUIZZES_PREF, quizzesList.lastUpdate?.datetime)
                         quizzesList.questions?.forEach {
                             add(
@@ -392,45 +359,7 @@ class MainActivity : AppCompatActivity() {
                         }
                         //println("Added")
                     } else {
-                        if (datetimeSaved == null || datetimeSaved != quizzesList.lastUpdate?.datetime) {
-                            //Data are updated server-side, so I update data saved in the local database
-                            //println("Updating")
-                            setVariable(DATETIME_QUIZZES_PREF, quizzesList.lastUpdate?.datetime)
-                            quizzesList.questions?.forEachIndexed { counter, it ->
-                                if (quizzesSaved.size > (counter + 1) && (quizzesSaved[counter].chapter != it.chapter || quizzesSaved[counter].section != it.section || quizzesSaved[counter].question != it.question || quizzesSaved[counter].A != it.A || quizzesSaved[counter].B != it.B || quizzesSaved[counter].C != it.C || quizzesSaved[counter].D != it.D || quizzesSaved[counter].correct != it.correct)) {
-                                    update(
-                                        QuizzesModel(
-                                            it.id,
-                                            it.chapter,
-                                            it.section,
-                                            it.question,
-                                            it.A,
-                                            it.B,
-                                            it.C,
-                                            it.D,
-                                            it.correct
-                                        )
-                                    )
-                                } else {
-                                    add(
-                                        QuizzesModel(
-                                            it.id,
-                                            it.chapter,
-                                            it.section,
-                                            it.question,
-                                            it.A,
-                                            it.B,
-                                            it.C,
-                                            it.D,
-                                            it.correct
-                                        )
-                                    )
-                                }
-                            }
-                            //println("Updated")
-                        } else {
-                            //println("Already updated")
-                        }
+                        //println("Already updated")
                     }
                 }
             }
@@ -472,11 +401,13 @@ class MainActivity : AppCompatActivity() {
                 if (response!!.isSuccessful && response.body() != null) {
                     val newsList = response.body()!!
 
-                    if (newsSaved.isEmpty()) {
-                        //First time download data from server
-                        //println("Adding")
+                    if (datetimeSaved == null || datetimeSaved != newsList.lastUpdate?.datetime) {
+                        //Data are updated server-side, so I update data saved in the local database
+                        //println("Updating")
+                        deleteAllNews()
                         setVariable(DATETIME_NEWS_PREF, newsList.lastUpdate?.datetime)
-                        newsList.news?.forEach {
+
+                        newsList.news?.forEachIndexed { counter, it ->
                             add(
                                 NewsModel(
                                     it.id,
@@ -489,50 +420,13 @@ class MainActivity : AppCompatActivity() {
                                 )
                             )
                         }
+                        //println("Updated")
                         homeViewModel.setNewsChanged(changed = true)
                         //println("Changing")
-                        //println("Added")
                     } else {
-                        if (datetimeSaved == null || datetimeSaved != newsList.lastUpdate?.datetime) {
-                            //Data are updated server-side, so I update data saved in the local database
-                            //println("Updating")
-                            setVariable(DATETIME_NEWS_PREF, newsList.lastUpdate?.datetime)
-
-                            newsList.news?.forEachIndexed { counter, it ->
-                                if (newsSaved.size > (counter + 1) && checkNews(it.id) && (newsSaved[counter].type != it.type || newsSaved[counter].date != it.date || newsSaved[counter].title != it.title || newsSaved[counter].image != it.image || newsSaved[counter].link != it.link || newsSaved[counter].text != it.text)) {
-                                    update(
-                                        NewsModel(
-                                            it.id,
-                                            it.type,
-                                            it.date,
-                                            it.title,
-                                            it.image,
-                                            it.link,
-                                            it.text
-                                        )
-                                    )
-                                } else {
-                                    add(
-                                        NewsModel(
-                                            it.id,
-                                            it.type,
-                                            it.date,
-                                            it.title,
-                                            it.image,
-                                            it.link,
-                                            it.text
-                                        )
-                                    )
-                                }
-                            }
-                            //println("Updated")
-                            homeViewModel.setNewsChanged(changed = true)
-                            //println("Changing")
-                        } else {
-                            //println("Already updated")
-                            homeViewModel.setNewsChanged(changed = false)
-                            //println("(Not) changing")
-                        }
+                        //println("Already updated")
+                        homeViewModel.setNewsChanged(changed = false)
+                        //println("(Not) changing")
                     }
                 }
             }
@@ -599,112 +493,32 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun update(chapter: ChaptersModel) {
-        //update || chapter
-        val databaseHandler = DatabaseHandler(this)
-        if (chapter.chapter != 0 && chapter.title != null) {
-            val oldChapter = databaseHandler.getChapter(chapter = chapter.chapter)
-            val status = databaseHandler.updateChapter(chapter)
-            if (status > -1) {
-                //println("${oldChapter.chapter}|${oldChapter.title} updated correctly with ${chapter.chapter}|${chapter.title}")
-            } else {
-                //println("${chapter.chapter}|${chapter.title} NOT updated correctly")
-            }
-        }
-    }
-
-    private fun update(section: SectionsModel) {
-        //update || section
-        val databaseHandler = DatabaseHandler(this)
-        if (section.section != "" && section.chapter != null && section.title != null && section.author != null && section.text != null) {
-            val oldSection = databaseHandler.getSection(section = section.section)
-            val status = databaseHandler.updateSection(section)
-            if (status > -1) {
-                //println("${oldSection.section}|${oldSection.chapter}|${oldSection.title} updated correctly with ${section.section}|${section.chapter}|${section.title}")
-            } else {
-                //println("${section.section}|${section.chapter}|${section.title} NOT updated correctly")
-            }
-        }
-    }
-
-    private fun update(quiz: QuizzesModel) {
-        //update || quiz
-        val databaseHandler = DatabaseHandler(this)
-        if (quiz.id != 0 && quiz.section != null && quiz.chapter != null && quiz.question != null && quiz.A != null && quiz.B != null && quiz.C != null && quiz.D != null && quiz.correct != null) {
-            val oldQuiz = databaseHandler.getQuiz(id = quiz.id)
-            val status = databaseHandler.updateQuiz(quiz)
-            if (status > -1) {
-                //println("${oldQuiz.id}|${oldQuiz.chapter}|${oldQuiz.question} updated correctly with ${quiz.id}|${quiz.chapter}|${quiz.question}")
-            } else {
-                //println("${quiz.id}|${quiz.chapter}|${quiz.question} NOT updated correctly")
-            }
-        }
-    }
-
-    private fun update(news: NewsModel) {
-        //update || news
-        val databaseHandler = DatabaseHandler(this)
-        if (news.id != 0 && news.type != -1 && news.date != "" && news.text != "") {
-            val oldNews = databaseHandler.getNews(id = news.id)
-            val status = databaseHandler.updateNews(news)
-            if (status > -1) {
-                //println("${oldNews.id}|${oldNews.type}|${oldNews.text} updated correctly with ${news.id}|${news.type}|${news.text}")
-            } else {
-                //println("${news.id}|${news.type}|${news.text} NOT updated correctly")
-            }
-        }
-    }
-
-    fun delete(chapter: ChaptersModel) {
+    fun deleteAllChapters() {
         //delete || chapter
         val databaseHandler = DatabaseHandler(this)
-        if (chapter.chapter != 0) {
-            val status = databaseHandler.deleteChapter(chapter)
-            if (status > -1) {
-                //println("${chapter.chapter} deleted correctly")
-            } else {
-                //println("${chapter.chapter} NOT deleted correctly")
-            }
-        }
+        databaseHandler.deleteAllStatistics()
+        databaseHandler.close()
     }
 
-    fun delete(section: SectionsModel) {
-        //delete || section
+    fun deleteAllSections() {
+        //delete || sections
         val databaseHandler = DatabaseHandler(this)
-        if (section.section != "") {
-            val status = databaseHandler.deleteSection(section)
-            if (status > -1) {
-                //println("${section.section} deleted correctly")
-            } else {
-                //println("${section.section} NOT deleted correctly")
-            }
-        }
+        databaseHandler.deleteAllSections()
+        databaseHandler.close()
     }
 
-    fun delete(quiz: QuizzesModel) {
-        //delete || quiz
+    fun deleteAllQuizzes() {
+        //delete || quizzes
         val databaseHandler = DatabaseHandler(this)
-        if (quiz.id != 0) {
-            val status = databaseHandler.deleteQuiz(quiz)
-            if (status > -1) {
-                //println("${quiz.id} deleted correctly")
-            } else {
-                //println("${quiz.id} NOT deleted correctly")
-            }
-        }
+        databaseHandler.deleteAllQuizzes()
+        databaseHandler.close()
     }
 
-    fun delete(news: NewsModel) {
+    fun deleteAllNews() {
         //delete || news
         val databaseHandler = DatabaseHandler(this)
-        if (news.id != 0) {
-            val status = databaseHandler.deleteNews(news)
-            if (status > -1) {
-                //println("${news.id} deleted correctly")
-            } else {
-                //println("${news.id} NOT deleted correctly")
-            }
-        }
+        databaseHandler.deleteAllNews()
+        databaseHandler.close()
     }
 
     fun getChapters(): ArrayList<ChaptersModel> {

@@ -175,6 +175,17 @@ class DatabaseHandler(context: Context) :
         database.close()
         return success
     }
+
+    fun deleteAllChapters() {
+        val database = writableDatabase
+
+        val success = database.delete(
+            TABLE_NAME_CHAPTERS,
+            null,
+            null
+        )
+        database.close()
+    }
     //End || Chapters
 
     //Sections
@@ -297,6 +308,17 @@ class DatabaseHandler(context: Context) :
         )
         database.close()
         return success
+    }
+
+    fun deleteAllSections() {
+        val database = writableDatabase
+
+        val success = database.delete(
+            TABLE_NAME_SECTIONS,
+            null,
+            null
+        )
+        database.close()
     }
     //End || Sections
 
@@ -583,6 +605,17 @@ class DatabaseHandler(context: Context) :
         database.close()
         return success
     }
+
+    fun deleteAllQuizzes() {
+        val database = writableDatabase
+
+        val success = database.delete(
+            TABLE_NAME_QUIZZES,
+            null,
+            null
+        )
+        database.close()
+    }
     //End || Quizzes
 
 
@@ -740,6 +773,17 @@ class DatabaseHandler(context: Context) :
         )
         database.close()
         return success
+    }
+
+    fun deleteAllNews() {
+        val database = writableDatabase
+
+        val success = database.delete(
+            TABLE_NAME_NEWS,
+            null,
+            null
+        )
+        database.close()
     }
     //End || News
 

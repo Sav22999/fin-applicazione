@@ -61,6 +61,10 @@ class MessagesFragment : Fragment() {
             getMessagesSections(startTask = false)
         }
 
+        return root
+    }
+
+    fun load() {
         if ((activity as MainActivity).checkLogged()) {
             //logged
             binding.noMessagesAvailableText.isGone = false
@@ -79,8 +83,6 @@ class MessagesFragment : Fragment() {
                 startActivity(intent)
             }
         }
-
-        return root
     }
 
     override fun onDestroyView() {
@@ -176,5 +178,10 @@ class MessagesFragment : Fragment() {
             binding.messagesItemsList.visibility = View.GONE
             binding.noMessagesAvailableText.isGone = false
         }
+    }
+
+    override fun onResume() {
+        load()
+        super.onResume()
     }
 }
