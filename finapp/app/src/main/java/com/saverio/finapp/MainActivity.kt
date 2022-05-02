@@ -4,11 +4,7 @@ import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import android.net.ConnectivityManager
-import android.net.NetworkCapabilities
-import android.os.Build
 import android.os.Bundle
-import android.util.DisplayMetrics
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
@@ -19,8 +15,6 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.saverio.finapp.api.ApiClient
 import com.saverio.finapp.api.PostResponseList
 import com.saverio.finapp.api.chapters.ChaptersList
-import com.saverio.finapp.api.messages.AllMessagesList
-import com.saverio.finapp.api.messages.MessagesSectionsList
 import com.saverio.finapp.api.news.NewsList
 import com.saverio.finapp.api.quizzes.QuizzesList
 import com.saverio.finapp.api.sections.SectionsList
@@ -69,12 +63,18 @@ class MainActivity : AppCompatActivity() {
         allCheckes()
     }
 
-    fun checkNotification(hour: Int, minute: Int, second: Int) {
+    fun scheduleNotifications(hour_to_show_push: Int) {
         try {
-            val calendar = Calendar.getInstance()
-            calendar.set(Calendar.HOUR_OF_DAY, hour)
-            calendar.set(Calendar.MINUTE, minute)
-            calendar.set(Calendar.SECOND, second)
+            val calendar = GregorianCalendar.getInstance().apply {
+                if (get(Calendar.HOUR_OF_DAY) >= hour_to_show_push) {
+                    add(Calendar.DAY_OF_MONTH, 1)
+                }
+
+                set(Calendar.HOUR_OF_DAY, hour_to_show_push)
+                set(Calendar.MINUTE, 0)
+                set(Calendar.SECOND, 0)
+                set(Calendar.MILLISECOND, 0)
+            }
 
             val notificationIntent = Intent(this, NotificationReceiver::class.java)
 
@@ -88,7 +88,7 @@ class MainActivity : AppCompatActivity() {
             alarmManager.setRepeating(
                 AlarmManager.RTC_WAKEUP,
                 calendar.timeInMillis,
-                10000,
+                AlarmManager.INTERVAL_DAY,
                 pendingIntent
             )
         } catch (e: Exception) {
@@ -111,7 +111,12 @@ class MainActivity : AppCompatActivity() {
                 println("No connection available")
             }
         })
-        checkNotification(0, 0, 1) //load notifications
+
+        //set scheduled notifications
+        scheduleNotifications(0)
+        scheduleNotifications(6)
+        scheduleNotifications(12)
+        scheduleNotifications(18)
     }
 
     override fun onResume() {
