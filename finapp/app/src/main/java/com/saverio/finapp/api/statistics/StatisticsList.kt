@@ -5,5 +5,5 @@ import com.saverio.finapp.api.LastUpdateList
 
 data class StatisticsList(
     @SerializedName("statistics")
-    val questions: List<StatisticsItemsList>? = null
+    val statistics: List<StatisticsItemsList>? = null
 )

@@ -1,5 +1,6 @@
 package com.saverio.finapp.ui.profile
 
+import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.AsyncTask
@@ -15,8 +16,11 @@ import androidx.core.widget.NestedScrollView
 import com.saverio.finapp.R
 import com.saverio.finapp.api.ApiClient
 import com.saverio.finapp.api.PostResponseList
+import com.saverio.finapp.api.statistics.StatisticsList
 import com.saverio.finapp.api.users.SignupPostList
 import com.saverio.finapp.api.users.UsersList
+import com.saverio.finapp.db.DatabaseHandler
+import com.saverio.finapp.db.StatisticsModel
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -67,6 +71,9 @@ class ProfileActivity : AppCompatActivity() {
 
         logoutButton.setOnClickListener {
             setVariable("userid", null)
+            val databaseHandler = DatabaseHandler(this)
+            databaseHandler.deleteAllStatistics()
+            databaseHandler.close()
 
             noLoggedConstraintLayout.isGone = false
             loginConstraintLayout.isGone = true
@@ -332,13 +339,15 @@ class ProfileActivity : AppCompatActivity() {
                     if (responseList.code == 200) {
                         //println("${responseList.code} || ${responseList.description} || ${responseList.userid}")
 
-                        setVariable("userid", responseList.userid)
+                        setUseridLogged(responseList.userid!!)
                         loadUserDetails()
                         Toast.makeText(
                             applicationContext,
                             getString(R.string.user_logged_in_successfully_toast),
                             Toast.LENGTH_LONG
                         ).show()
+
+                        checkStatistics()
 
                         onBackPressed()
                     } else {
@@ -490,6 +499,58 @@ class ProfileActivity : AppCompatActivity() {
         }
     }
 
+    fun checkStatistics() {
+        //check new data from server
+        if (checkLogged()) {
+            //logged
+
+            val call: Call<StatisticsList> =
+                ApiClient.client.getStatisticsInfo(userid = getUserid())
+            call.enqueue(object : Callback<StatisticsList> {
+
+                override fun onResponse(
+                    call: Call<StatisticsList>?,
+                    response: Response<StatisticsList>?
+                ) {
+                    //println("Response:\n" + response!!.body()!!)
+
+                    if (response!!.isSuccessful && response.body() != null) {
+                        val responseList = response.body()!!
+
+                        if (responseList != null) {
+                            val databaseHandler = DatabaseHandler(this@ProfileActivity)
+
+                            responseList.statistics!!.forEach {
+                                val statistics = StatisticsModel(
+                                    id = databaseHandler.getNewIdStatistics(),
+                                    type = it.type,
+                                    question_id = it.question_id,
+                                    datetime = it.datetime,
+                                    correct_answer = it.correct_answer,
+                                    user_answer = it.user_answer,
+                                    milliseconds = it.milliseconds
+                                )
+                                if (databaseHandler.checkStatistics(it.question_id, it.type)) {
+                                    //update
+                                    databaseHandler.updateStatistics(statistics)
+                                } else {
+                                    //insert
+                                    databaseHandler.addStatistics(statistics)
+                                }
+                            }
+                        }
+                    }
+                }
+
+                override fun onFailure(call: Call<StatisticsList>?, t: Throwable?) {
+                    //progerssProgressDialog.dismiss()
+                    Log.v("Error", t.toString())
+                }
+
+            })
+        }
+    }
+
     fun checkLogged(): Boolean {
         return (getVariable("userid") != "" && getVariable("userid") != null)
     }
@@ -503,10 +564,14 @@ class ProfileActivity : AppCompatActivity() {
     }
 
     private fun setVariable(variable: String, value: String?) {
-        getPreferences(MODE_PRIVATE).edit().putString(variable, value).apply()
+        getSharedPreferences("QuizNuotoPreferences", Context.MODE_PRIVATE).edit()
+            .putString(variable, value).apply()
     }
 
     private fun getVariable(variable: String): String? {
-        return getPreferences(MODE_PRIVATE).getString(variable, null)
+        return getSharedPreferences(
+            "QuizNuotoPreferences",
+            Context.MODE_PRIVATE
+        ).getString(variable, null)
     }
 }

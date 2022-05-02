@@ -1,5 +1,6 @@
 package com.saverio.finapp.ui.quiz
 
+import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.res.ColorStateList
@@ -111,17 +112,17 @@ class QuestionsQuizActivity : AppCompatActivity() {
             total = databaseHandler.getQuizzes(chapter = chapterId).size
         )
         if (!databaseHandler.checkStatistics(question = questionId, type = 0)) {
-            databaseHandler.addStatistics(
-                StatisticsModel(
-                    id = databaseHandler.getNewIdStatistics(),
-                    type = 0,
-                    question_id = questionId,
-                    datetime = now(),
-                    correct_answer = getQuiz.correct,
-                    user_answer = "",
-                    milliseconds = 0
-                )
+            val statistics = StatisticsModel(
+                id = databaseHandler.getNewIdStatistics(),
+                type = 0,
+                question_id = questionId,
+                datetime = now(),
+                correct_answer = getQuiz.correct,
+                user_answer = "",
+                milliseconds = 0
             )
+            databaseHandler.addStatistics(statistics)
+            sendStatistics(statistics)
         }
         val statistics = databaseHandler.getStatistics(question_id = questionId, type = 0)[0]
         if (statistics.user_answer != "") {
@@ -179,6 +180,7 @@ class QuestionsQuizActivity : AppCompatActivity() {
             val databaseHandler = DatabaseHandler(this)
             val getQuiz =
                 databaseHandler.getQuiz(id = databaseHandler.getQuizzes(chapter = chapter)[number - 2].id)
+            databaseHandler.close()
             resetTime(getQuiz.id)
             resetQuestionsLayout(chapter!!, number - 1, questionId = getQuiz.id)
         }
@@ -205,6 +207,7 @@ class QuestionsQuizActivity : AppCompatActivity() {
             val databaseHandler = DatabaseHandler(this)
             val getQuiz =
                 databaseHandler.getQuiz(id = databaseHandler.getQuizzes(chapter = chapter)[number].id)
+            databaseHandler.close()
             resetTime(getQuiz.id)
             resetQuestionsLayout(chapter!!, number + 1, questionId = getQuiz.id)
         }
@@ -302,6 +305,7 @@ class QuestionsQuizActivity : AppCompatActivity() {
             if (!databaseHandler.checkStatistics(question = questionId, type = 0)) {
                 //no present || add
                 databaseHandler.addStatistics(statistics)
+                sendStatistics(statistics)
             } else {
                 //already present || update
                 statistics.id =
@@ -390,6 +394,7 @@ class QuestionsQuizActivity : AppCompatActivity() {
                 milliseconds = timePassed
             )
             databaseHandler.addStatistics(statistics)
+            sendStatistics(statistics)
         }
         databaseHandler.close()
     }
@@ -506,10 +511,10 @@ class QuestionsQuizActivity : AppCompatActivity() {
     }
 
     private fun setVariable(variable: String, value: String?) {
-        getPreferences(MODE_PRIVATE).edit().putString(variable, value).apply()
+        getSharedPreferences("QuizNuotoPreferences", Context.MODE_PRIVATE).edit().putString(variable, value).apply()
     }
 
     private fun getVariable(variable: String): String? {
-        return getPreferences(MODE_PRIVATE).getString(variable, null)
+        return getSharedPreferences("QuizNuotoPreferences", Context.MODE_PRIVATE).getString(variable, null)
     }
 }

@@ -18,6 +18,7 @@ import com.saverio.finapp.api.chapters.ChaptersList
 import com.saverio.finapp.api.news.NewsList
 import com.saverio.finapp.api.quizzes.QuizzesList
 import com.saverio.finapp.api.sections.SectionsList
+import com.saverio.finapp.api.statistics.StatisticsList
 import com.saverio.finapp.api.statistics.StatisticsPostList
 import com.saverio.finapp.databinding.ActivityMainBinding
 import com.saverio.finapp.db.*
@@ -98,18 +99,51 @@ class MainActivity : AppCompatActivity() {
         //check new data from server
         if (checkLogged()) {
             //logged
-            val databaseHandler = DatabaseHandler(this)
-            val getStatistics = databaseHandler.getStatistics() //all statistics
 
-            getStatistics.forEach {
-                if (databaseHandler.checkStatistics(it.question_id, it.type)) {
-                    //update
-                    databaseHandler.updateStatistics(it)
-                } else {
-                    //insert
-                    databaseHandler.addStatistics(it)
+            val call: Call<StatisticsList> =
+                ApiClient.client.getStatisticsInfo(userid = getUserid())
+            call.enqueue(object : Callback<StatisticsList> {
+
+                override fun onResponse(
+                    call: Call<StatisticsList>?,
+                    response: Response<StatisticsList>?
+                ) {
+                    //println("Response:\n" + response!!.body()!!)
+
+                    if (response!!.isSuccessful && response.body() != null) {
+                        val responseList = response.body()!!
+
+                        if (responseList != null) {
+                            val databaseHandler = DatabaseHandler(this@MainActivity)
+
+                            responseList.statistics!!.forEach {
+                                val statistics = StatisticsModel(
+                                    id = databaseHandler.getNewIdStatistics(),
+                                    type = it.type,
+                                    question_id = it.question_id,
+                                    datetime = it.datetime,
+                                    correct_answer = it.correct_answer,
+                                    user_answer = it.user_answer,
+                                    milliseconds = it.milliseconds
+                                )
+                                if (databaseHandler.checkStatistics(it.question_id, it.type)) {
+                                    //update
+                                    databaseHandler.updateStatistics(statistics)
+                                } else {
+                                    //insert
+                                    databaseHandler.addStatistics(statistics)
+                                }
+                            }
+                        }
+                    }
                 }
-            }
+
+                override fun onFailure(call: Call<StatisticsList>?, t: Throwable?) {
+                    //progerssProgressDialog.dismiss()
+                    Log.v("Error", t.toString())
+                }
+
+            })
         }
     }
 
@@ -697,11 +731,15 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setVariable(variable: String, value: String?) {
-        getPreferences(MODE_PRIVATE).edit().putString(variable, value).apply()
+        getSharedPreferences("QuizNuotoPreferences", Context.MODE_PRIVATE).edit()
+            .putString(variable, value).apply()
     }
 
     private fun getVariable(variable: String): String? {
-        return getPreferences(MODE_PRIVATE).getString(variable, null)
+        return getSharedPreferences(
+            "QuizNuotoPreferences",
+            Context.MODE_PRIVATE
+        ).getString(variable, null)
     }
 
     companion object {

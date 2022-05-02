@@ -1,5 +1,6 @@
 package com.saverio.finapp.ui.quiz
 
+import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.res.ColorStateList
@@ -77,6 +78,7 @@ class SimulationQuizActivity : AppCompatActivity() {
 
         val databaseHandler = DatabaseHandler(this)
         val questionsTemp = databaseHandler.getQuizzesRandom(limit = 50)
+        databaseHandler.close()
         questionsTemp.forEach {
             questionsSimulation.add(
                 SimulationQuizzesModel(
@@ -328,6 +330,7 @@ class SimulationQuizActivity : AppCompatActivity() {
                 milliseconds = milliseconds
             )
             databaseHandler.addStatistics(statistics)
+            databaseHandler.close()
             sendStatistics(statistics)
         }
 
@@ -383,6 +386,7 @@ class SimulationQuizActivity : AppCompatActivity() {
     fun sendStatistics(statistics: StatisticsModel) {
         if (checkLogged()) {
             //logged
+            println("Prepare to sending")
             val statisticsToSend = StatisticsPostList(
                 userid = getUserid(),
                 type = statistics.type,
@@ -437,19 +441,15 @@ class SimulationQuizActivity : AppCompatActivity() {
         return (getVariable("userid") != "" && getVariable("userid") != null)
     }
 
-    fun setUseridLogged(userid: String) {
-        setVariable("userid", userid)
-    }
-
     fun getUserid(): String {
         return (if (checkLogged()) getVariable("userid")!! else "")
     }
 
     private fun setVariable(variable: String, value: String?) {
-        getPreferences(MODE_PRIVATE).edit().putString(variable, value).apply()
+        getSharedPreferences("QuizNuotoPreferences", Context.MODE_PRIVATE).edit().putString(variable, value).apply()
     }
 
     private fun getVariable(variable: String): String? {
-        return getPreferences(MODE_PRIVATE).getString(variable, null)
+        return getSharedPreferences("QuizNuotoPreferences", Context.MODE_PRIVATE).getString(variable, null)
     }
 }
