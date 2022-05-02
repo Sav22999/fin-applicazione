@@ -239,6 +239,7 @@ class MessagesActivity : AppCompatActivity() {
     ) {
         val messagesItemsList: RecyclerView = findViewById(R.id.messages_conversation_items_list)
         val noMessagesAvailableText: TextView = findViewById(R.id.no_messages_available_here_text)
+
         if (clear) messagesItemsList.adapter = null
 
         if (messages != null && messages.isNotEmpty()) {
@@ -253,9 +254,10 @@ class MessagesActivity : AppCompatActivity() {
                 username = getUsername()
             )
             messagesItemsList.adapter = itemAdapter
-            messagesItemsList.smoothScrollToPosition(itemAdapter.itemCount - 1);
+            messagesItemsList.scrollToPosition(itemAdapter.itemCount - 1);
         } else {
             messagesItemsList.visibility = View.GONE
+            noMessagesAvailableText.text = getString(R.string.no_messages_available_here_text)
             noMessagesAvailableText.isGone = false
         }
     }
