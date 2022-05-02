@@ -440,8 +440,7 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/titleProfile"
-        app:layout_constraintVertical_bias="0.0"
-        tools:visibility="visible">
+        app:layout_constraintVertical_bias="0.0">
 
         <androidx.cardview.widget.CardView
             android:id="@+id/cardViewProfileLogin"
@@ -628,7 +627,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/titleProfile">
+        app:layout_constraintTop_toBottomOf="@+id/titleProfile"
+        tools:visibility="visible">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -1055,15 +1055,12 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
-                    <EditText
+                    <TextView
                         android:id="@+id/textViewProfileSignupBorn"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:background="@drawable/border_radius_with_border"
-                        android:ems="10"
-                        android:gravity="start|top"
                         android:hint="@string/sign_up_form_born_text"
-                        android:inputType="date|datetime"
                         android:paddingStart="10dp"
                         android:paddingTop="5dp"
                         android:paddingEnd="10dp"

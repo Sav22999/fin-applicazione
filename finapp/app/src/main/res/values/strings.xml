@@ -146,7 +146,7 @@
     <string name="password_forgot_text"><u>Ho dimenticato la password</u></string>
     <string name="sign_up_form_name_text">Nome</string>
     <string name="sign_up_form_surname_text">Cognome</string>
-    <string name="sign_up_form_born_text">Data di nascita (AAAA-MM-GG)</string>
+    <string name="sign_up_form_born_text">Data di nascita</string>
     <string name="sign_up_form_email_text">Email</string>
     <string name="sign_up_form_password_text">Password</string>
     <string name="sign_up_form_repeat_password_text">Ripeti la password</string>

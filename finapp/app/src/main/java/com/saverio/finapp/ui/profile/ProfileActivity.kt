@@ -1,5 +1,7 @@
 package com.saverio.finapp.ui.profile
 
+import android.annotation.SuppressLint
+import android.app.DatePickerDialog
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -25,8 +27,10 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.security.MessageDigest
+import java.util.*
 
 class ProfileActivity : AppCompatActivity() {
+    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_profile)
@@ -158,6 +162,24 @@ class ProfileActivity : AppCompatActivity() {
             signupConstraintLayout.isGone = false
             loggedConstraintLayout.isGone = true
 
+            val born = findViewById<TextView>(R.id.textViewProfileSignupBorn)
+            val today = Calendar.getInstance()
+            born.setOnClickListener {
+                val datePickerDialog = DatePickerDialog(
+                    this,
+                    DatePickerDialog.OnDateSetListener { view, year, month, dayOfMonth ->
+                        born.setText(
+                            "$year-$month-$dayOfMonth"
+                        )
+                    },
+                    today.get(Calendar.YEAR),
+                    today.get(Calendar.MONTH),
+                    today.get(Calendar.DAY_OF_MONTH)
+                )
+                datePickerDialog.datePicker.maxDate = System.currentTimeMillis()
+                datePickerDialog.show()
+            }
+
             val buttonSignupSectionSignupProfile: Button =
                 findViewById(R.id.buttonSignupSectionSignupProfile)
             buttonSignupSectionSignupProfile.setOnClickListener {
@@ -168,7 +190,6 @@ class ProfileActivity : AppCompatActivity() {
                 val password = findViewById<EditText>(R.id.textViewProfileSignupPassword)
                 val repeat_password =
                     findViewById<EditText>(R.id.textViewProfileSignupRepeatPassword)
-                val born = findViewById<EditText>(R.id.textViewProfileSignupBorn)
 
                 if (name.text.toString() != "" && surname.text.toString() != "" && username.text.toString() != "" && password.text.toString() != "" && password.text.toString() == repeat_password.text.toString() && born.text.toString() != "") {
                     createAccount(
@@ -351,6 +372,13 @@ class ProfileActivity : AppCompatActivity() {
 
                         onBackPressed()
                     } else {
+                        val username_or_email: EditText =
+                            findViewById(R.id.editTextProfileLoginUsernameOrEmail)
+                        val password: EditText = findViewById(R.id.editTextProfileLoginPassword)
+                        if (responseList.code == 402) {
+                            username_or_email.setError(getString(R.string.username_or_email_or_password_are_wrong_text))
+                            password.setError(getString(R.string.username_or_email_or_password_are_wrong_text))
+                        }
                         Log.v("Error", responseList.description)
                     }
                 }
