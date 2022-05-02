@@ -128,7 +128,7 @@ interface ApiInterface {
 
     @GET("messages/get")
     fun getAllMessagesInfo(
-        @Query("userid") userid: String
+        @Query("section") section: String
     ): Call<AllMessagesList>
 
     @GET("messages/sections/get")

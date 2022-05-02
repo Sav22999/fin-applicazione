@@ -25,14 +25,15 @@
             app:cardBackgroundColor="?android:attr/colorBackground"
             app:cardCornerRadius="15dp"
             app:cardElevation="0dp"
-            app:layout_constraintBottom_toTopOf="@+id/textViewSentMessageMessageFromAnother"
+            app:layout_constraintBottom_toTopOf="@+id/textViewSentMessageFromAnother"
             app:layout_constraintStart_toStartOf="parent">
 
             <ImageView
                 android:id="@+id/imageViewAccountImage"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:scaleType="centerCrop" />
+                android:scaleType="centerCrop"
+                android:visibility="visible" />
 
         </androidx.cardview.widget.CardView>
 
@@ -41,7 +42,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="5dp"
             android:layout_marginEnd="50dp"
-            app:layout_constraintBottom_toTopOf="@+id/textViewSentMessageMessageFromAnother"
+            app:layout_constraintBottom_toTopOf="@+id/textViewSentMessageFromAnother"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/cardViewAccountImage"
             app:layout_constraintTop_toTopOf="parent">
@@ -105,6 +106,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:textColor="?attr/colorOnTertiary"
+                        android:textIsSelectable="true"
                         android:textSize="14sp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -118,7 +120,7 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <TextView
-            android:id="@+id/textViewSentMessageMessageFromAnother"
+            android:id="@+id/textViewSentMessageFromAnother"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="15dp"
@@ -147,7 +149,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="50dp"
             android:layout_marginEnd="5dp"
-            app:layout_constraintBottom_toTopOf="@+id/textViewSentMessageMessageFromMe"
+            app:layout_constraintBottom_toTopOf="@+id/textViewSentMessageFromMe"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -179,6 +181,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:textColor="?attr/colorOnPrimary"
+                        android:textIsSelectable="true"
                         android:textSize="14sp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -192,7 +195,7 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <TextView
-            android:id="@+id/textViewSentMessageMessageFromMe"
+            android:id="@+id/textViewSentMessageFromMe"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="15dp"

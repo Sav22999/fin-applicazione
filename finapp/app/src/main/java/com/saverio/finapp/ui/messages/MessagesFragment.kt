@@ -58,7 +58,7 @@ class MessagesFragment : Fragment() {
         )
 
         swipeRefreshLayout.setOnRefreshListener {
-            getMessagesSections()
+            getMessagesSections(startTask = false)
         }
 
         if ((activity as MainActivity).checkLogged()) {
@@ -67,7 +67,7 @@ class MessagesFragment : Fragment() {
             binding.buttonLoginMessages.isGone = true
             binding.noLoggedMessagesText.isGone = true
 
-            getMessagesSections()
+            getMessagesSections(startTask = true)
         } else {
             //no logged
             binding.noMessagesAvailableText.isGone = true
@@ -89,7 +89,7 @@ class MessagesFragment : Fragment() {
         _binding = null
     }
 
-    fun getMessagesSections() {
+    fun getMessagesSections(startTask: Boolean = false) {
         swipeRefreshLayout.isRefreshing = true
         val call: Call<MessagesSectionsList> =
             ApiClient.client.getUserMessagesSectionsInfo(userid = (activity as MainActivity).getUserid())
@@ -144,8 +144,8 @@ class MessagesFragment : Fragment() {
 
         })
 
-        if (currentRunnable == null) {
-            currentRunnable = Runnable { getMessagesSections() }
+        if (startTask) {
+            currentRunnable = Runnable { getMessagesSections(startTask = true) }
             mainHandler.postDelayed(
                 currentRunnable!!,
                 60000

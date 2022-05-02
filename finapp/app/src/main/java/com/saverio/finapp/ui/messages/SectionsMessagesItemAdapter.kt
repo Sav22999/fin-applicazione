@@ -8,13 +8,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.cardview.widget.CardView
-import androidx.core.view.isGone
 import androidx.core.view.isInvisible
 import androidx.recyclerview.widget.RecyclerView
 import com.saverio.finapp.R
-import com.saverio.finapp.api.messages.AllMessagesItemsList
-import com.saverio.finapp.api.messages.AllMessagesList
-import com.saverio.finapp.db.DatabaseHandler
 import com.saverio.finapp.db.SectionsModel
 
 
@@ -28,7 +24,7 @@ class SectionsMessagesItemAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, type: Int): ItemViewHolder {
         return ItemViewHolder(
             LayoutInflater.from(parent.context)
-                .inflate(R.layout.all_messages_message_recyclerview, parent, false)
+                .inflate(R.layout.sections_message_recyclerview, parent, false)
         )
     }
 

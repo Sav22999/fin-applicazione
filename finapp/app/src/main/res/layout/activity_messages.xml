@@ -22,7 +22,8 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:scrollbars="vertical"
-            app:layoutManager="LinearLayoutManager">
+            app:layoutManager="LinearLayoutManager"
+            app:stackFromEnd="false">
 
         </androidx.recyclerview.widget.RecyclerView>
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

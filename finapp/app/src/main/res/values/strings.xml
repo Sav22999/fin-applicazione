@@ -128,7 +128,8 @@
     <string name="log_in_now_message_text">Accedi ora</string><!--redirect to "Account">"Login"-->
     <string name="no_messages_available_text">Non sono presenti altre conversazioni alle quali potersi unire</string>
     <string name="no_messages_available_here_text">Non sono presenti messaggi in questa discussione.\n<b>Scrivine uno tu per primo!</b></string>
-    <string name="sent_message_text">%s · %s</string><!--Username · DD/MM/YYYY HH:MM:SS-->
+    <string name="sent_message_text">%s · %s</string><!--Username/You · DD/MM/YYYY HH:MM:SS-->
+    <string name="you_message_text">Tu</string>
     <string name="reply_to_message_text">Rispondi</string>
     <string name="digit_something_text">Scrivi un messaggio…</string>
 

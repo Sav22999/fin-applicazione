@@ -75,6 +75,7 @@ class ProfileActivity : AppCompatActivity() {
 
         logoutButton.setOnClickListener {
             setVariable("userid", null)
+            setVariable("username", null)
             val databaseHandler = DatabaseHandler(this)
             databaseHandler.deleteAllStatistics()
             databaseHandler.close()
@@ -473,6 +474,7 @@ class ProfileActivity : AppCompatActivity() {
                         textViewSurname.text = responseList.user_details.surname
                         cardViewSurname.isGone = false
                         textViewUsername.text = responseList.user_details.username
+                        setUsernameLogged(username = responseList.user_details.username)
                         cardViewUsername.isGone = false
                         textViewEmail.text = responseList.user_details.email
                         cardViewEmail.isGone = false
@@ -585,6 +587,10 @@ class ProfileActivity : AppCompatActivity() {
 
     fun setUseridLogged(userid: String) {
         setVariable("userid", userid)
+    }
+
+    fun setUsernameLogged(username: String) {
+        setVariable("username", username)
     }
 
     fun getUserid(): String {
