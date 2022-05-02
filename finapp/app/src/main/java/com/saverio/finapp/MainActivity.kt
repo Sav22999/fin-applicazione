@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.util.DisplayMetrics
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
@@ -34,6 +35,9 @@ import kotlin.collections.ArrayList
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
+
+    lateinit var currentFragment: String
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -47,19 +51,36 @@ class MainActivity : AppCompatActivity() {
         val homeViewModel =
             ViewModelProvider(this).get(HomeViewModel::class.java)
 
+        /*
+        val networkConnection = NetworkConnection(applicationContext)
+        networkConnection.observe(this, Observer { isConnected ->
+            if (isConnected) {
+                //connected
+            } else {
+                //not connected
+            }
+        })
+        */
+
         allCheckes()
     }
 
     fun allCheckes() {
-        if (checkForInternetConnection(this)) {
-            checkChapters("")
-            checkSections("", "")
-            checkQuizzes("", "")
-            checkNews("", "")
-            checkStatistics()
-        } else {
-            //println("Internet is not available")
-        }
+        val networkConnection = NetworkConnection(applicationContext)
+        networkConnection.observe(this, Observer { isConnected ->
+            if (isConnected) {
+                //connected
+                checkChapters("")
+                checkSections("", "")
+                checkQuizzes("", "")
+                checkNews("", "")
+                checkStatistics()
+            } else {
+                //not connected
+                println("No connection available")
+            }
+        })
+        LoadMessages() //load notifications
     }
 
     override fun onResume() {
@@ -188,29 +209,6 @@ class MainActivity : AppCompatActivity() {
             }
 
         })
-    }
-
-    fun checkForInternetConnection(context: Context): Boolean {
-        // if the android version is above M
-        val connectivityManager =
-            context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            val network = connectivityManager.activeNetwork ?: return false
-            val activeNetwork = connectivityManager.getNetworkCapabilities(network) ?: return false
-            return when {
-                // Wi-Fi
-                activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
-                // Mobile data
-                activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
-                else -> false
-            }
-        } else {
-            // if the android version is below M
-            @Suppress("DEPRECATION") val networkInfo =
-                connectivityManager.activeNetworkInfo ?: return false
-            @Suppress("DEPRECATION")
-            return networkInfo.isConnected
-        }
     }
 
     fun checkChapters(chapter: String = "") {

@@ -40,6 +40,9 @@ class QuizFragment : Fragment() {
         setupRecyclerView(clear = true, search = false, getChapters)
 
         val main = activity as MainActivity
+
+        main.currentFragment = "quiz"
+
         main.allCheckes()
 
         val simulationCard = binding.cardViewQuizSimulation

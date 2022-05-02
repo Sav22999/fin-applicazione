@@ -40,6 +40,9 @@ class TheoryFragment : Fragment() {
         val root: View = binding.root
 
         val main = activity as MainActivity
+
+        main.currentFragment = "theory"
+
         main.allCheckes()
 
         val databaseHandler = DatabaseHandler(requireContext())

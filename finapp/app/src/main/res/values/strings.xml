@@ -15,11 +15,7 @@
     <string name="title_profile_signup">Registrazione</string>
     <string name="title_messages">Discussioni</string>
 
-    <string name="load_database">Load database</string>
-    <string name="check_database">Check database</string>
-    <string name="show_database">Show database</string>
-    <string name="update_database">Update database</string>
-    <string name="delete_database">Delete database</string>
+    <string name="no_internet_connection_available_text">Nessuna connessione a Internet disponibile al momento</string>
 
     <!--News-->
     <string name="type_0_general_news_text">Generale</string>
@@ -162,4 +158,8 @@
     <string name="email_already_taken_text">Email già utilizzata</string>
     <string name="cannot_be_empty_text">Non può essere vuoto</string>
     <string name="password_should_match_text">Le password devono coincidere</string>
+
+    <!--Notification-->
+    <string name="open_the_app_to_read_message_notification">Apri l\'app per leggere il messaggio</string>
+    <string name="new_message_notification">New message</string>
 </resources>

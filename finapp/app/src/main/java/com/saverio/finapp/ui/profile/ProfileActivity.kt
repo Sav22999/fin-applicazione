@@ -15,6 +15,7 @@ import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isGone
 import androidx.core.widget.NestedScrollView
+import com.saverio.finapp.NetworkConnection
 import com.saverio.finapp.R
 import com.saverio.finapp.api.ApiClient
 import com.saverio.finapp.api.PostResponseList
@@ -47,6 +48,52 @@ class ProfileActivity : AppCompatActivity() {
             //from "messages"
         }
 
+        val networkConnection = NetworkConnection(this)
+        networkConnection.observe(this, androidx.lifecycle.Observer { isConnected ->
+            val constraintLayout: ConstraintLayout =
+                findViewById(R.id.constraintLayoutNoInternetConnectionActivityProfile)
+            val noLoggedConstraintLayout: ConstraintLayout =
+                findViewById(R.id.constraintLayoutProfileNoLogged)
+            val loginConstraintLayout: ConstraintLayout =
+                findViewById(R.id.constraintLayoutProfileLogin)
+            val signupConstraintLayout: NestedScrollView =
+                findViewById(R.id.nestedScrollViewProfileSignup)
+            val loggedConstraintLayout: NestedScrollView =
+                findViewById(R.id.nestedScrollViewProfileLoggedDetails)
+            if (isConnected) {
+                //connected
+                constraintLayout.isGone = true
+                noLoggedConstraintLayout.isGone = true
+                loginConstraintLayout.isGone = true
+                signupConstraintLayout.isGone = true
+                loggedConstraintLayout.isGone = true
+                loadProfile()
+            } else {
+                //not connected
+                constraintLayout.isGone = false
+                noLoggedConstraintLayout.isGone = true
+                loginConstraintLayout.isGone = true
+                signupConstraintLayout.isGone = true
+                loggedConstraintLayout.isGone = true
+            }
+        })
+
+        /*
+            noLoggedConstraintLayout.isGone = true
+            loginConstraintLayout.isGone = true
+            signupConstraintLayout.isGone = true
+            loggedConstraintLayout.isGone = true
+        */
+
+        val actionBar = getSupportActionBar()
+        if (actionBar != null) {
+            //show the back button in the action bar
+            actionBar.setDisplayHomeAsUpEnabled(true)
+            actionBar.title = ""
+        }
+    }
+
+    fun loadProfile() {
         val loginButton: Button = findViewById(R.id.buttonLoginProfile)
         val signupButton: TextView = findViewById(R.id.sign_up_text)
         val logoutButton: Button = findViewById(R.id.buttonLogoutProfile)
@@ -219,20 +266,6 @@ class ProfileActivity : AppCompatActivity() {
                 }
             }
         }
-
-        /*
-            noLoggedConstraintLayout.isGone = true
-            loginConstraintLayout.isGone = true
-            signupConstraintLayout.isGone = true
-            loggedConstraintLayout.isGone = true
-        */
-
-        val actionBar = getSupportActionBar()
-        if (actionBar != null) {
-            //show the back button in the action bar
-            actionBar.setDisplayHomeAsUpEnabled(true)
-            actionBar.title = ""
-        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -256,7 +289,7 @@ class ProfileActivity : AppCompatActivity() {
         val loggedConstraintLayout: NestedScrollView =
             findViewById(R.id.nestedScrollViewProfileLoggedDetails)
 
-        if (!noLoggedConstraintLayout.isGone || !loggedConstraintLayout.isGone) {
+        if (!noLoggedConstraintLayout.isGone || !loggedConstraintLayout.isGone || (noLoggedConstraintLayout.isGone && loggedConstraintLayout.isGone && loginConstraintLayout.isGone && signupConstraintLayout.isGone)) {
             //from noLogged or Logged
             finish()
             super.onBackPressed()

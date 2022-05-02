@@ -6,11 +6,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.core.view.isGone
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.saverio.finapp.MainActivity
+import com.saverio.finapp.NetworkConnection
 import com.saverio.finapp.R
 import com.saverio.finapp.databinding.FragmentHomeBinding
 import com.saverio.finapp.db.DatabaseHandler
@@ -37,6 +40,8 @@ class HomeFragment : Fragment() {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
+        (activity as MainActivity).currentFragment = "home"
+
         val main = activity as MainActivity
         swipeRefreshLayout = binding.swipeRefreshLayout
         homeViewModel.newsChanged.observe(requireActivity()) { o ->
@@ -62,9 +67,23 @@ class HomeFragment : Fragment() {
         }
         setupRecyclerView(main, clear = true)
         Handler().postDelayed(Runnable {
-            if (main.checkForInternetConnection(requireContext())) {
-                checkNews(main)
-            }
+            val networkConnection = NetworkConnection(requireContext())
+            networkConnection.observe(requireActivity(), Observer { isConnected ->
+                if ((activity as MainActivity).currentFragment == "home") {
+                    if (isConnected) {
+                        //connected
+                        checkNews(main)
+                        binding.constraintLayoutNoInternetConnectionFragmentHome.isGone = true
+                        binding.newsItemsList.isGone = false
+                    } else {
+                        //not connected
+                        println("No connection available")
+                        binding.newsItemsList.isGone = true
+                        binding.constraintLayoutNoInternetConnectionFragmentHome.isGone = false
+                        swipeRefreshLayout.isRefreshing = false
+                    }
+                }
+            })
         }, 500)
 
         return root
