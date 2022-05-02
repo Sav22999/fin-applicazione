@@ -1,7 +1,7 @@
 package com.saverio.finapp.db
 
 class QuizzesModel(
-    var id: Int,
+    var id: Int = -1,
     var chapter: Int?,
     var section: String?,
     var question: String?,

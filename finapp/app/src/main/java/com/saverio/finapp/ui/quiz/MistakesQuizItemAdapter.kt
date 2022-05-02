@@ -42,24 +42,24 @@ class MistakesQuizItemAdapter(
 
         val databaseHandler = DatabaseHandler(context)
 
-        val correctListLettToNum = mapOf("A" to 0, "B" to 1, "C" to 2, "D" to 3)
-        val correctListNumToLett = mapOf(0 to "A", 1 to "B", 2 to "C", 3 to "D")
+        if (databaseHandler.getQuizzes().size > 0) {
+            val getQuiz = databaseHandler.getQuiz(item.question_id)
+            holder.questionText.text = getQuiz.question
+            val questionsLetter =
+                arrayOf("A" to getQuiz.A, "B" to getQuiz.B, "C" to getQuiz.C, "D" to getQuiz.D)
 
 
-        val getQuiz = databaseHandler.getQuiz(item.question_id)
-        holder.questionText.text = getQuiz.question
-        val questionsLetter =
-            arrayOf("A" to getQuiz.A, "B" to getQuiz.B, "C" to getQuiz.C, "D" to getQuiz.D)
-
-        var indexToUse = 0
-        questionsLetter.forEachIndexed { index, it ->
-            if (getQuiz.correct != it.first) {
-                holder.textQuestionsMistakes[indexToUse].text = it.second.toString()
-                indexToUse++
-            } else {
-                holder.textQuestionCorrect.text = it.second.toString()
+            var indexToUse = 0
+            questionsLetter.forEachIndexed { index, it ->
+                if (getQuiz.correct != it.first) {
+                    holder.textQuestionsMistakes[indexToUse].text = it.second.toString()
+                    indexToUse++
+                } else {
+                    holder.textQuestionCorrect.text = it.second.toString()
+                }
             }
         }
+        databaseHandler.close()
     }
 
     override fun getItemCount(): Int {
