@@ -50,8 +50,19 @@
                 android:text="@string/title_settings"
                 android:textSize="20sp"
                 app:layout_constraintEnd_toStartOf="@+id/imageViewAccountSettings"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/imageViewAccountViewProfile4"
                 app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/imageViewAccountViewProfile4"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_marginStart="10dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_settings"
+                app:tint="?attr/colorTertiary" />
 
             <ImageView
                 android:id="@+id/imageViewAccountSettings"
@@ -100,8 +111,19 @@
                 android:text="@string/title_profile"
                 android:textSize="20sp"
                 app:layout_constraintEnd_toStartOf="@+id/imageViewAccountViewProfile"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/imageViewAccountViewProfile2"
                 app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/imageViewAccountViewProfile2"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_marginStart="10dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_account"
+                app:tint="?attr/colorTertiary" />
 
             <ImageView
                 android:id="@+id/imageViewAccountViewProfile"
@@ -150,8 +172,19 @@
                 android:text="@string/title_statistics"
                 android:textSize="20sp"
                 app:layout_constraintEnd_toStartOf="@+id/imageViewAccountViewStatistics"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/imageViewAccountViewProfile3"
                 app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/imageViewAccountViewProfile3"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_marginStart="10dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_statistics"
+                app:tint="?attr/colorTertiary" />
 
             <ImageView
                 android:id="@+id/imageViewAccountViewStatistics"

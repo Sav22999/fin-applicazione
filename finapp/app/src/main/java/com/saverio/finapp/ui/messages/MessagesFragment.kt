@@ -34,13 +34,11 @@ class MessagesFragment : Fragment() {
 
         if ((activity as MainActivity).checkLogged()) {
             //logged
-            binding.editTextSearchMessages.isGone = false
             binding.noMessagesAvailableText.isGone = false
             binding.buttonLoginMessages.isGone = true
             binding.noLoggedMessagesText.isGone = true
         } else {
             //no logged
-            binding.editTextSearchMessages.isGone = true
             binding.noMessagesAvailableText.isGone = true
             binding.buttonLoginMessages.isGone = false
             binding.noLoggedMessagesText.isGone = false
