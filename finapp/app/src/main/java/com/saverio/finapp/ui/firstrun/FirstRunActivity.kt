@@ -39,7 +39,7 @@ class FirstRunActivity : AppCompatActivity() {
         val initialX = cardView.marginStart.toFloat()
         cardView.animate().x((cardView.width + cardView.marginStart + cardView.marginEnd) * 2f)
             .setDuration(0).start()
-        if (iterator != 0) cardView.animate().x(initialX).setDuration(200).start()
+        if (iterator != 0) cardView.animate().x(initialX).setDuration(300).start()
         //cardView.isGone = false
 
         animateNavPointsBar(iterator)
@@ -49,7 +49,7 @@ class FirstRunActivity : AppCompatActivity() {
         //cardView.isGone = true
         val initialX = cardView.marginStart.toFloat()
         cardView.animate().x(-((cardView.marginStart * 2f) + cardView.width)).setDuration(0).start()
-        if (iterator != 0) cardView.animate().x(initialX).setDuration(200).start()
+        if (iterator != 0) cardView.animate().x(initialX).setDuration(400).start()
         //cardView.isGone = false
 
         animateNavPointsBar(iterator)
@@ -64,7 +64,6 @@ class FirstRunActivity : AppCompatActivity() {
     }
 
     fun animateNavPointsBar(number: Int) {
-        println(number)
         if (number > 0) {
             val newX = when (number) {
                 1 -> {
@@ -131,7 +130,7 @@ class FirstRunActivity : AppCompatActivity() {
         }
         buttonForward3.setOnClickListener {
             //set "FirstRun" as "true"
-            setVariable(FIRST_RUN_APP, true)
+            setVariable(FIRST_RUN_APP, false)
 
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent) //run MainActivity

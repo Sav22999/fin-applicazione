@@ -18,8 +18,6 @@ class NotificationReceiver : BroadcastReceiver() {
     lateinit var title: String
     lateinit var text: String
 
-    val hour_show = 10
-
     lateinit var context: Context
 
     override fun onReceive(context: Context, intent: Intent) {

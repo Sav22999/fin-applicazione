@@ -67,31 +67,16 @@ class MainActivity : AppCompatActivity() {
         */
     }
 
-    fun scheduleNotifications(hour_to_show_push: Int) {
+    fun scheduleNotifications() {
         try {
-            val calendar = GregorianCalendar.getInstance().apply {
-                if (get(Calendar.HOUR_OF_DAY) >= hour_to_show_push) {
-                    add(Calendar.DAY_OF_MONTH, 1)
-                }
-
-                set(Calendar.HOUR_OF_DAY, hour_to_show_push)
-                set(Calendar.MINUTE, 0)
-                set(Calendar.SECOND, 0)
-                set(Calendar.MILLISECOND, 0)
-            }
-
             val notificationIntent = Intent(this, NotificationReceiver::class.java)
 
-            val pendingIntent = PendingIntent.getBroadcast(
-                applicationContext,
-                100,
-                notificationIntent,
-                PendingIntent.FLAG_UPDATE_CURRENT
-            )
+            val pendingIntent =
+                PendingIntent.getBroadcast(applicationContext, 0, notificationIntent, 0)
             val alarmManager = getSystemService(ALARM_SERVICE) as AlarmManager
             alarmManager.setRepeating(
-                AlarmManager.RTC_WAKEUP,
-                calendar.timeInMillis,
+                AlarmManager.RTC,
+                100,
                 10000,
                 pendingIntent
             )
@@ -117,7 +102,7 @@ class MainActivity : AppCompatActivity() {
         })
 
         //set scheduled notifications
-        scheduleNotifications(8)
+        scheduleNotifications()
 
         //check for new messages and eventually new notifications
         val notificationReceiver = NotificationReceiver()
