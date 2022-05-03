@@ -99,7 +99,9 @@
     <string name="cancel_alert_dialog_button">Annulla</string>
     <string name="ok_alert_dialog_button">OK</string>
     <string name="forward_alert_dialog_button">Avanti</string>
+    <string name="finish_alert_dialog_button">Termina</string>
     <string name="back_alert_dialog_button">Indietro</string>
+    <string name="check_alert_dialog_button">Verifica</string>
     <string name="continue_alert_dialog_button">Continua</string>
     <string name="see_results_alert_dialog_button">Vedi risultati</string>
     <string name="confirm_alert_dialog_button">Conferma</string>
@@ -160,6 +162,15 @@
     <string name="password_should_match_text">Le password devono coincidere</string>
 
     <!--Notification-->
-    <string name="open_the_app_to_read_message_notification">Apri l\'app per leggere il messaggio</string>
-    <string name="new_message_notification">New message</string>
+    <string name="preview_message_notification">%s</string><!--Message-->
+    <string name="new_message_notification">Nuovo messaggio nella sezione %s</string>
+
+    <!--First-run-->
+    <string name="app_not_official_of_fin_text_first_run">Questa app <b>non</b> è ufficiale F.I.N.</string>
+    <string name="title1_text_first_run">Preparati!</string>
+    <string name="message1_text_first_run">Studia la <b>teoria</b>, esercitati con le domande d\'esame ed effettua <b>simulazioni</b> dell\'effettivo test che sosterrai.\nPuoi anche rivedere le domande che hai sbagliato, così da non sbagliarle più!</string>
+    <string name="title2_text_first_run">Scopri</string>
+    <string name="message2_text_first_run">Il mondo del nuoto è meraviglioso. Con questa app inizierai a scoprire nuovi contenuti, e vedrai il nuoto e tutto ciò che lo circonda con occhi diversi.\nNella <i>Home</i> potrai anche tenere sott\'occhio le ultime novità sui regolamenti, delle curiosità e tanto altro!</string>
+    <string name="title3_text_first_run">Dialoga</string>
+    <string name="message3_text_first_run">Non ti è chiaro qualcosa studiato nella teoria e non vuoi aspettare di tornare a lezione in presenza, per chiederlo al tuo docente? Non c\'è problema!\nNella sezione <i>Discussioni</i> potrai porre quesiti e interagire con altri utenti, e chiedere aiuto a loro.</string>
 </resources>

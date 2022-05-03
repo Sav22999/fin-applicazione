@@ -15,6 +15,10 @@
         android:theme="@style/Theme.FINApp"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".ui.firstrun.FirstRunActivity"
+            android:exported="false"
+            android:launchMode="singleTop" />
+        <activity
             android:name=".ui.messages.MessagesActivity"
             android:exported="false" />
         <activity
@@ -57,7 +61,8 @@
         <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:label="@string/app_name">
+            android:label="@string/app_name"
+            android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -65,7 +70,7 @@
             </intent-filter>
         </activity>
 
-        <receiver android:name=".NotificationReceiver" />
+        <receiver android:name=".notification.NotificationReceiver" />
     </application>
 
 </manifest>

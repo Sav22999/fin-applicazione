@@ -1,4 +1,4 @@
-package com.saverio.finapp
+package com.saverio.finapp.internet
 
 import android.annotation.TargetApi
 import android.content.BroadcastReceiver

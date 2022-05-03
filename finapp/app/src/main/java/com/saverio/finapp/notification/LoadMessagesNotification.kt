@@ -1,31 +1,23 @@
-package com.saverio.finapp
+package com.saverio.finapp.notification
 
-import android.annotation.SuppressLint
 import android.content.Context
-import android.content.Intent
 import android.util.Log
+import com.saverio.finapp.R
 import com.saverio.finapp.api.ApiClient
-import com.saverio.finapp.api.ApiClient.BASE_URL
-import com.saverio.finapp.api.ApiInterface
 import com.saverio.finapp.api.messages.AllMessagesList
 import com.saverio.finapp.api.messages.MessagesSectionsList
-import com.saverio.finapp.db.DatabaseHandler
-import com.saverio.finapp.db.SectionsModel
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
-import java.text.SimpleDateFormat
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 
-class LoadMessages {
+class LoadMessagesNotification {
     lateinit var notificationReceiver: NotificationReceiver
 
     lateinit var globalContext: Context
 
     fun loadSections(context: Context, notificationReceiver: NotificationReceiver? = null) {
+        this.notificationReceiver = notificationReceiver!!
+
         globalContext = context
         val call: Call<MessagesSectionsList> =
             ApiClient.client.getUserMessagesSectionsInfo(userid = getUserid())
@@ -69,25 +61,45 @@ class LoadMessages {
                 if (response!!.isSuccessful && response.body() != null) {
                     val responseList = response.body()!!
 
-                    val currentDatetime = responseList.lastUpdate?.datetime.toString()
+                    val currentDatetime =
+                        responseList.lastUpdate?.datetime.toString()//global datetime
+                    var currentSectionDatetime =
+                        responseList.messages?.get(responseList.messages.size - 1)?.datetime//section datetime || we took the datetime of the last element
+                    if (currentSectionDatetime == null) currentSectionDatetime = currentDatetime
 
-                    if (getVariable("datetime_$section") != currentDatetime) {
+                    println(
+                        "section: $section || currentDate: ${currentSectionDatetime} || datetimeSaved: ${
+                            getVariable("datetime_$section")
+                        }"
+                    )
+
+                    if (getVariable("datetime_$section") != currentSectionDatetime) {
                         setDatetime(
-                            value = currentDatetime,
+                            value = currentSectionDatetime!!,
                             section = section
                         )
                         //get notification number
                         var notificationNumber = globalContext.getSharedPreferences(
-                            "notificationNumber",
+                            "notifications",
                             Context.MODE_PRIVATE
                         ).getInt("notificationNumber", 0)
 
                         //send the push notification
-                        notificationReceiver.sendNow(
-                            title = globalContext.getString(R.string.new_message_notification),
-                            text = globalContext.getString(R.string.open_the_app_to_read_message_notification),
-                            number = notificationNumber
-                        )
+                        if (notificationReceiver != null) {
+                            val tempMessage = responseList.messages?.get(responseList.messages.size - 1)
+                            notificationReceiver.sendNow(
+                                title = globalContext.getString(
+                                    R.string.new_message_notification,
+                                    section
+                                ),
+                                text = globalContext.getString(
+                                    R.string.preview_message_notification,
+                                    tempMessage?.text
+                                ),
+                                number = notificationNumber,
+                                section = section
+                            )
+                        }
                     }
                 }
             }

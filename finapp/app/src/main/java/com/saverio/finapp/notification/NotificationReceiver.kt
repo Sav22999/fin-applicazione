@@ -1,19 +1,17 @@
-package com.saverio.finapp
+package com.saverio.finapp.notification
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
-import android.content.Context.NOTIFICATION_SERVICE
 import android.content.Intent
 import android.media.RingtoneManager
 import android.net.Uri
 import android.os.Build
 import androidx.core.app.NotificationCompat
+import com.saverio.finapp.R
 import com.saverio.finapp.ui.messages.MessagesActivity
-import java.util.*
-
 
 class NotificationReceiver : BroadcastReceiver() {
 
@@ -27,14 +25,16 @@ class NotificationReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         this.context = context
 
-        var loadMessages = LoadMessages()
+        println("load messages notification")
+        var loadMessages = LoadMessagesNotification()
         loadMessages.loadSections(context, notificationReceiver = this)
     }
 
-    fun sendNow(title: String, text: String, number: Int) {
+    fun sendNow(title: String, text: String, number: Int, section: String) {
         this.title = title
         this.text = text
-        sendNotification(context, title, text, true, number)
+        println("send now notification")
+        sendNotification(context, title, text, true, number, section)
     }
 
     fun sendNotification(
@@ -42,13 +42,15 @@ class NotificationReceiver : BroadcastReceiver() {
         title: String,
         message: String,
         autoCancel: Boolean = true,
-        notificationNumber: Int
+        notificationNumber: Int,
+        section: String
     ) {
+        println("trying to sending notification")
         val NOTIFICATION_CHANNEL_ID =
             "${context.packageName.replace(".", "_")}_notification_${notificationNumber}"
         val NOTIFICATION_CHANNEL_NAME = "${context.packageName}_notification".replace(".", "_")
         val notificationManager =
-            context.getSystemService(NOTIFICATION_SERVICE) as NotificationManager?
+            context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager?
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val importance = NotificationManager.IMPORTANCE_DEFAULT
@@ -61,6 +63,7 @@ class NotificationReceiver : BroadcastReceiver() {
         }
 
         val intent = Intent(context, MessagesActivity::class.java)
+        intent.putExtra("section_id", section)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
 
         val pendingIntent =
@@ -79,56 +82,18 @@ class NotificationReceiver : BroadcastReceiver() {
                 .setAutoCancel(autoCancel) //.setSound(defaultSoundUri)
                 .setContentIntent(pendingIntent)
 
-        val savedDate = getNotificationDate(context)
-
-        val c = Calendar.getInstance()
-
-        val currentDate =
-            "${c.get(Calendar.YEAR)}-${c.get(Calendar.MONTH + 1)}-${c.get(Calendar.DAY_OF_MONTH)}"
-
-        if (currentDate != savedDate || getSavedMessage(context) != title || getSavedMessage(context) == "") {
-            notificationManager!!.notify(
-                notificationNumber,
-                notificationBuilder.build()
-            )
-            setNotificationDate(context, currentDate)
-            incrementNotificationNumber(context, notificationNumber)
-        } else {
-            //Notification already sent
-        }
-
-        setSavedMessage(context, title)
-    }
-
-    fun getSavedMessage(context: Context): String? {
-        return context.getSharedPreferences("messageNotification", Context.MODE_PRIVATE)
-            .getString("messageNotification", "")
-    }
-
-    fun setSavedMessage(context: Context, word: String) {
-        context.getSharedPreferences("messageNotification", Context.MODE_PRIVATE).edit()
-            .putString("messageNotification", word).apply()
-    }
-
-    fun getNotificationDate(context: Context): String {
-        return context.getSharedPreferences(
-            "lastNotificationDate",
-            Context.MODE_PRIVATE
-        ).getString("lastNotificationDate", "").toString()
-    }
-
-    fun setNotificationDate(context: Context, currentDate: String) {
-        context.getSharedPreferences("lastNotificationDate", Context.MODE_PRIVATE).edit()
-            .putString("lastNotificationDate", currentDate).apply()
+        notificationManager!!.notify(
+            notificationNumber,
+            notificationBuilder.build()
+        )
+        incrementNotificationNumber(context, notificationNumber)
+        println("notification should be sent")
     }
 
     fun incrementNotificationNumber(context: Context, notificationNumber: Int) {
         //increment notification number
         var notificationNumberTemp = notificationNumber + 1
-        context.getSharedPreferences(
-            "notificationNumber",
-            Context.MODE_PRIVATE
-        ).edit()
+        context.getSharedPreferences("notifications", Context.MODE_PRIVATE).edit()
             .putInt("notificationNumber", notificationNumberTemp).apply()
     }
 }

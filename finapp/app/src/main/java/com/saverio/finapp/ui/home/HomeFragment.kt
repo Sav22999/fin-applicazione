@@ -13,7 +13,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.saverio.finapp.MainActivity
-import com.saverio.finapp.NetworkConnection
+import com.saverio.finapp.internet.NetworkConnection
 import com.saverio.finapp.R
 import com.saverio.finapp.databinding.FragmentHomeBinding
 import com.saverio.finapp.db.DatabaseHandler

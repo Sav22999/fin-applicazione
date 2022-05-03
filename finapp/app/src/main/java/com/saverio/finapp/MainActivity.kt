@@ -22,7 +22,11 @@ import com.saverio.finapp.api.statistics.StatisticsList
 import com.saverio.finapp.api.statistics.StatisticsPostList
 import com.saverio.finapp.databinding.ActivityMainBinding
 import com.saverio.finapp.db.*
+import com.saverio.finapp.internet.NetworkConnection
+import com.saverio.finapp.notification.NotificationReceiver
+import com.saverio.finapp.ui.firstrun.FirstRunActivity
 import com.saverio.finapp.ui.home.HomeViewModel
+import com.saverio.finapp.ui.quiz.MistakesQuizActivity
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -49,6 +53,8 @@ class MainActivity : AppCompatActivity() {
         val homeViewModel =
             ViewModelProvider(this).get(HomeViewModel::class.java)
 
+        checkFirstRunTutorial()
+
         /*
         val networkConnection = NetworkConnection(applicationContext)
         networkConnection.observe(this, Observer { isConnected ->
@@ -59,8 +65,6 @@ class MainActivity : AppCompatActivity() {
             }
         })
         */
-
-        allCheckes()
     }
 
     fun scheduleNotifications(hour_to_show_push: Int) {
@@ -88,7 +92,7 @@ class MainActivity : AppCompatActivity() {
             alarmManager.setRepeating(
                 AlarmManager.RTC_WAKEUP,
                 calendar.timeInMillis,
-                AlarmManager.INTERVAL_DAY,
+                10000,
                 pendingIntent
             )
         } catch (e: Exception) {
@@ -108,15 +112,16 @@ class MainActivity : AppCompatActivity() {
                 checkStatistics()
             } else {
                 //not connected
-                println("No connection available")
+                //println("No connection available")
             }
         })
 
         //set scheduled notifications
-        scheduleNotifications(0)
-        scheduleNotifications(6)
-        scheduleNotifications(12)
-        scheduleNotifications(18)
+        scheduleNotifications(8)
+
+        //check for new messages and eventually new notifications
+        val notificationReceiver = NotificationReceiver()
+        notificationReceiver.onReceive(this, Intent(this, NotificationReceiver::class.java))
     }
 
     override fun onResume() {
@@ -126,6 +131,14 @@ class MainActivity : AppCompatActivity() {
 
     fun checkLogged(): Boolean {
         return (getVariable("userid") != "" && getVariable("userid") != null)
+    }
+
+    fun checkFirstRunTutorial() {
+        if (getVariable(FIRST_RUN_APP, default = true)!!) {
+            val intent = Intent(this, FirstRunActivity::class.java)
+            startActivity(intent) //run FirstRunActivity
+            finish() //close MainActivity
+        }
     }
 
     fun setUseridLogged(userid: String) {
@@ -590,6 +603,11 @@ class MainActivity : AppCompatActivity() {
             .putString(variable, value).apply()
     }
 
+    private fun setVariable(variable: String, value: Boolean = false) {
+        getSharedPreferences("QuizNuotoPreferences", Context.MODE_PRIVATE).edit()
+            .putBoolean(variable, value).apply()
+    }
+
     private fun getVariable(variable: String): String? {
         return getSharedPreferences(
             "QuizNuotoPreferences",
@@ -597,10 +615,18 @@ class MainActivity : AppCompatActivity() {
         ).getString(variable, null)
     }
 
+    private fun getVariable(variable: String, default: Boolean = false): Boolean? {
+        return getSharedPreferences("QuizNuotoPreferences", Context.MODE_PRIVATE).getBoolean(
+            variable,
+            default
+        )
+    }
+
     companion object {
         const val DATETIME_CHAPTERS_PREF = "DATETIME_CHAPTERS_PREF"
         const val DATETIME_SECTIONS_PREF = "DATETIME_SECTIONS_PREF"
         const val DATETIME_QUIZZES_PREF = "DATETIME_QUIZZES_PREF"
         const val DATETIME_NEWS_PREF = "DATETIME_NEWS_PREF"
+        const val FIRST_RUN_APP = "FIRST_RUN_APP"
     }
 }

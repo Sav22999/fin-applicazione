@@ -15,7 +15,7 @@ import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isGone
 import androidx.core.widget.NestedScrollView
-import com.saverio.finapp.NetworkConnection
+import com.saverio.finapp.internet.NetworkConnection
 import com.saverio.finapp.R
 import com.saverio.finapp.api.ApiClient
 import com.saverio.finapp.api.PostResponseList

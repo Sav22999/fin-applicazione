@@ -19,7 +19,7 @@ import androidx.core.content.ContextCompat.startActivity
 import androidx.core.view.isGone
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
-import com.saverio.finapp.NetworkConnection
+import com.saverio.finapp.internet.NetworkConnection
 import com.saverio.finapp.R
 import com.saverio.finapp.db.NewsModel
 import kotlin.coroutines.coroutineContext

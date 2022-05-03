@@ -47,14 +47,18 @@ class QuizFragment : Fragment() {
 
         val simulationCard = binding.cardViewQuizSimulation
         simulationCard.setOnClickListener {
-            val intent = Intent(context, SimulationQuizActivity::class.java)
-            startActivity(intent)
+            if (databaseHandler.getQuizzes().size > 0) {
+                val intent = Intent(context, SimulationQuizActivity::class.java)
+                startActivity(intent)
+            }
         }
         val mistakesCard = binding.cardViewQuizMistakes
         mistakesCard.setOnClickListener {
             val intent = Intent(context, MistakesQuizActivity::class.java)
             startActivity(intent)
         }
+
+        databaseHandler.close()
 
         (activity as MainActivity).pushStatistics()
 
