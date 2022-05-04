@@ -584,24 +584,24 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setVariable(variable: String, value: String?) {
-        getSharedPreferences("QuizNuotoPreferences", Context.MODE_PRIVATE).edit()
+        getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE).edit()
             .putString(variable, value).apply()
     }
 
     private fun setVariable(variable: String, value: Boolean = false) {
-        getSharedPreferences("QuizNuotoPreferences", Context.MODE_PRIVATE).edit()
+        getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE).edit()
             .putBoolean(variable, value).apply()
     }
 
     private fun getVariable(variable: String): String? {
         return getSharedPreferences(
-            "QuizNuotoPreferences",
+            PREFERENCES_NAME,
             Context.MODE_PRIVATE
         ).getString(variable, null)
     }
 
     private fun getVariable(variable: String, default: Boolean = false): Boolean? {
-        return getSharedPreferences("QuizNuotoPreferences", Context.MODE_PRIVATE).getBoolean(
+        return getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE).getBoolean(
             variable,
             default
         )
@@ -613,5 +613,9 @@ class MainActivity : AppCompatActivity() {
         const val DATETIME_QUIZZES_PREF = "DATETIME_QUIZZES_PREF"
         const val DATETIME_NEWS_PREF = "DATETIME_NEWS_PREF"
         const val FIRST_RUN_APP = "FIRST_RUN_APP"
+        const val FIRST_RUN_QUIZ = "FIRST_RUN_QUIZ"
+        const val FIRST_RUN_SIMULATION = "FIRST_RUN_SIMULATION"
+        const val FIRST_RUN_MESSAGES = "FIRST_RUN_MESSAGES"
+        const val PREFERENCES_NAME = "QuizNuotoPreferences"
     }
 }

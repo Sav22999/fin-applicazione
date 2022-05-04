@@ -1,8 +1,10 @@
 package com.saverio.finapp.ui.theory
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
+import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -10,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.saverio.finapp.R
 import com.saverio.finapp.db.DatabaseHandler
 import com.saverio.finapp.db.SectionsModel
+import com.saverio.finapp.ui.messages.MessagesActivity
 
 
 class SectionActivity : AppCompatActivity() {
@@ -30,6 +33,13 @@ class SectionActivity : AppCompatActivity() {
         }
         val getSection = databaseHandler.getSection(section = sectionId)
         setupSection(chapter = chapterId, section = sectionId, getSection = getSection)
+
+        val buttonStartConversation: Button = findViewById(R.id.buttonStartConversation)
+        buttonStartConversation.setOnClickListener {
+            val intent = Intent(this, MessagesActivity::class.java)
+            intent.putExtra("section_id", sectionId)
+            startActivity(intent)
+        }
 
         val actionBar = getSupportActionBar()
         if (actionBar != null) {

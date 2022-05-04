@@ -17,6 +17,7 @@ import androidx.core.view.marginEnd
 import androidx.core.view.marginStart
 import com.saverio.finapp.MainActivity
 import com.saverio.finapp.MainActivity.Companion.FIRST_RUN_APP
+import com.saverio.finapp.MainActivity.Companion.PREFERENCES_NAME
 import com.saverio.finapp.R
 
 class FirstRunActivity : AppCompatActivity() {
@@ -216,7 +217,7 @@ class FirstRunActivity : AppCompatActivity() {
     }
 
     private fun setVariable(variable: String, value: Boolean = false) {
-        getSharedPreferences("QuizNuotoPreferences", Context.MODE_PRIVATE).edit()
+        getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE).edit()
             .putBoolean(variable, value).apply()
     }
 }

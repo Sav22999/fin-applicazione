@@ -37,6 +37,8 @@ class MessagesFragment : Fragment() {
     private val binding get() = _binding!!
     lateinit var swipeRefreshLayout: SwipeRefreshLayout
 
+    var connected: Boolean = true
+
     var currentRunnable: Runnable? = null
     val mainHandler = Handler(Looper.getMainLooper())
 
@@ -71,6 +73,7 @@ class MessagesFragment : Fragment() {
     fun load() {
         val networkConnection = NetworkConnection(requireContext())
         networkConnection.observe(this, Observer { isConnected ->
+            connected = isConnected
             if ((activity as MainActivity).currentFragment == "messages") {
                 if (isConnected) {
                     //connected
@@ -97,12 +100,13 @@ class MessagesFragment : Fragment() {
                     }
                 } else {
                     //not connected
-                    println("No connection available")
+                    //println("No connection available")
                     binding.noMessagesAvailableText.isGone = true
                     binding.noLoggedMessagesText.text =
                         getString(R.string.no_internet_connection_available_text)
                     binding.constraintLayoutNoInternetConnectionFragmentMessages.isGone = false
                     swipeRefreshLayout.isRefreshing = false
+                    binding.messagesItemsList.isGone = true
                 }
             }
         })
@@ -115,72 +119,75 @@ class MessagesFragment : Fragment() {
     }
 
     fun getMessagesSections(startTask: Boolean = false) {
-        swipeRefreshLayout.isRefreshing = true
-        try {
-            val call: Call<MessagesSectionsList> =
-                ApiClient.client.getUserMessagesSectionsInfo(userid = (activity as MainActivity).getUserid())
-            call.enqueue(object : Callback<MessagesSectionsList> {
+        if (connected) {
+            swipeRefreshLayout.isRefreshing = true
+            try {
+                val call: Call<MessagesSectionsList> =
+                    ApiClient.client.getUserMessagesSectionsInfo(userid = (activity as MainActivity).getUserid())
+                call.enqueue(object : Callback<MessagesSectionsList> {
 
-                override fun onResponse(
-                    call: Call<MessagesSectionsList>?,
-                    response: Response<MessagesSectionsList>?
-                ) {
-                    //println("Response:\n" + response!!.body()!!)
+                    override fun onResponse(
+                        call: Call<MessagesSectionsList>?,
+                        response: Response<MessagesSectionsList>?
+                    ) {
+                        //println("Response:\n" + response!!.body()!!)
 
-                    if (response!!.isSuccessful && response.body() != null) {
-                        val responseList = response.body()!!
+                        if (response!!.isSuccessful && response.body() != null) {
+                            val responseList = response.body()!!
 
-                        val databaseHandler = DatabaseHandler(requireContext())
-                        val allSectionsSaved = databaseHandler.getSections()
+                            val databaseHandler = DatabaseHandler(requireContext())
+                            val allSectionsSaved = databaseHandler.getSections()
 
-                        var sectionsJoined = ArrayList<String>()
-                        var sectionsNotJoinedToPass = ArrayList<SectionsModel>()
-                        var sectionsToPass = ArrayList<SectionsModel>()
-                        responseList.sections?.forEach {
-                            val sectionTempSaved = databaseHandler.getSection(section = it.section)
-                            sectionsToPass.add(sectionTempSaved)
-                            sectionsJoined.add(it.section)
-                        }
-                        allSectionsSaved.forEach {
-                            if (sectionsJoined.indexOf(it.section) != -1) {
-                                //present in the "sectionsJoined" database, so don't add to the "general sections messages"
-                                //(already added in the recyclerview "joined")
-                            } else {
-                                //add to the other recyclerview ("noJoined")
+                            var sectionsJoined = ArrayList<String>()
+                            var sectionsNotJoinedToPass = ArrayList<SectionsModel>()
+                            var sectionsToPass = ArrayList<SectionsModel>()
+                            responseList.sections?.forEach {
                                 val sectionTempSaved =
                                     databaseHandler.getSection(section = it.section)
                                 sectionsToPass.add(sectionTempSaved)
+                                sectionsJoined.add(it.section)
                             }
+                            allSectionsSaved.forEach {
+                                if (sectionsJoined.indexOf(it.section) != -1) {
+                                    //present in the "sectionsJoined" database, so don't add to the "general sections messages"
+                                    //(already added in the recyclerview "joined")
+                                } else {
+                                    //add to the other recyclerview ("noJoined")
+                                    val sectionTempSaved =
+                                        databaseHandler.getSection(section = it.section)
+                                    sectionsToPass.add(sectionTempSaved)
+                                }
+                            }
+                            databaseHandler.close()
+
+                            swipeRefreshLayout.isRefreshing = false
+
+                            this@MessagesFragment.setupRecyclerView(
+                                clear = true,
+                                getSections = sectionsToPass,
+                                sectionsJoined = sectionsJoined
+                            )
                         }
-                        databaseHandler.close()
-
-                        swipeRefreshLayout.isRefreshing = false
-
-                        this@MessagesFragment.setupRecyclerView(
-                            clear = true,
-                            getSections = sectionsToPass,
-                            sectionsJoined = sectionsJoined
-                        )
                     }
-                }
 
-                override fun onFailure(call: Call<MessagesSectionsList>?, t: Throwable?) {
-                    //progerssProgressDialog.dismiss()
-                    Log.v("Error", t.toString())
-                }
+                    override fun onFailure(call: Call<MessagesSectionsList>?, t: Throwable?) {
+                        //progerssProgressDialog.dismiss()
+                        Log.v("Error", t.toString())
+                    }
 
-            })
+                })
+            } catch (e: Exception) {
 
-            if (startTask) {
-                currentRunnable = Runnable { getMessagesSections(startTask = true) }
-                mainHandler.postDelayed(
-                    currentRunnable!!,
-                    60000
-                ) //every 1 minutes (1000 milliseconds * 1 minute (->60 seconds) = 60000)
             }
-        } catch (e: Exception) {
-
         }
+        if (startTask) {
+            currentRunnable = Runnable { getMessagesSections(startTask = true) }
+            mainHandler.postDelayed(
+                currentRunnable!!,
+                60000
+            ) //every 1 minutes (1000 milliseconds * 1 minute (->60 seconds) = 60000)
+        }
+
     }
 
     fun setupRecyclerView(
@@ -209,6 +216,7 @@ class MessagesFragment : Fragment() {
     }
 
     override fun onResume() {
+        (activity as MainActivity).allCheckes()
         load()
         super.onResume()
     }

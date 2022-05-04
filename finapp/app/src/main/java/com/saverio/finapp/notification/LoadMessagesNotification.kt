@@ -2,6 +2,7 @@ package com.saverio.finapp.notification
 
 import android.content.Context
 import android.util.Log
+import com.saverio.finapp.MainActivity.Companion.PREFERENCES_NAME
 import com.saverio.finapp.R
 import com.saverio.finapp.api.ApiClient
 import com.saverio.finapp.api.messages.AllMessagesList
@@ -67,13 +68,11 @@ class LoadMessagesNotification {
                         responseList.messages?.get(responseList.messages.size - 1)?.datetime//section datetime || we took the datetime of the last element
                     if (currentSectionDatetime == null) currentSectionDatetime = currentDatetime
 
-                    println(
-                        "section: $section || currentDate: ${currentSectionDatetime} || datetimeSaved: ${
-                            getVariable("datetime_$section")
-                        }"
-                    )
-
-                    if (getVariable("datetime_$section") != currentSectionDatetime) {
+                    //println("section: $section || currentDate: ${currentSectionDatetime} || datetimeSaved: ${getVariable("datetime_$section")}")
+                    val tempMessage = responseList.messages?.get(responseList.messages.size - 1)
+                    if (getVariable("datetime_$section") != currentSectionDatetime && getUsername() != tempMessage?.username) {
+                        //send notification only if the saved date is different to the current date AND the username is not the same of login (so, it's not a message from the same user)
+                        //println("^^^^ New message in section $section ^^^^")
                         setDatetime(
                             value = currentSectionDatetime!!,
                             section = section
@@ -85,8 +84,7 @@ class LoadMessagesNotification {
                         ).getInt("notificationNumber", 0)
 
                         //send the push notification
-                        if (notificationReceiver != null) {
-                            val tempMessage = responseList.messages?.get(responseList.messages.size - 1)
+                        if (notificationReceiver != null && getVariable("notifications", true)) {
                             notificationReceiver.sendNow(
                                 title = globalContext.getString(
                                     R.string.new_message_notification,
@@ -112,15 +110,23 @@ class LoadMessagesNotification {
     }
 
     fun setDatetime(value: String, section: String) {
-        globalContext.getSharedPreferences("QuizNuotoPreferences", Context.MODE_PRIVATE).edit()
+        globalContext.getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE).edit()
             .putString("datetime_" + section, value).apply()
     }
 
     private fun getVariable(variable: String): String? {
         return globalContext.getSharedPreferences(
-            "QuizNuotoPreferences",
+            PREFERENCES_NAME,
             Context.MODE_PRIVATE
         ).getString(variable, null)
+    }
+
+    private fun getVariable(variable: String, default: Boolean): Boolean {
+        return globalContext.getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE)
+            .getBoolean(
+                variable,
+                default
+            )
     }
 
     fun checkLogged(): Boolean {
@@ -129,5 +135,9 @@ class LoadMessagesNotification {
 
     fun getUserid(): String {
         return (if (checkLogged()) getVariable("userid")!! else "")
+    }
+
+    fun getUsername(): String {
+        return (if (checkLogged()) getVariable("username")!! else "")
     }
 }

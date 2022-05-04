@@ -13,20 +13,25 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.core.view.isGone
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.saverio.finapp.MainActivity
+import com.saverio.finapp.MainActivity.Companion.PREFERENCES_NAME
 import com.saverio.finapp.R
 import com.saverio.finapp.api.ApiClient
 import com.saverio.finapp.api.PostMessageResponseList
 import com.saverio.finapp.api.messages.AllMessagesItemsList
 import com.saverio.finapp.api.messages.AllMessagesList
+import com.saverio.finapp.api.messages.MessagePostList
 import com.saverio.finapp.api.messages.MessagesSectionsList
 import com.saverio.finapp.db.DatabaseHandler
 import com.saverio.finapp.db.SectionsModel
+import com.saverio.finapp.internet.NetworkConnection
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -39,6 +44,8 @@ class MessagesActivity : AppCompatActivity() {
     var currentRunnable: Runnable? = null
     val mainHandler = Handler(Looper.getMainLooper())
 
+    var connected: Boolean = true
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_messages)
@@ -48,6 +55,29 @@ class MessagesActivity : AppCompatActivity() {
         if (bundle != null) {
             section_id = bundle.getString("section_id")!!
         }
+
+        val networkConnection = NetworkConnection(applicationContext)
+        networkConnection.observe(this, Observer { isConnected ->
+            val editTextMessage: EditText = findViewById(R.id.editTextMessageText)
+            val buttonSend: Button = findViewById(R.id.buttonSendMessage)
+            val constraintNoConnection: ConstraintLayout =
+                findViewById(R.id.constraintLayoutNoInternetConnectionActivityMessages)
+            connected = isConnected
+            if (isConnected) {
+                //connected
+                editTextMessage.isEnabled = true
+                buttonSend.isEnabled = true
+
+                constraintNoConnection.isGone = true
+            } else {
+                //not connected
+                editTextMessage.isEnabled = false
+                buttonSend.isEnabled = false
+
+                constraintNoConnection.isGone = false
+                swipeRefreshLayout.isRefreshing = false
+            }
+        })
 
         if (checkLogged()) {
             //logged
@@ -144,7 +174,6 @@ class MessagesActivity : AppCompatActivity() {
 
                     editTextMessage.isEnabled = true
                     buttonSend.isEnabled = true
-                    editTextMessage.setText("")
 
                     getAllMessages(startTask = false)
                 }
@@ -163,56 +192,58 @@ class MessagesActivity : AppCompatActivity() {
     }
 
     fun getAllMessages(startTask: Boolean = false) {
-        val editTextMessage: EditText = findViewById(R.id.editTextMessageText)
-        val buttonSend: Button = findViewById(R.id.buttonSendMessage)
+        if (connected) {
+            val editTextMessage: EditText = findViewById(R.id.editTextMessageText)
+            val buttonSend: Button = findViewById(R.id.buttonSendMessage)
 
-        if (!startTask) {
-            swipeRefreshLayout.isRefreshing = true
-        }
+            if (!startTask) {
+                swipeRefreshLayout.isRefreshing = true
+            }
 
-        val call: Call<AllMessagesList> =
-            ApiClient.client.getAllMessagesInfo(section = section_id)
-        call.enqueue(object : Callback<AllMessagesList> {
+            val call: Call<AllMessagesList> =
+                ApiClient.client.getAllMessagesInfo(section = section_id)
+            call.enqueue(object : Callback<AllMessagesList> {
 
-            override fun onResponse(
-                call: Call<AllMessagesList>?,
-                response: Response<AllMessagesList>?
-            ) {
-                //println("Response:\n" + response!!.body()!!)
+                override fun onResponse(
+                    call: Call<AllMessagesList>?,
+                    response: Response<AllMessagesList>?
+                ) {
+                    //println("Response:\n" + response!!.body()!!)
 
-                if (response!!.isSuccessful && response.body() != null) {
-                    val responseList = response.body()!!
+                    if (response!!.isSuccessful && response.body() != null) {
+                        val responseList = response.body()!!
 
-                    swipeRefreshLayout.isRefreshing = false
+                        swipeRefreshLayout.isRefreshing = false
 
-                    val currentDatetime = responseList.lastUpdate?.datetime.toString()
+                        val currentDatetime = responseList.lastUpdate?.datetime.toString()
 
-                    if (getVariable("datetime_$section_id") != currentDatetime) {
-                        setDatetime(
-                            value = currentDatetime,
-                            section = section_id
-                        )
+                        if (getVariable("datetime_$section_id") != currentDatetime) {
+                            setDatetime(
+                                value = currentDatetime,
+                                section = section_id
+                            )
 
-                        setupRecyclerView(
-                            clear = true,
-                            messages = responseList.messages
-                        )
-                        editTextMessage.isEnabled = true
-                        buttonSend.isEnabled = true
-                        editTextMessage.setText("")
+                            setupRecyclerView(
+                                clear = true,
+                                messages = responseList.messages
+                            )
+                            editTextMessage.isEnabled = true
+                            buttonSend.isEnabled = true
+                            editTextMessage.setText("")
+                        }
                     }
                 }
-            }
 
-            override fun onFailure(call: Call<AllMessagesList>?, t: Throwable?) {
-                //progerssProgressDialog.dismiss()
-                Log.v("Error", t.toString())
-                editTextMessage.isEnabled = true
-                buttonSend.isEnabled = true
-                editTextMessage.setText("")
-            }
+                override fun onFailure(call: Call<AllMessagesList>?, t: Throwable?) {
+                    //progerssProgressDialog.dismiss()
+                    Log.v("Error", t.toString())
+                    editTextMessage.isEnabled = true
+                    buttonSend.isEnabled = true
+                    editTextMessage.setText("")
+                }
 
-        })
+            })
+        }
 
         if (startTask) {
             currentRunnable = Runnable { getAllMessages(startTask = true) }
@@ -275,18 +306,18 @@ class MessagesActivity : AppCompatActivity() {
     }
 
     fun setDatetime(value: String, section: String) {
-        getSharedPreferences("QuizNuotoPreferences", Context.MODE_PRIVATE).edit()
+        getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE).edit()
             .putString("datetime_" + section, value).apply()
     }
 
     private fun setVariable(variable: String, value: String?) {
-        getSharedPreferences("QuizNuotoPreferences", Context.MODE_PRIVATE).edit()
+        getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE).edit()
             .putString(variable, value).apply()
     }
 
     private fun getVariable(variable: String): String? {
         return getSharedPreferences(
-            "QuizNuotoPreferences",
+            PREFERENCES_NAME,
             Context.MODE_PRIVATE
         ).getString(variable, null)
     }

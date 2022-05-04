@@ -17,6 +17,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isGone
 import com.saverio.finapp.MainActivity
+import com.saverio.finapp.MainActivity.Companion.PREFERENCES_NAME
 import com.saverio.finapp.R
 import com.saverio.finapp.api.ApiClient
 import com.saverio.finapp.api.PostResponseList
@@ -511,10 +512,10 @@ class QuestionsQuizActivity : AppCompatActivity() {
     }
 
     private fun setVariable(variable: String, value: String?) {
-        getSharedPreferences("QuizNuotoPreferences", Context.MODE_PRIVATE).edit().putString(variable, value).apply()
+        getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE).edit().putString(variable, value).apply()
     }
 
     private fun getVariable(variable: String): String? {
-        return getSharedPreferences("QuizNuotoPreferences", Context.MODE_PRIVATE).getString(variable, null)
+        return getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE).getString(variable, null)
     }
 }

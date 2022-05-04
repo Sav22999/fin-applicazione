@@ -143,7 +143,7 @@ class AllSectionsActivity : AppCompatActivity() {
         else noSectionsAvailableText.text = getString(R.string.no_sections_available_text)
 
         if (getSections.size > 0) {
-            editTextSearchSections.isGone = false
+            if(!search) editTextSearchSections.isGone = false
             noSectionsAvailableText.visibility = View.GONE
             sectionsItemsList.visibility = View.VISIBLE
 
@@ -152,7 +152,7 @@ class AllSectionsActivity : AppCompatActivity() {
             val itemAdapter = AllSectionsItemAdapter(this, getSections, chapter)
             sectionsItemsList.adapter = itemAdapter
         } else {
-            editTextSearchSections.isGone = true
+            if(!search) editTextSearchSections.isGone = true
             noSectionsAvailableText.visibility = View.VISIBLE
             sectionsItemsList.visibility = View.GONE
         }

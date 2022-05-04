@@ -19,6 +19,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isGone
 import androidx.core.view.updateLayoutParams
 import com.saverio.finapp.MainActivity
+import com.saverio.finapp.MainActivity.Companion.PREFERENCES_NAME
 import com.saverio.finapp.R
 import com.saverio.finapp.api.ApiClient
 import com.saverio.finapp.api.PostResponseList
@@ -448,13 +449,13 @@ class SimulationQuizActivity : AppCompatActivity() {
     }
 
     private fun setVariable(variable: String, value: String?) {
-        getSharedPreferences("QuizNuotoPreferences", Context.MODE_PRIVATE).edit()
+        getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE).edit()
             .putString(variable, value).apply()
     }
 
     private fun getVariable(variable: String): String? {
         return getSharedPreferences(
-            "QuizNuotoPreferences",
+            PREFERENCES_NAME,
             Context.MODE_PRIVATE
         ).getString(variable, null)
     }

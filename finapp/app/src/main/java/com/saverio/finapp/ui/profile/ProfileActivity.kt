@@ -15,6 +15,7 @@ import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isGone
 import androidx.core.widget.NestedScrollView
+import com.saverio.finapp.MainActivity.Companion.PREFERENCES_NAME
 import com.saverio.finapp.internet.NetworkConnection
 import com.saverio.finapp.R
 import com.saverio.finapp.api.ApiClient
@@ -631,13 +632,13 @@ class ProfileActivity : AppCompatActivity() {
     }
 
     private fun setVariable(variable: String, value: String?) {
-        getSharedPreferences("QuizNuotoPreferences", Context.MODE_PRIVATE).edit()
+        getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE).edit()
             .putString(variable, value).apply()
     }
 
     private fun getVariable(variable: String): String? {
         return getSharedPreferences(
-            "QuizNuotoPreferences",
+            PREFERENCES_NAME,
             Context.MODE_PRIVATE
         ).getString(variable, null)
     }

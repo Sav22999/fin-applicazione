@@ -19,5 +19,7 @@
         <item name="android:textColor">@color/darkwhite</item>
         <item name="colorTertiary">@color/darkwhite</item>
         <item name="colorOnTertiary">@color/darkdarkwhite</item>
+
+        <item name="textColorAlertDialogListItem">@color/lightred</item>
     </style>
 </resources>

@@ -125,7 +125,7 @@ class TheoryFragment : Fragment() {
         else binding.noChaptersAvailableText.text = getString(R.string.no_chapters_available_text)
 
         if (getChapters.size > 0) {
-            binding.editTextSearchChapters.isGone = false
+            if (!search) binding.editTextSearchChapters.isGone = false
             binding.noChaptersAvailableText.visibility = View.GONE
             binding.chaptersItemsList.visibility = View.VISIBLE
 
@@ -138,7 +138,7 @@ class TheoryFragment : Fragment() {
             )
             binding.chaptersItemsList.adapter = itemAdapter
         } else {
-            binding.editTextSearchChapters.isGone = true
+            if (!search) binding.editTextSearchChapters.isGone = true
             binding.noChaptersAvailableText.visibility = View.VISIBLE
             binding.chaptersItemsList.visibility = View.GONE
         }
