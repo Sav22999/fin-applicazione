@@ -216,7 +216,6 @@ class MessagesFragment : Fragment() {
     }
 
     override fun onResume() {
-        (activity as MainActivity).allCheckes()
         load()
         super.onResume()
     }

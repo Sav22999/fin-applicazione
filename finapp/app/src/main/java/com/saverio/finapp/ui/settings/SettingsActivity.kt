@@ -57,6 +57,8 @@ class SettingsActivity : AppCompatActivity() {
                     databaseHandler.deleteAllStatistics()
                     databaseHandler.close()
 
+                    setVariable("reset", true)
+
                     //close Settings
                     finish()
                 })

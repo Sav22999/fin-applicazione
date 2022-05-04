@@ -58,4 +58,13 @@ class AccountFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
+
+    override fun onResume() {
+        /*val main = (activity as MainActivity)
+        if (main.getVariable("reset", false)!!) {
+            main.setVariable("reset", false)
+            //resetted
+        }*/
+        super.onResume()
+    }
 }

@@ -588,7 +588,7 @@ class MainActivity : AppCompatActivity() {
             .putString(variable, value).apply()
     }
 
-    private fun setVariable(variable: String, value: Boolean = false) {
+    fun setVariable(variable: String, value: Boolean = false) {
         getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE).edit()
             .putBoolean(variable, value).apply()
     }
@@ -600,7 +600,7 @@ class MainActivity : AppCompatActivity() {
         ).getString(variable, null)
     }
 
-    private fun getVariable(variable: String, default: Boolean = false): Boolean? {
+    fun getVariable(variable: String, default: Boolean = false): Boolean? {
         return getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE).getBoolean(
             variable,
             default
