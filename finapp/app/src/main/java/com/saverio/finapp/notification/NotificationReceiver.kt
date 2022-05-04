@@ -10,6 +10,7 @@ import android.media.RingtoneManager
 import android.net.Uri
 import android.os.Build
 import androidx.core.app.NotificationCompat
+import com.saverio.finapp.MainActivity
 import com.saverio.finapp.R
 import com.saverio.finapp.ui.messages.MessagesActivity
 
@@ -23,7 +24,7 @@ class NotificationReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         this.context = context
 
-        println("load messages notification")
+        //println("load messages notification")
         var loadMessages = LoadMessagesNotification()
         loadMessages.loadSections(context, notificationReceiver = this)
     }
@@ -31,7 +32,7 @@ class NotificationReceiver : BroadcastReceiver() {
     fun sendNow(title: String, text: String, number: Int, section: String) {
         this.title = title
         this.text = text
-        println("send now notification")
+        //println("send now notification")
         sendNotification(context, title, text, true, number, section)
     }
 
@@ -43,7 +44,7 @@ class NotificationReceiver : BroadcastReceiver() {
         notificationNumber: Int,
         section: String
     ) {
-        println("trying to sending notification")
+        //println("trying to sending notification")
         val NOTIFICATION_CHANNEL_ID =
             "${context.packageName.replace(".", "_")}_notification_${notificationNumber}"
         val NOTIFICATION_CHANNEL_NAME = "${context.packageName}_notification".replace(".", "_")
@@ -61,11 +62,11 @@ class NotificationReceiver : BroadcastReceiver() {
         }
 
         val intent = Intent(context, MessagesActivity::class.java)
+        intent.putExtra("source", "notifications")
         intent.putExtra("section_id", section)
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
 
-        val pendingIntent =
-            PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_ONE_SHOT)
+        val pendingIntent = PendingIntent.getActivity(context, 0, intent, 0)
 
         val defaultSoundUri: Uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
         var notificationBuilder =
@@ -77,15 +78,21 @@ class NotificationReceiver : BroadcastReceiver() {
                     NotificationCompat.BigTextStyle()
                         .bigText(message)
                 )
-                .setAutoCancel(autoCancel) //.setSound(defaultSoundUri)
+                .setAutoCancel(autoCancel)
+                .setSound(defaultSoundUri)
                 .setContentIntent(pendingIntent)
+                .addAction(
+                    R.drawable.ic_forward,
+                    context.getString(R.string.see_conversation_notification),
+                    pendingIntent
+                );
 
         notificationManager!!.notify(
             notificationNumber,
             notificationBuilder.build()
         )
         incrementNotificationNumber(context, notificationNumber)
-        println("notification should be sent")
+        //println("notification should be sent")
     }
 
     fun incrementNotificationNumber(context: Context, notificationNumber: Int) {

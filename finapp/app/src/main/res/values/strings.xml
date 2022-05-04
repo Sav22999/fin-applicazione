@@ -164,6 +164,7 @@
     <!--Notification-->
     <string name="preview_message_notification">%s</string><!--Message-->
     <string name="new_message_notification">Nuovo messaggio nella sezione %s</string>
+    <string name="see_conversation_notification">Vedi conversazione</string>
 
     <!--First-run-->
     <string name="app_not_official_of_fin_text_first_run">Questa app <b>non</b> è ufficiale F.I.N.</string>

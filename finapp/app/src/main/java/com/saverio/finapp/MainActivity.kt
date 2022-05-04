@@ -65,6 +65,13 @@ class MainActivity : AppCompatActivity() {
             }
         })
         */
+
+        //set scheduled notifications
+        scheduleNotifications()
+
+        //check for new messages and eventually new notifications
+        val notificationReceiver = NotificationReceiver()
+        notificationReceiver.onReceive(this, Intent(this, NotificationReceiver::class.java))
     }
 
     fun scheduleNotifications() {
@@ -100,13 +107,6 @@ class MainActivity : AppCompatActivity() {
                 //println("No connection available")
             }
         })
-
-        //set scheduled notifications
-        scheduleNotifications()
-
-        //check for new messages and eventually new notifications
-        val notificationReceiver = NotificationReceiver()
-        notificationReceiver.onReceive(this, Intent(this, NotificationReceiver::class.java))
     }
 
     override fun onResume() {
@@ -225,13 +225,13 @@ class MainActivity : AppCompatActivity() {
                 call: Call<PostResponseList>?,
                 response: Response<PostResponseList>?
             ) {
-                println("Response:\n" + response!!.body()!!)
+                //println("Response:\n" + response!!.body()!!)
 
                 if (response!!.isSuccessful && response.body() != null) {
                     val responseList = response.body()!!
 
                     if (responseList.code == 200) {
-                        println("${responseList.code} || ${responseList.description}")
+                        //("${responseList.code} || ${responseList.description}")
                     } else {
                         Log.v("Error", responseList.description)
                     }
