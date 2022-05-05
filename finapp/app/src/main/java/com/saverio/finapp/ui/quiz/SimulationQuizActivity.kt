@@ -209,15 +209,16 @@ class SimulationQuizActivity : AppCompatActivity() {
     }
 
     fun checkFirstRun() {
+        val constraintLayoutFirstRunSimulationActivity: ConstraintLayout =
+            findViewById(R.id.constraintLayoutFirstRunSimulation)
         if (getVariable(FIRST_RUN_SIMULATION, default = true)!!) {
             //it's the first time (Simulation)
-            val constraintLayoutFirstRunSimulationActivity: ConstraintLayout =
-                findViewById(R.id.constraintLayoutFirstRunSimulation)
             constraintLayoutFirstRunSimulationActivity.isGone = false
 
             firstRun(number = 1)
         } else {
             //it's not the first time (Simulation)
+            constraintLayoutFirstRunSimulationActivity.isGone = true
             startSimulation()
         }
     }

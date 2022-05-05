@@ -330,14 +330,15 @@ class QuestionsQuizActivity : AppCompatActivity() {
     }
 
     fun checkFirstRun() {
+        val constraintLayoutFirstRunQuizActivity: ConstraintLayout =
+            findViewById(R.id.constraintLayoutFirstRunQuiz)
         if (getVariable(FIRST_RUN_QUIZ, default = true)!!) {
             //it's the first time (Quiz)
-            val constraintLayoutFirstRunQuizActivity: ConstraintLayout =
-                findViewById(R.id.constraintLayoutFirstRunQuiz)
             constraintLayoutFirstRunQuizActivity.isGone = false
             firstRun(number = 1)
         } else {
             //it's not the first time (Quiz)
+            constraintLayoutFirstRunQuizActivity.isGone = true
             if (!alreadyAnswered) startTime(lastQuestionIdUsed)
             startQuiz()
         }
