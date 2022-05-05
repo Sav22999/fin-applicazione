@@ -14,6 +14,7 @@
     <string name="title_profile_login">Accedi</string>
     <string name="title_profile_signup">Registrazione</string>
     <string name="title_messages">Discussioni</string>
+    <string name="title_discussion_section">Sezione %s</string>
 
     <string name="no_internet_connection_available_text">Nessuna connessione a Internet disponibile al momento</string>
 
@@ -106,6 +107,9 @@
     <string name="continue_alert_dialog_button">Continua</string>
     <string name="see_results_alert_dialog_button">Vedi risultati</string>
     <string name="confirm_alert_dialog_button">Conferma</string>
+    <string name="no_logged_login_cancel_alert_dialog_text">Per poter usufruire di questa funzione devi effettuare l\'accesso.</string>
+    <string name="no_logged_login_now_alert_dialog_button">Accedi ora</string>
+    <string name="no_logged_login_now_alert_dialog_title">Accesso non effettuato</string>
 
     <!--Statistics section-->
     <string name="statistics_all_simulations_button">Vedi tutte le simulazioni</string>

@@ -32,6 +32,7 @@ import com.saverio.finapp.api.messages.MessagesSectionsList
 import com.saverio.finapp.db.DatabaseHandler
 import com.saverio.finapp.db.SectionsModel
 import com.saverio.finapp.internet.NetworkConnection
+import org.w3c.dom.Text
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -55,6 +56,9 @@ class MessagesActivity : AppCompatActivity() {
         if (bundle != null) {
             section_id = bundle.getString("section_id")!!
         }
+
+        val sectionTitle: TextView = findViewById(R.id.titleDiscussion)
+        sectionTitle.text = getString(R.string.title_discussion_section, section_id)
 
         val networkConnection = NetworkConnection(applicationContext)
         networkConnection.observe(this, Observer { isConnected ->

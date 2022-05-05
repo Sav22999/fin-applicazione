@@ -1,18 +1,23 @@
 package com.saverio.finapp.ui.theory
 
+import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.saverio.finapp.MainActivity
 import com.saverio.finapp.R
 import com.saverio.finapp.db.DatabaseHandler
 import com.saverio.finapp.db.SectionsModel
 import com.saverio.finapp.ui.messages.MessagesActivity
+import com.saverio.finapp.ui.profile.ProfileActivity
 
 
 class SectionActivity : AppCompatActivity() {
@@ -36,9 +41,29 @@ class SectionActivity : AppCompatActivity() {
 
         val buttonStartConversation: Button = findViewById(R.id.buttonStartConversation)
         buttonStartConversation.setOnClickListener {
-            val intent = Intent(this, MessagesActivity::class.java)
-            intent.putExtra("section_id", sectionId)
-            startActivity(intent)
+            if (!checkLogged()) {
+                val builder: AlertDialog.Builder = AlertDialog.Builder(this)
+                builder.setTitle(R.string.no_logged_login_now_alert_dialog_title)
+                builder.setMessage(R.string.no_logged_login_cancel_alert_dialog_text)
+                builder.setCancelable(true)
+                builder.setPositiveButton(
+                    R.string.no_logged_login_now_alert_dialog_button,
+                    DialogInterface.OnClickListener { dialog, which ->
+                        val intent = Intent(this, ProfileActivity::class.java)
+                        intent.putExtra("source", "section")
+                        startActivity(intent)
+                    })
+                builder.setNegativeButton(
+                    R.string.cancel_alert_dialog_button,
+                    DialogInterface.OnClickListener { dialog, which ->
+                        dialog.dismiss()
+                    })
+                builder.create().show() //create and show the alert dialog
+            } else {
+                val intent = Intent(this, MessagesActivity::class.java)
+                intent.putExtra("section_id", sectionId)
+                startActivity(intent)
+            }
         }
 
         val actionBar = getSupportActionBar()
@@ -84,5 +109,16 @@ class SectionActivity : AppCompatActivity() {
     override fun onResume() {
         //supportActionBar?.hide()
         super.onResume()
+    }
+
+    fun checkLogged(): Boolean {
+        return (getVariable("userid") != "" && getVariable("userid") != null)
+    }
+
+    private fun getVariable(variable: String): String? {
+        return getSharedPreferences(
+            MainActivity.PREFERENCES_NAME,
+            Context.MODE_PRIVATE
+        ).getString(variable, null)
     }
 }

@@ -43,7 +43,8 @@ class TheoryFragment : Fragment() {
 
         main.currentFragment = "theory"
 
-        main.allCheckes()
+        main.checkChapters("")
+        main.checkSections("", "")
 
         val databaseHandler = DatabaseHandler(requireContext())
         val getChapters = databaseHandler.getChapters()

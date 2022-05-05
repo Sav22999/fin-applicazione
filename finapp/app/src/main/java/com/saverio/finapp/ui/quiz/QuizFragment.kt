@@ -43,7 +43,7 @@ class QuizFragment : Fragment() {
 
         main.currentFragment = "quiz"
 
-        main.allCheckes()
+        main.checkQuizzes("", "")
 
         val simulationCard = binding.cardViewQuizSimulation
         simulationCard.setOnClickListener {

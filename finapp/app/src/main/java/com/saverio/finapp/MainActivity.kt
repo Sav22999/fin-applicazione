@@ -92,7 +92,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun allCheckes() {
+    private fun allCheckes() {
         val networkConnection = NetworkConnection(applicationContext)
         networkConnection.observe(this, Observer { isConnected ->
             if (isConnected) {
