@@ -11,14 +11,16 @@ import android.util.DisplayMetrics
 import android.util.Log
 import android.view.MenuItem
 import android.view.View
+import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.view.isGone
-import androidx.core.view.updateLayoutParams
+import androidx.core.view.*
+import androidx.core.widget.NestedScrollView
 import com.saverio.finapp.MainActivity
+import com.saverio.finapp.MainActivity.Companion.FIRST_RUN_SIMULATION
 import com.saverio.finapp.MainActivity.Companion.PREFERENCES_NAME
 import com.saverio.finapp.R
 import com.saverio.finapp.api.ApiClient
@@ -54,6 +56,172 @@ class SimulationQuizActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_simulation_quiz)
 
+        checkFirstRun()
+
+        val actionBar = getSupportActionBar()
+        if (actionBar != null) {
+            //show the back button in the action bar
+            actionBar.setDisplayHomeAsUpEnabled(true)
+            actionBar.title = ""
+        }
+    }
+
+    fun firstRun(number: Int) {
+        val buttonNext: Button = findViewById(R.id.buttonNextFirstRunSimulation)
+        val viewFocus: View = findViewById(R.id.viewFirstRunSimulation)
+        val text: TextView = findViewById(R.id.textViewFirstRunSimulation)
+        buttonNext.setOnClickListener { firstRun(number + 1) }
+
+        val textViewTimePassed: TextView = findViewById(R.id.textViewTimePassed)
+        textViewTimePassed.isGone = false
+        textViewTimePassed.text =
+            getString(R.string.time_spent_details_results_text, getTimeFormatted(passed = 787))
+        setProgressBar(passed = 787)
+
+        val textViewQuestionNumber: TextView = findViewById(R.id.textViewQuestionNumberSimulation)
+        textViewQuestionNumber.isGone = false
+        textViewQuestionNumber.text = getString(
+            R.string.question_number_text,
+            getString(R.string.question_number_first_run_quiz).toInt(),
+            getString(R.string.question_number_total_first_run_simulation).toInt()
+        )
+
+        val constraintLayoutSimulationActivity: ConstraintLayout =
+            findViewById(R.id.constraintLayoutSimulationActivity)
+
+        var screenWidth = constraintLayoutSimulationActivity.width
+        var screenHeight = constraintLayoutSimulationActivity.height
+
+        when (number) {
+            1 -> {
+                viewFocus.isGone = true
+                text.text = getString(R.string.message1_first_run_simulation)
+            }
+            2 -> {
+                //reset from before status
+                viewFocus.isGone = false
+
+                //set new status
+                setViewFirstRun(
+                    viewFocus,
+                    textViewQuestionNumber.width,
+                    textViewQuestionNumber.height,
+                    textViewQuestionNumber.x,
+                    textViewQuestionNumber.y
+                )
+                text.text = getString(R.string.message3_first_run_simulation)
+            }
+            3 -> {
+                //reset from before status
+                //nothing
+
+                //set new status
+                setViewFirstRun(
+                    viewFocus,
+                    textViewTimePassed.width,
+                    textViewTimePassed.height,
+                    textViewTimePassed.x,
+                    textViewTimePassed.y
+                )
+                text.text = getString(R.string.message2_first_run_simulation)
+            }
+            4 -> {
+                //reset from before status
+                val buttonFinishSimulation: Button = findViewById(R.id.buttonFinishSimulation)
+                buttonFinishSimulation.isGone = true
+
+                //set new status
+                viewFocus.isGone = true
+                text.text = getString(R.string.message4_first_run_simulation)
+            }
+            5 -> {
+                //reset from before/after status
+                val buttonFinishSimulation: Button = findViewById(R.id.buttonFinishSimulation)
+                buttonFinishSimulation.isGone = false
+                viewFocus.isGone = false
+
+                //set new status
+                val buttonExitTestSimulation: Button = findViewById(R.id.buttonExitTestSimulation)
+                val constraintLayoutButtonsSimulation: ConstraintLayout =
+                    findViewById(R.id.constraintLayoutButtonsSimulation)
+                setViewFirstRun(
+                    viewFocus,
+                    buttonExitTestSimulation.width,
+                    buttonExitTestSimulation.height,
+                    buttonExitTestSimulation.x,
+                    buttonExitTestSimulation.y + constraintLayoutButtonsSimulation.y
+                )
+                text.text = getString(R.string.message5_first_run_simulation)
+            }
+            6 -> {
+                //reset from before status
+                viewFocus.isGone = false
+
+                //set new status
+                val buttonFinishSimulation: Button = findViewById(R.id.buttonFinishSimulation)
+                buttonFinishSimulation.isGone = false
+                val constraintLayoutNavigationButtonsSimulation: ConstraintLayout =
+                    findViewById(R.id.constraintLayoutNavigationButtonsSimulation)
+                setViewFirstRun(
+                    viewFocus,
+                    buttonFinishSimulation.width,
+                    buttonFinishSimulation.height,
+                    screenWidth - (buttonFinishSimulation.width + constraintLayoutNavigationButtonsSimulation.marginStart + buttonFinishSimulation.marginEnd + (buttonFinishSimulation.paddingStart / 3) * 2).toFloat(),
+                    screenHeight - (buttonFinishSimulation.height + constraintLayoutNavigationButtonsSimulation.marginBottom + (buttonFinishSimulation.paddingStart / 3) * 2).toFloat()
+                )
+                text.text = getString(R.string.message6_first_run_simulation)
+            }
+            7 -> {
+                //reset from before status
+                //nothing
+
+                //set new status
+                text.text = getString(R.string.message7_first_run_simulation)
+                viewFocus.isGone = true
+            }
+            else -> {
+                //finish
+                setVariable(FIRST_RUN_SIMULATION, false)
+                val constraintLayoutFirstRunSimulationActivity: ConstraintLayout =
+                    findViewById(R.id.constraintLayoutFirstRunSimulation)
+                constraintLayoutFirstRunSimulationActivity.isGone = true
+                startSimulation()
+            }
+        }
+    }
+
+    fun setViewFirstRun(viewFocus: View, width: Int, height: Int, x: Float, y: Float) {
+        viewFocus.isGone = false
+        Handler().postDelayed({
+            viewFocus.animate().x(x - viewFocus.paddingStart).setDuration(500)
+            viewFocus.animate().y(y - viewFocus.paddingTop).setDuration(500)
+            viewFocus.layoutParams =
+                ViewGroup.LayoutParams(
+                    width + (viewFocus.paddingStart * 2),
+                    height + (viewFocus.paddingTop * 2)
+                )
+        }, 200)
+    }
+
+    fun checkFirstRun() {
+        if (getVariable(FIRST_RUN_SIMULATION, default = true)!!) {
+            //it's the first time (Simulation)
+            val constraintLayoutFirstRunSimulationActivity: ConstraintLayout =
+                findViewById(R.id.constraintLayoutFirstRunSimulation)
+            constraintLayoutFirstRunSimulationActivity.isGone = false
+
+            val buttonSkip: TextView = findViewById(R.id.skipFirstRunSimulation)
+            buttonSkip.setOnClickListener {
+                setVariable(FIRST_RUN_SIMULATION, false)
+            }
+            firstRun(number = 1)
+        } else {
+            //it's not the first time (Simulation)
+            startSimulation()
+        }
+    }
+
+    fun startSimulation() {
         questionsLayout = arrayOf(
             findViewById(R.id.constraintLayoutQuestion1Simulation),
             findViewById(R.id.constraintLayoutQuestion2Simulation),
@@ -80,7 +248,7 @@ class SimulationQuizActivity : AppCompatActivity() {
         val databaseHandler = DatabaseHandler(this)
         val questionsTemp = databaseHandler.getQuizzesRandom(limit = 50)
         databaseHandler.close()
-        if(questionsTemp.size > 0) {
+        if (questionsTemp.size > 0) {
             questionsTemp.forEach {
                 questionsSimulation.add(
                     SimulationQuizzesModel(
@@ -98,6 +266,9 @@ class SimulationQuizActivity : AppCompatActivity() {
                 )
             }
 
+            val buttonFinishSimulation: Button = findViewById(R.id.buttonFinishSimulation)
+            buttonFinishSimulation.isGone = true
+
             start(
                 chapterId = questionsSimulation[0].chapter,
                 number = 1,
@@ -105,13 +276,6 @@ class SimulationQuizActivity : AppCompatActivity() {
             )
 
             startTime()
-        }
-
-        val actionBar = getSupportActionBar()
-        if (actionBar != null) {
-            //show the back button in the action bar
-            actionBar.setDisplayHomeAsUpEnabled(true)
-            actionBar.title = ""
         }
     }
 
@@ -160,8 +324,8 @@ class SimulationQuizActivity : AppCompatActivity() {
         timeStopped = true
     }
 
-    fun getTimeFormatted(): String {
-        val time = MAX_TIME - timePassed
+    fun getTimeFormatted(passed: Int = timePassed): String {
+        val time = MAX_TIME - passed
         var timeToReturn: String = ""
         if (time < 60) {
             timeToReturn = "00:00:${getValueWithZero(time)}"
@@ -183,8 +347,8 @@ class SimulationQuizActivity : AppCompatActivity() {
         return if (value < 10) "0$value" else value.toString()
     }
 
-    fun setProgressBar() {
-        val time = timePassed
+    fun setProgressBar(passed: Int = timePassed) {
+        val time = passed
         val passedProgress: View = findViewById(R.id.progressBarSimulationPassed)
         val residualProgress: View = findViewById(R.id.progressBarSimulationResidual)
         passedProgress.isGone = false
@@ -218,23 +382,28 @@ class SimulationQuizActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        val builder: AlertDialog.Builder = AlertDialog.Builder(this)
-        builder.setTitle(R.string.closing_alert_dialog_title)
-        builder.setMessage(R.string.sure_to_close_and_cancel_simulation_alert_dialog_text)
-        builder.setPositiveButton(
-            R.string.im_sure_alert_dialog_button,
-            DialogInterface.OnClickListener { dialog, which ->
-                finish()
-                super.onBackPressed()
-            })
-        builder.setNegativeButton(
-            R.string.cancel_alert_dialog_button,
-            DialogInterface.OnClickListener { dialog, which ->
-                startTime()
-                dialog.dismiss()
-            })
-        stopTime()
-        builder.create().show() //create and show the alert dialog
+        if (getVariable(FIRST_RUN_SIMULATION, default = false)!!) {
+            val builder: AlertDialog.Builder = AlertDialog.Builder(this)
+            builder.setTitle(R.string.closing_alert_dialog_title)
+            builder.setMessage(R.string.sure_to_close_and_cancel_simulation_alert_dialog_text)
+            builder.setPositiveButton(
+                R.string.im_sure_alert_dialog_button,
+                DialogInterface.OnClickListener { dialog, which ->
+                    finish()
+                    super.onBackPressed()
+                })
+            builder.setNegativeButton(
+                R.string.cancel_alert_dialog_button,
+                DialogInterface.OnClickListener { dialog, which ->
+                    startTime()
+                    dialog.dismiss()
+                })
+            stopTime()
+            builder.create().show() //create and show the alert dialog
+        } else {
+            finish()
+            super.onBackPressed()
+        }
     }
 
     fun setupQuiz(
@@ -383,6 +552,7 @@ class SimulationQuizActivity : AppCompatActivity() {
     }
 
     override fun onResume() {
+        checkFirstRun()
         super.onResume()
     }
 
@@ -458,5 +628,17 @@ class SimulationQuizActivity : AppCompatActivity() {
             PREFERENCES_NAME,
             Context.MODE_PRIVATE
         ).getString(variable, null)
+    }
+
+    fun getVariable(variable: String, default: Boolean = false): Boolean? {
+        return getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE).getBoolean(
+            variable,
+            default
+        )
+    }
+
+    fun setVariable(variable: String, value: Boolean = false) {
+        getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE).edit()
+            .putBoolean(variable, value).apply()
     }
 }

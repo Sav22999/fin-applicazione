@@ -348,8 +348,8 @@
 
         <View
             android:id="@+id/viewFirstRunQuiz"
-            android:layout_width="100dp"
-            android:layout_height="40dp"
+            android:layout_width="1dp"
+            android:layout_height="1dp"
             android:background="@drawable/border_radius_25dp"
             android:backgroundTint="@color/transparentyellow"
             android:padding="5dp"
@@ -364,6 +364,7 @@
             android:id="@+id/textViewFirstRunQuiz"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginTop="100dp"
             android:background="@color/transparentblack2"
             android:padding="10dp"
             android:text="@string/message1_first_run_quiz"

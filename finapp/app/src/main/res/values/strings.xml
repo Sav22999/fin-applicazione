@@ -204,11 +204,11 @@
 
     <!--Firs-run Simulation-->
     <string name="message1_first_run_simulation">Questa è la sezione <i>Simulazione</i>, dove potrai simulare l\'esame tenuto dalla Federazione Italiana Nuoto. Hai a disposizione <b>2 ore</b>, e devi rispondere a 50 domande pescate casualmente.</string>
-    <string name="message2_first_run_simulation">Qui in alto a sinistra è indicato il numero della domanda corrente.</string>
-    <string name="message3_first_run_simulation">Qui in alto a destra è indicato il tempo che hai ancora a disposizione per finire la simulazione.</string>
+    <string name="message2_first_run_simulation">Qui in alto a destra è indicato il tempo che hai ancora a disposizione per finire la simulazione.</string>
+    <string name="message3_first_run_simulation">Qui in alto a sinistra è indicato il numero della domanda corrente.</string>
     <string name="message4_first_run_simulation">Puoi vedere lo scorrere del tempo anche in questa barra di progressione: verde per il tempo rimanente, rosso per il tempo già passato.</string>
     <string name="message5_first_run_simulation">Puoi comunque terminare la prova quando vuoi, senza salvarla, premendo questo pulsante.</string>
-    <string name="message6_first_run_simulation">Una volta arrivati alla domanda numero 5, vedrai questo pulsante. Ti permetterà di salvare e terminare definitivamente l\'esame.</string>
+    <string name="message6_first_run_simulation">Una volta arrivati alla domanda numero 50, vedrai questo pulsante. Ti permetterà di salvare e terminare definitivamente l\'esame.</string>
     <string name="message7_first_run_simulation">Quindi, accederai ai risultati della prova con tutti i dettagli di cui necessiti.</string>
 
     <!--Firs-run All discussions-->
