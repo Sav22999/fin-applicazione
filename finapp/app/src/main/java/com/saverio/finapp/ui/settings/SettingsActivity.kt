@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
 import android.widget.Switch
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.cardview.widget.CardView
 import com.saverio.finapp.MainActivity
@@ -36,6 +37,11 @@ class SettingsActivity : AppCompatActivity() {
             setVariable(MainActivity.FIRST_RUN_QUIZ, true)
             setVariable(MainActivity.FIRST_RUN_SIMULATION, true)
             setVariable(MainActivity.FIRST_RUN_MESSAGES, true)
+
+            Toast.makeText(
+                this,
+                getString(R.string.shown_first_runs_again_settings_toast), Toast.LENGTH_SHORT
+            ).show()
         }
 
         val cardViewDeleteData: CardView = findViewById(R.id.cardViewSettingsResetData)
