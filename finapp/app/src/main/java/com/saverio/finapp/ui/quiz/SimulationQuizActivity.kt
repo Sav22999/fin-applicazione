@@ -71,6 +71,10 @@ class SimulationQuizActivity : AppCompatActivity() {
         val viewFocus: View = findViewById(R.id.viewFirstRunSimulation)
         val text: TextView = findViewById(R.id.textViewFirstRunSimulation)
         buttonNext.setOnClickListener { firstRun(number + 1) }
+        val buttonSkip: TextView = findViewById(R.id.skipFirstRunSimulation)
+        buttonSkip.setOnClickListener {
+            setVariable(FIRST_RUN_SIMULATION, false)
+        }
 
         val textViewTimePassed: TextView = findViewById(R.id.textViewTimePassed)
         textViewTimePassed.isGone = false
@@ -210,10 +214,6 @@ class SimulationQuizActivity : AppCompatActivity() {
                 findViewById(R.id.constraintLayoutFirstRunSimulation)
             constraintLayoutFirstRunSimulationActivity.isGone = false
 
-            val buttonSkip: TextView = findViewById(R.id.skipFirstRunSimulation)
-            buttonSkip.setOnClickListener {
-                setVariable(FIRST_RUN_SIMULATION, false)
-            }
             firstRun(number = 1)
         } else {
             //it's not the first time (Simulation)

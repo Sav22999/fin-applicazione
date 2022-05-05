@@ -335,11 +335,6 @@ class QuestionsQuizActivity : AppCompatActivity() {
             val constraintLayoutFirstRunQuizActivity: ConstraintLayout =
                 findViewById(R.id.constraintLayoutFirstRunQuiz)
             constraintLayoutFirstRunQuizActivity.isGone = false
-
-            val buttonSkip: TextView = findViewById(R.id.skipFirstRunQuiz)
-            buttonSkip.setOnClickListener {
-                setVariable(FIRST_RUN_QUIZ, false)
-            }
             firstRun(number = 1)
         } else {
             //it's not the first time (Quiz)
@@ -353,6 +348,10 @@ class QuestionsQuizActivity : AppCompatActivity() {
         val viewFocus: View = findViewById(R.id.viewFirstRunQuiz)
         val text: TextView = findViewById(R.id.textViewFirstRunQuiz)
         buttonNext.setOnClickListener { firstRun(number + 1) }
+        val buttonSkip: TextView = findViewById(R.id.skipFirstRunQuiz)
+        buttonSkip.setOnClickListener {
+            setVariable(FIRST_RUN_QUIZ, false)
+        }
 
         val textViewTimeUsed: TextView = findViewById(R.id.textViewTimeUsed)
         textViewTimeUsed.isGone = false

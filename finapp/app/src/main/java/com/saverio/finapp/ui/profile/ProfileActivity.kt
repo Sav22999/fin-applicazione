@@ -3,8 +3,10 @@ package com.saverio.finapp.ui.profile
 import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.content.Context
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.net.Uri
 import android.os.AsyncTask
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -479,6 +481,13 @@ class ProfileActivity : AppCompatActivity() {
         val textViewUsername: TextView = findViewById(R.id.textViewProfileLoggedUsername)
         val textViewEmail: TextView = findViewById(R.id.textViewProfileLoggedEmail)
         val textViewBorn: TextView = findViewById(R.id.textViewProfileLoggedBorn)
+
+        cardViewImage.setOnClickListener {
+            //open Gravatar https://it.gravatar.com/
+            val intent = Intent(Intent.ACTION_VIEW)
+            intent.data = Uri.parse("https://it.gravatar.com/")
+            startActivity(intent)
+        }
 
         val imageViewProfile: ImageView = findViewById(R.id.imageViewProfileImage)
 

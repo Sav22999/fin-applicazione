@@ -219,6 +219,7 @@
     <string name="notifications_settings">Notifiche</string>
     <string name="delete_all_device_data_settings">Cancella tutti i dati del dispositivo</string>
     <string name="show_first_runs_again_settings">Mostra tutti i <i>tutorial iniziali</i> di nuovo</string>
-    <string name="delete_all_device_data_title_settings">Delete all device data</string>
-    <string name="continue_delete_all_device_data_message_dialog_settings">Se continui cancellerai tutti i dati salvati localmente, incluse le preferenze delle Impostazioni, ma non perderai i dati sincronizzati con il tuo account.\nNon potrai annullare l\'operazione una volta iniziata.</string>
+    <string name="shown_first_runs_again_settings_toast">I tutorial iniziali saranno nuovamente mostrati.</string>
+    <string name="delete_all_device_data_title_settings">Cancella tutti i dati</string>
+    <string name="continue_delete_all_device_data_message_dialog_settings">Se continui cancellerai tutti i dati salvati dell\'app localmente, incluse le preferenze delle Impostazioni, ma non perderai i dati sincronizzati con il tuo account.\nNon potrai annullare l\'operazione una volta iniziata.</string>
 </resources>
