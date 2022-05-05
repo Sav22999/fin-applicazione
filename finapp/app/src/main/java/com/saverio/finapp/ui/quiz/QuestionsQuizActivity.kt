@@ -351,6 +351,7 @@ class QuestionsQuizActivity : AppCompatActivity() {
         val buttonSkip: TextView = findViewById(R.id.skipFirstRunQuiz)
         buttonSkip.setOnClickListener {
             setVariable(FIRST_RUN_QUIZ, false)
+            checkFirstRun()
         }
 
         val textViewTimeUsed: TextView = findViewById(R.id.textViewTimeUsed)

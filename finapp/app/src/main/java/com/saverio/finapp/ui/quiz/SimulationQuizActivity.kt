@@ -74,6 +74,7 @@ class SimulationQuizActivity : AppCompatActivity() {
         val buttonSkip: TextView = findViewById(R.id.skipFirstRunSimulation)
         buttonSkip.setOnClickListener {
             setVariable(FIRST_RUN_SIMULATION, false)
+            checkFirstRun()
         }
 
         val textViewTimePassed: TextView = findViewById(R.id.textViewTimePassed)
