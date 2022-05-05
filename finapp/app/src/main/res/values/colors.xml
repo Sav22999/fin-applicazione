@@ -10,6 +10,10 @@
     <color name="darkwhite">#FFEEEEEE</color>
     <color name="darkdarkwhite">#FFDDDDDD</color>
 
+    <color name="transparentblack">#44000000</color>
+    <color name="transparentyellow">#99FDD835</color>
+    <color name="transparentblack2">#BB000000</color>
+
     <color name="red">#D32F2F</color>
     <color name="lightred">#FF8888</color>
 

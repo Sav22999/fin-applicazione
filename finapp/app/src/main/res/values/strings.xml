@@ -101,6 +101,7 @@
     <string name="cancel_alert_dialog_button">Annulla</string>
     <string name="ok_alert_dialog_button">OK</string>
     <string name="forward_alert_dialog_button">Avanti</string>
+    <string name="next_alert_dialog_button">Avanti</string>
     <string name="finish_alert_dialog_button">Termina</string>
     <string name="back_alert_dialog_button">Indietro</string>
     <string name="check_alert_dialog_button">Verifica</string>
@@ -180,18 +181,29 @@
     <string name="message2_text_first_run">Il mondo del nuoto è meraviglioso. Con questa app inizierai a scoprire nuovi contenuti, e vedrai il nuoto e tutto ciò che lo circonda con occhi diversi.\nNella <i>Home</i> potrai anche tenere sott\'occhio le ultime novità sui regolamenti, delle curiosità e tanto altro!</string>
     <string name="title3_text_first_run">Dialoga</string>
     <string name="message3_text_first_run">Non ti è chiaro qualcosa studiato nella teoria e non vuoi aspettare di tornare a lezione in presenza, per chiederlo al tuo docente? Non c\'è problema!\nNella sezione <i>Discussioni</i> potrai porre quesiti e interagire con altri utenti, e chiedere aiuto a loro.</string>
-    <string name="skip_tutorial_button">Salta tutorial</string>
+    <string name="skip_tutorial_button"><u>Salta tutorial</u></string>
+
+    <string name="question_example_default">Question</string>
+    <string name="answer1_example_default">Answer 1</string>
+    <string name="answer2_example_default">Answer 2</string>
+    <string name="answer3_example_default">Answer 3</string>
+    <string name="answer4_example_default">Answer 4</string>
+    <string name="question_number_first_run_quiz">2</string>
+    <string name="question_number_total_first_run_quiz">31</string>
+    <string name="time_example_first_run_quiz">19</string>
+    <string name="question_number_total_first_run_simulation">50</string>
+    <string name="time_example_first_run_simulation">43</string>
 
     <!--Firs-run Quiz-->
-    <string name="message1_first_run_quiz">Questa è la sezione "Quiz per capitolo", dove potrai vedere e potrai rispondere una sola volta alle domande d\'esame.</string>
+    <string name="message1_first_run_quiz">Questa è la sezione <i>Quiz per capitolo</i>, dove potrai vedere e potrai rispondere una sola volta alle domande d\'esame.</string>
     <string name="message2_first_run_quiz">Qui in alto è indicato il tempo impiegato per rispondere alla domanda, una volta data la risposta il tempo rimarrà bloccato.</string>
     <string name="message3_first_run_quiz">Se non sei sicuro della risposta, puoi andare falcimente a consultare la sezione nella quale viene trattato l\'argomento, così da ripassarlo.</string>
     <string name="message4_first_run_quiz">Questi sono i pulsanti di navigazione, per andare indietro o andare avanti nelle domande.</string>
-    <string name="message5_first_run_quiz">Questo pulsante compare solo dopo che hai selezionato una risposta e serve per verificarne la correttezza (una volta premuto, la risposta sarà definitavamente salvata).</string>
-    <string name="message6_first_run_quiz">Puoi selezionare una singola risposta; puoi anche deselezionarla per poterla saltare.</string>
+    <string name="message5_first_run_quiz">Puoi selezionare una singola risposta; puoi anche deselezionarla per poterla saltare.</string>
+    <string name="message6_first_run_quiz">Questo pulsante compare solo dopo che hai selezionato una risposta e serve per verificarne la correttezza (una volta premuto, la risposta sarà definitavamente salvata).</string>
 
     <!--Firs-run Simulation-->
-    <string name="message1_first_run_simulation">Questa è la sezione "Simulazione", dove potrai simulare l\'esame tenuto dalla Federazione Italiana Nuoto. Hai a disposizione 2 ore, e devi rispondere a 50 domande pescate casualmente.</string>
+    <string name="message1_first_run_simulation">Questa è la sezione <i>Simulazione</i>, dove potrai simulare l\'esame tenuto dalla Federazione Italiana Nuoto. Hai a disposizione <b>2 ore</b>, e devi rispondere a 50 domande pescate casualmente.</string>
     <string name="message2_first_run_simulation">Qui in alto a sinistra è indicato il numero della domanda corrente.</string>
     <string name="message3_first_run_simulation">Qui in alto a destra è indicato il tempo che hai ancora a disposizione per finire la simulazione.</string>
     <string name="message4_first_run_simulation">Puoi vedere lo scorrere del tempo anche in questa barra di progressione: verde per il tempo rimanente, rosso per il tempo già passato.</string>

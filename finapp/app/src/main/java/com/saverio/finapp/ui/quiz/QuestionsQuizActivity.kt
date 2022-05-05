@@ -8,15 +8,21 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.sax.Element
+import android.util.DisplayMetrics
 import android.util.Log
 import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.view.isGone
+import androidx.core.view.*
+import androidx.core.widget.NestedScrollView
 import com.saverio.finapp.MainActivity
+import com.saverio.finapp.MainActivity.Companion.FIRST_RUN_QUIZ
 import com.saverio.finapp.MainActivity.Companion.PREFERENCES_NAME
 import com.saverio.finapp.R
 import com.saverio.finapp.api.ApiClient
@@ -25,6 +31,7 @@ import com.saverio.finapp.api.statistics.StatisticsPostList
 import com.saverio.finapp.db.DatabaseHandler
 import com.saverio.finapp.db.QuizzesModel
 import com.saverio.finapp.db.StatisticsModel
+import com.saverio.finapp.ui.firstrun.FirstRunActivity
 import com.saverio.finapp.ui.theory.SectionActivity
 import org.w3c.dom.Text
 import retrofit2.Call
@@ -54,6 +61,10 @@ class QuestionsQuizActivity : AppCompatActivity() {
     var alreadyAnswered = false
     var lastQuestionIdUsed: Int = -1
 
+    var chapterId: Int? = null
+    var questionId: Int = 0
+    var questionNumber: Int = 0
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_questions_quiz)
@@ -81,10 +92,6 @@ class QuestionsQuizActivity : AppCompatActivity() {
             findViewById(R.id.textViewQuestion4)
         )
 
-        var chapterId: Int? = null
-        var questionId: Int = 0
-        var questionNumber: Int = 0
-
         if (bundle != null) {
             chapterId = bundle.getInt("chapter_id")
             questionId = bundle.getInt("question_id")
@@ -93,7 +100,7 @@ class QuestionsQuizActivity : AppCompatActivity() {
         }
         if (questionNumber == -1) questionNumber = 1
 
-        start(chapterId!!, number = questionNumber, questionId)
+        checkFirstRun()
 
         val actionBar = getSupportActionBar()
         if (actionBar != null) {
@@ -101,6 +108,10 @@ class QuestionsQuizActivity : AppCompatActivity() {
             actionBar.setDisplayHomeAsUpEnabled(true)
             actionBar.title = ""
         }
+    }
+
+    fun startQuiz() {
+        start(chapterId!!, number = questionNumber, questionId)
     }
 
     fun start(chapterId: Int, number: Int, questionId: Int) {
@@ -318,6 +329,163 @@ class QuestionsQuizActivity : AppCompatActivity() {
         }
     }
 
+    fun checkFirstRun() {
+        if (getVariable(FIRST_RUN_QUIZ, default = true)!!) {
+            //it's the first time (Quiz)
+            val constraintLayoutFirstRunQuizActivity: ConstraintLayout =
+                findViewById(R.id.constraintLayoutFirstRunQuiz)
+            constraintLayoutFirstRunQuizActivity.isGone = false
+
+            val buttonSkip: TextView = findViewById(R.id.skipFirstRunQuiz)
+            buttonSkip.setOnClickListener {
+                setVariable(FIRST_RUN_QUIZ, false)
+            }
+            firstRun(number = 1)
+        } else {
+            //it's not the first time (Quiz)
+            startQuiz()
+        }
+    }
+
+    fun firstRun(number: Int) {
+        val buttonNext: Button = findViewById(R.id.buttonNextFirstRunQuiz)
+        val viewFocus: View = findViewById(R.id.viewFirstRunQuiz)
+        val text: TextView = findViewById(R.id.textViewFirstRunQuiz)
+        buttonNext.setOnClickListener { firstRun(number + 1) }
+
+        val textViewTimeUsed: TextView = findViewById(R.id.textViewTimeUsed)
+        textViewTimeUsed.isGone = false
+        textViewTimeUsed.text =
+            getString(R.string.time_spent_details_results_text, getTimeFormatted(18))
+
+        val textViewQuestionNumber: TextView = findViewById(R.id.textViewQuestionNumber)
+        textViewQuestionNumber.isGone = false
+        textViewQuestionNumber.text = getString(
+            R.string.question_number_text,
+            getString(R.string.question_number_first_run_quiz).toInt(),
+            getString(R.string.question_number_total_first_run_quiz).toInt()
+        )
+
+        val constraintLayoutQuizActivity: ConstraintLayout =
+            findViewById(R.id.constraintLayoutQuizActivity)
+
+        var screenWidth = constraintLayoutQuizActivity.width
+        var screenHeight = constraintLayoutQuizActivity.height
+
+        when (number) {
+            1 -> {
+                viewFocus.isGone = true
+                text.text = getString(R.string.message1_first_run_quiz)
+            }
+            2 -> {
+                //reset from before status
+                //nothing
+
+                //set new status
+                setViewFirstRun(
+                    viewFocus,
+                    textViewTimeUsed.width,
+                    textViewTimeUsed.height,
+                    textViewTimeUsed.x,
+                    textViewTimeUsed.y
+                )
+                text.text = getString(R.string.message2_first_run_quiz)
+            }
+            3 -> {
+                //reset from before status
+                //nothing
+
+                //set new status
+                val buttonThery: Button = findViewById(R.id.buttonTheory)
+                setViewFirstRun(
+                    viewFocus,
+                    buttonThery.width,
+                    buttonThery.height,
+                    buttonThery.x,
+                    buttonThery.y + buttonThery.pivotY + buttonThery.paddingTop + (buttonThery.paddingTop / 2)
+                )
+                text.text = getString(R.string.message3_first_run_quiz)
+            }
+            4 -> {
+                //reset from before status
+                val buttonCheck: Button = findViewById(R.id.buttonCheck)
+                buttonCheck.isGone = true
+
+                //set new status
+                val constraintLayoutBackNextButtonsQuiz: ConstraintLayout =
+                    findViewById(R.id.constraintLayoutBackNextButtonsQuiz)
+                val constraintLayoutNavigationButtonsQuiz: ConstraintLayout =
+                    findViewById(R.id.constraintLayoutNavigationButtonsQuiz)
+                setViewFirstRun(
+                    viewFocus,
+                    constraintLayoutBackNextButtonsQuiz.width,
+                    constraintLayoutBackNextButtonsQuiz.height,
+                    screenWidth - (constraintLayoutBackNextButtonsQuiz.width + constraintLayoutNavigationButtonsQuiz.marginStart + constraintLayoutBackNextButtonsQuiz.marginEnd + constraintLayoutNavigationButtonsQuiz.paddingStart).toFloat(),
+                    screenHeight - (constraintLayoutBackNextButtonsQuiz.height + constraintLayoutBackNextButtonsQuiz.y + constraintLayoutNavigationButtonsQuiz.marginBottom + (constraintLayoutBackNextButtonsQuiz.paddingStart * 2))
+                )
+                text.text = getString(R.string.message4_first_run_quiz)
+            }
+            5 -> {
+                //reset from before/after status
+                val buttonCheck: Button = findViewById(R.id.buttonCheck)
+                buttonCheck.isGone = false
+
+                //set new status
+                val constraintLayoutQuestionAnswersQuiz: ConstraintLayout =
+                    findViewById(R.id.constraintLayoutQuestionAnswersQuiz)
+                val nestedScrollView: NestedScrollView = findViewById(R.id.nestedScrollViewQuiz)
+                setViewFirstRun(
+                    viewFocus,
+                    constraintLayoutQuestionAnswersQuiz.width,
+                    constraintLayoutQuestionAnswersQuiz.height,
+                    constraintLayoutQuestionAnswersQuiz.x + constraintLayoutQuestionAnswersQuiz.marginStart + nestedScrollView.marginStart,
+                    constraintLayoutQuestionAnswersQuiz.y + constraintLayoutQuestionAnswersQuiz.pivotY + constraintLayoutQuestionAnswersQuiz.paddingTop
+                )
+                text.text = getString(R.string.message5_first_run_quiz)
+            }
+            6 -> {
+                //reset from before status
+                //nothing
+
+                //set new status
+                val buttonCheck: Button = findViewById(R.id.buttonCheck)
+                val constraintLayoutNavigationButtonsQuiz: ConstraintLayout =
+                    findViewById(R.id.constraintLayoutNavigationButtonsQuiz)
+                buttonCheck.isGone = false
+                setViewFirstRun(
+                    viewFocus,
+                    buttonCheck.width,
+                    buttonCheck.height,
+                    screenWidth - (buttonCheck.width + constraintLayoutNavigationButtonsQuiz.marginStart + buttonCheck.marginEnd + (buttonCheck.paddingStart / 3) * 2).toFloat(),
+                    screenHeight - (buttonCheck.height + constraintLayoutNavigationButtonsQuiz.marginBottom + (buttonCheck.paddingStart / 3) * 2).toFloat()
+                )
+                text.text = getString(R.string.message6_first_run_quiz)
+            }
+            else -> {
+                //finish
+                setVariable(FIRST_RUN_QUIZ, false)
+                val constraintLayoutFirstRunQuizActivity: ConstraintLayout =
+                    findViewById(R.id.constraintLayoutFirstRunQuiz)
+                constraintLayoutFirstRunQuizActivity.isGone = true
+                resetTime(questionId)
+                startQuiz()
+            }
+        }
+    }
+
+    fun setViewFirstRun(viewFocus: View, width: Int, height: Int, x: Float, y: Float) {
+        viewFocus.isGone = false
+        Handler().postDelayed({
+            viewFocus.animate().x(x - viewFocus.paddingStart).setDuration(500)
+            viewFocus.animate().y(y - viewFocus.paddingTop).setDuration(500)
+            viewFocus.layoutParams =
+                ViewGroup.LayoutParams(
+                    width + (viewFocus.paddingStart * 2),
+                    height + (viewFocus.paddingTop * 2)
+                )
+        }, 200)
+    }
+
     fun resetQuestionsLayout(chapterId: Int, number: Int, questionId: Int) {
         val question: TextView = findViewById(R.id.textViewQuestionQuestion)
 
@@ -343,7 +511,8 @@ class QuestionsQuizActivity : AppCompatActivity() {
     }
 
     override fun onResume() {
-        if (!alreadyAnswered) startTime(lastQuestionIdUsed)
+        //if (!alreadyAnswered) startTime(lastQuestionIdUsed)
+        checkFirstRun()
         super.onResume()
     }
 
@@ -512,10 +681,26 @@ class QuestionsQuizActivity : AppCompatActivity() {
     }
 
     private fun setVariable(variable: String, value: String?) {
-        getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE).edit().putString(variable, value).apply()
+        getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE).edit()
+            .putString(variable, value).apply()
     }
 
     private fun getVariable(variable: String): String? {
-        return getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE).getString(variable, null)
+        return getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE).getString(
+            variable,
+            null
+        )
+    }
+
+    fun getVariable(variable: String, default: Boolean = false): Boolean? {
+        return getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE).getBoolean(
+            variable,
+            default
+        )
+    }
+
+    fun setVariable(variable: String, value: Boolean = false) {
+        getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE).edit()
+            .putBoolean(variable, value).apply()
     }
 }
