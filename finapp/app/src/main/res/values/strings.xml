@@ -43,8 +43,8 @@
 
     <!--Messages-->
     <string name="no_news_available_text">Nessuna notizia disponibile. Per favore, fai swipe down per aggiornare la pagina.</string>
-    <string name="no_chapters_available_text">Nessun capitolo è disponibile. Vai in Impostazioni per aggiornare i dati.</string>
-    <string name="no_sections_available_text">Nessuna sezione è disponibile. Vai in Impostazioni per aggiornare i dati.</string>
+    <string name="no_chapters_available_text">Nessun capitolo è disponibile. Attendi il download dei dati aggiornare i dati.</string>
+    <string name="no_sections_available_text">Nessuna sezione è disponibile. Attendi il download dei dati aggiornare i dati.</string>
     <string name="no_results_available_text">Nessun risultato è disponibile. Si è verificato un errore.</string>
     <string name="no_mistaks_available_text">Nessuna risposta sbagliata fino ad ora.</string>
     <string name="results_error_text">Si è verificato un errore durante il caricamento dei risultati.</string>
@@ -212,9 +212,8 @@
     <string name="message7_first_run_simulation">Quindi, accederai ai risultati della prova con tutti i dettagli di cui necessiti.</string>
 
     <!--Firs-run All discussions-->
-    <string name="message1_first_run_discussions">In questa sezione potrai gestire le conversazioni con gli altri utenti dell\'app. Potrai porre domande, esporre dubbi o rispondere ad altri utenti.</string>
-    <string name="message2_first_run_discussions">In evidenza (in alto) troverai le conversazioni che hai già iniziato. Queste sono riconoscibili dalla barra azzurra laterale.</string>
-    <string name="message3_first_run_discussions">Potrai comunque iniziare nuove conversazioni, semplicemente facendo click sulla sezione da te interessata.</string>
+    <string name="message_title_help_discussions">Aiuto</string>
+    <string name="message_text_help_discussions">In evidenza (in alto) troverai le conversazioni che hai già iniziato. Queste sono riconoscibili dalla barra azzurra laterale.</string>
 
     <!--Settings-->
     <string name="notifications_settings">Notifiche</string>

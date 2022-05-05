@@ -50,11 +50,11 @@
                 android:text="@string/title_settings"
                 android:textSize="20sp"
                 app:layout_constraintEnd_toStartOf="@+id/imageViewAccountSettings"
-                app:layout_constraintStart_toEndOf="@+id/imageViewAccountViewProfile4"
+                app:layout_constraintStart_toEndOf="@+id/imageViewViewSettingsAccount"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
-                android:id="@+id/imageViewAccountViewProfile4"
+                android:id="@+id/imageViewViewSettingsAccount"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 android:layout_marginStart="10dp"
@@ -111,11 +111,11 @@
                 android:text="@string/title_profile"
                 android:textSize="20sp"
                 app:layout_constraintEnd_toStartOf="@+id/imageViewAccountViewProfile"
-                app:layout_constraintStart_toEndOf="@+id/imageViewAccountViewProfile2"
+                app:layout_constraintStart_toEndOf="@+id/imageViewViewProfileAccount"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
-                android:id="@+id/imageViewAccountViewProfile2"
+                android:id="@+id/imageViewViewProfileAccount"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 android:layout_marginStart="10dp"
@@ -172,11 +172,11 @@
                 android:text="@string/title_statistics"
                 android:textSize="20sp"
                 app:layout_constraintEnd_toStartOf="@+id/imageViewAccountViewStatistics"
-                app:layout_constraintStart_toEndOf="@+id/imageViewAccountViewProfile3"
+                app:layout_constraintStart_toEndOf="@+id/imageViewViewStatisticsAccount"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
-                android:id="@+id/imageViewAccountViewProfile3"
+                android:id="@+id/imageViewViewStatisticsAccount"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 android:layout_marginStart="10dp"

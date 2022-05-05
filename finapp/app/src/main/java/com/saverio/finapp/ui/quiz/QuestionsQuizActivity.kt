@@ -343,6 +343,7 @@ class QuestionsQuizActivity : AppCompatActivity() {
             firstRun(number = 1)
         } else {
             //it's not the first time (Quiz)
+            if (!alreadyAnswered) startTime(lastQuestionIdUsed)
             startQuiz()
         }
     }
@@ -511,7 +512,6 @@ class QuestionsQuizActivity : AppCompatActivity() {
     }
 
     override fun onResume() {
-        //if (!alreadyAnswered) startTime(lastQuestionIdUsed)
         checkFirstRun()
         super.onResume()
     }

@@ -8,15 +8,24 @@
 
     <TextView
         android:id="@+id/titleMessages"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="10dp"
         android:text="@string/title_messages"
         android:textSize="34sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/imageViewAllDiscussionsHelp"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintStart_toEndOf="@+id/titleMessages"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_help"
+        app:tint="?attr/colorTertiary" />
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipeRefreshLayoutFragmentMessages"

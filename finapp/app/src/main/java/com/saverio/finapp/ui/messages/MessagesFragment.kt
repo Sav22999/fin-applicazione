@@ -1,5 +1,7 @@
 package com.saverio.finapp.ui.messages
 
+import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
@@ -8,6 +10,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.core.view.isGone
 import androidx.fragment.app.Fragment
@@ -65,6 +68,14 @@ class MessagesFragment : Fragment() {
 
         swipeRefreshLayout.setOnRefreshListener {
             getMessagesSections(startTask = false)
+        }
+
+        binding.imageViewAllDiscussionsHelp.setOnClickListener {
+            val builder: AlertDialog.Builder = AlertDialog.Builder(requireContext())
+            builder.setTitle(R.string.message_title_help_discussions)
+            builder.setMessage(R.string.message_text_help_discussions)
+            builder.setCancelable(true)
+            builder.create().show() //create and show the alert dialog
         }
 
         return root
