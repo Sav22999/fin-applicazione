@@ -186,7 +186,6 @@ class MessagesActivity : AppCompatActivity() {
             }
 
             override fun onFailure(call: Call<PostMessageResponseList>?, t: Throwable?) {
-                //progerssProgressDialog.dismiss()
                 Log.v("Error", t.toString())
 
                 editTextMessage.isEnabled = true

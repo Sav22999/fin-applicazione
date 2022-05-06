@@ -55,16 +55,7 @@ class MainActivity : AppCompatActivity() {
 
         checkFirstRunTutorial()
 
-        /*
-        val networkConnection = NetworkConnection(applicationContext)
-        networkConnection.observe(this, Observer { isConnected ->
-            if (isConnected) {
-                //connected
-            } else {
-                //not connected
-            }
-        })
-        */
+        allCheckes()
 
         //set scheduled notifications
         scheduleNotifications()
@@ -124,10 +115,6 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent) //run FirstRunActivity
             finish() //close MainActivity
         }
-    }
-
-    fun setUseridLogged(userid: String) {
-        setVariable("userid", userid)
     }
 
     fun getUserid(): String {
@@ -284,7 +271,6 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun onFailure(call: Call<ChaptersList>?, t: Throwable?) {
-                //progerssProgressDialog.dismiss()
                 Log.v("Error", t.toString())
             }
 
@@ -338,7 +324,6 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun onFailure(call: Call<SectionsList>?, t: Throwable?) {
-                //progerssProgressDialog.dismiss()
                 Log.v("Error", t.toString())
                 setVariable(DATETIME_SECTIONS_PREF, "")
             }
@@ -397,7 +382,6 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun onFailure(call: Call<QuizzesList>?, t: Throwable?) {
-                //progerssProgressDialog.dismiss()
                 Log.v("Error", t.toString())
             }
 
@@ -464,7 +448,6 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun onFailure(call: Call<NewsList>?, t: Throwable?) {
-                //progerssProgressDialog.dismiss()
                 Log.v("Error", t.toString())
                 homeViewModel.setLoading(load = false)
                 //println("Loaded")

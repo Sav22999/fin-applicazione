@@ -42,7 +42,6 @@ class LoadMessagesNotification {
             }
 
             override fun onFailure(call: Call<MessagesSectionsList>?, t: Throwable?) {
-                //progerssProgressDialog.dismiss()
                 Log.v("Error", t.toString())
             }
         })
@@ -103,7 +102,6 @@ class LoadMessagesNotification {
             }
 
             override fun onFailure(call: Call<AllMessagesList>?, t: Throwable?) {
-                //progerssProgressDialog.dismiss()
                 Log.v("Error", t.toString())
             }
         })

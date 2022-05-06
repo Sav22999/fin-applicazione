@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.saverio.finapp.MainActivity
+import com.saverio.finapp.R
 import com.saverio.finapp.databinding.FragmentAccountBinding
 import com.saverio.finapp.ui.profile.ProfileActivity
 import com.saverio.finapp.ui.settings.SettingsActivity
@@ -32,7 +33,9 @@ class AccountFragment : Fragment() {
         _binding = FragmentAccountBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        (activity as MainActivity).currentFragment = "account"
+        val main = (activity as MainActivity)
+
+        main.currentFragment = "account"
 
         binding.cardViewAccountSettings.setOnClickListener {
             val intent = Intent(requireContext(), SettingsActivity::class.java)
