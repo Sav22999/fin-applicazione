@@ -13,7 +13,7 @@ import com.saverio.finapp.db.DatabaseHandler
 import com.saverio.finapp.db.StatisticsModel
 import com.saverio.finapp.ui.quiz.ResultSimulationItemAdapter
 
-class AllSimulations : AppCompatActivity() {
+class AllSimulationsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_all_simulations)
@@ -27,7 +27,7 @@ class AllSimulations : AppCompatActivity() {
         if (actionBar != null) {
             //show the back button in the action bar
             actionBar.setDisplayHomeAsUpEnabled(true)
-            actionBar.title = ""
+            actionBar.title = getString(R.string.statistics_all_simulations_title)
         }
     }
 

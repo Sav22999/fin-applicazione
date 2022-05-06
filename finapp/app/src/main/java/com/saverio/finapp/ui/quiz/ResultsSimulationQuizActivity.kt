@@ -115,7 +115,7 @@ class ResultsSimulationQuizActivity : AppCompatActivity() {
         if (actionBar != null) {
             //show the back button in the action bar
             actionBar.setDisplayHomeAsUpEnabled(true)
-            actionBar.title = ""
+            actionBar.title = getString(R.string.title_simulation_results)
         }
     }
 

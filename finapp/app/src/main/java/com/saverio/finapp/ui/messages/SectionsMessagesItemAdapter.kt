@@ -32,9 +32,12 @@ class SectionsMessagesItemAdapter(
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
         val item = items[position]
 
-        holder.chapterTitle.text =
-            holder.chapter_text.replace("%d", item.chapter.toString())
-        holder.sectionTitle.text = holder.section_text.replace("%s", item.section)
+        holder.chapterSectionTitle.text = holder.itemView.resources.getString(
+            R.string.chapter_section_text,
+            item.chapter,
+            item.section
+        )
+        holder.sectionTitle.text = item.title
 
         if (sectionsJoined.indexOf(item.section) != -1) {
             //it's present in "Joined" section list
@@ -56,13 +59,11 @@ class SectionsMessagesItemAdapter(
     }
 
     class ItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val chapterTitle: TextView = view.findViewById(R.id.textViewChapterMessage)
+        val chapterSectionTitle: TextView = view.findViewById(R.id.textViewChapterMessage)
         val sectionTitle: TextView = view.findViewById(R.id.textViewSimulationDateTitle)
         val status: View = view.findViewById(R.id.viewStatusMessage)
         val card: CardView = view.findViewById(R.id.cardViewAllMessagesMessage)
 
-        val chapter_text = view.resources.getString(R.string.chapter_id_text)
-        val section_text = view.resources.getString(R.string.section_id_text)
         val colorPrimary = view.resources.getColor(R.color.colorLightBlue)
     }
 }

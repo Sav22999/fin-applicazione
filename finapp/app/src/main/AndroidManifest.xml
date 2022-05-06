@@ -20,7 +20,8 @@
             android:launchMode="singleTop" />
         <activity
             android:name=".ui.messages.MessagesActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:launchMode="singleInstancePerTask" />
         <activity
             android:name=".ui.settings.SettingsActivity"
             android:exported="false" />
@@ -31,7 +32,7 @@
             android:name=".ui.statistics.StatisticsActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.statistics.AllSimulations"
+            android:name=".ui.statistics.AllSimulationsActivity"
             android:exported="false" />
         <activity
             android:name=".ui.quiz.ResultsSimulationQuizActivity"

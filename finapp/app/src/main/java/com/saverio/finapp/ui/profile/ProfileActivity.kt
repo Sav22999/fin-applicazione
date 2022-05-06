@@ -11,6 +11,7 @@ import android.os.AsyncTask
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.util.Patterns
 import android.view.MenuItem
 import android.widget.*
 import androidx.cardview.widget.CardView
@@ -88,11 +89,16 @@ class ProfileActivity : AppCompatActivity() {
             loggedConstraintLayout.isGone = true
         */
 
+        setActionBarTitle(getString(R.string.title_profile))
+    }
+
+    fun setActionBarTitle(title: String, subtitle: String = "") {
         val actionBar = getSupportActionBar()
         if (actionBar != null) {
             //show the back button in the action bar
             actionBar.setDisplayHomeAsUpEnabled(true)
-            actionBar.title = ""
+            actionBar.title = title
+            actionBar.subtitle = subtitle
         }
     }
 
@@ -100,8 +106,6 @@ class ProfileActivity : AppCompatActivity() {
         val loginButton: Button = findViewById(R.id.buttonLoginProfile)
         val signupButton: TextView = findViewById(R.id.sign_up_text)
         val logoutButton: Button = findViewById(R.id.buttonLogoutProfile)
-
-        val titleProfile: TextView = findViewById(R.id.titleProfile)
 
         val noLoggedConstraintLayout: ConstraintLayout =
             findViewById(R.id.constraintLayoutProfileNoLogged)
@@ -138,7 +142,10 @@ class ProfileActivity : AppCompatActivity() {
 
         loginButton.setOnClickListener {
             //login
-            titleProfile.text = getString(R.string.title_profile_login)
+            setActionBarTitle(
+                getString(R.string.title_profile),
+                getString(R.string.title_profile_login)
+            )
 
             noLoggedConstraintLayout.isGone = true
             loginConstraintLayout.isGone = false
@@ -147,6 +154,10 @@ class ProfileActivity : AppCompatActivity() {
 
             val passwordForgottedText: TextView = findViewById(R.id.passwordForgottedText)
             passwordForgottedText.setOnClickListener {
+                setActionBarTitle(
+                    getString(R.string.title_profile),
+                    getString(R.string.password_forgot_text)
+                )
                 val loginCardView: CardView =
                     findViewById(R.id.cardViewProfileLogin)
                 val resetPasswordCardView: CardView =
@@ -157,8 +168,7 @@ class ProfileActivity : AppCompatActivity() {
                 val backResetPassword: Button =
                     findViewById(R.id.buttonGoBackProfileLoginResetPassword)
                 backResetPassword.setOnClickListener {
-                    resetPasswordCardView.isGone = true
-                    loginCardView.isGone = false
+                    onBackPressed()
                 }
             }
 
@@ -206,7 +216,10 @@ class ProfileActivity : AppCompatActivity() {
 
         signupButton.setOnClickListener {
             //signup
-            titleProfile.text = getString(R.string.title_profile_signup)
+            setActionBarTitle(
+                getString(R.string.title_profile),
+                getString(R.string.title_profile_signup)
+            )
 
             noLoggedConstraintLayout.isGone = true
             loginConstraintLayout.isGone = true
@@ -231,13 +244,38 @@ class ProfileActivity : AppCompatActivity() {
                 datePickerDialog.show()
             }
 
+            val cardViewImageSignup: CardView = findViewById(R.id.cardViewProfileSignupImage)
+            cardViewImageSignup.setOnClickListener {
+                val intent = Intent(Intent.ACTION_VIEW)
+                intent.data = Uri.parse("https://it.gravatar.com/")
+                startActivity(intent)
+            }
+            cardViewImageSignup.isGone = true
+            val imageSignup = findViewById<ImageView>(R.id.imageViewProfileSignupImage)
+            val email = findViewById<EditText>(R.id.textViewProfileSignupEmail)
+            email.setOnFocusChangeListener { v, hasFocus ->
+                if (!hasFocus) {
+                    if (email.text.toString() != "" && Patterns.EMAIL_ADDRESS.matcher(email.text)
+                            .matches()
+                    ) {
+                        cardViewImageSignup.isGone = false
+                        val imageUrl =
+                            "https://www.gravatar.com/avatar/${
+                                email.text.toString().toMD5()
+                            }?s=1000&r=g"
+                        DownloadImageFromInternet(imageSignup).execute(imageUrl)
+                    } else {
+                        cardViewImageSignup.isGone = true
+                    }
+                }
+            }
+
             val buttonSignupSectionSignupProfile: Button =
                 findViewById(R.id.buttonSignupSectionSignupProfile)
             buttonSignupSectionSignupProfile.setOnClickListener {
                 val name = findViewById<EditText>(R.id.textViewProfileSignupName)
                 val surname = findViewById<EditText>(R.id.textViewProfileSignupSurname)
                 val username = findViewById<EditText>(R.id.textViewProfileSignupUsername)
-                val email = findViewById<EditText>(R.id.textViewProfileSignupEmail)
                 val password = findViewById<EditText>(R.id.textViewProfileSignupPassword)
                 val repeat_password =
                     findViewById<EditText>(R.id.textViewProfileSignupRepeatPassword)
@@ -306,12 +344,15 @@ class ProfileActivity : AppCompatActivity() {
 
             if (!loginConstraintLayout.isGone && !resetPasswordCardView.isGone) {
                 //from reset password
+                setActionBarTitle(
+                    getString(R.string.title_profile),
+                    getString(R.string.title_profile_login)
+                )
                 loginCardView.isGone = false
                 resetPasswordCardView.isGone = true
             } else {
                 //from signup or login
-                val titleProfile: TextView = findViewById(R.id.titleProfile)
-                titleProfile.text = getString(R.string.title_profile)
+                setActionBarTitle(getString(R.string.title_profile))
 
                 noLoggedConstraintLayout.isGone = true
                 loginConstraintLayout.isGone = true

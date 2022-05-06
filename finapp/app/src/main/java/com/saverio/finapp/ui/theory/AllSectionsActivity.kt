@@ -68,14 +68,12 @@ class AllSectionsActivity : AppCompatActivity() {
             showSoftKeyboard(searchBox)
         }
 
-        val title: TextView = findViewById(R.id.titleSections)
-        title.text = getString(R.string.chapter_id_text, chapterId)
-
         val actionBar = getSupportActionBar()
         if (actionBar != null) {
             //show the back button in the action bar
             actionBar.setDisplayHomeAsUpEnabled(true)
-            actionBar.title = ""
+            actionBar.title = getString(R.string.chapter_id_text, chapterId)
+            actionBar.subtitle = getString(R.string.title_sections)
         }
     }
 
@@ -143,7 +141,7 @@ class AllSectionsActivity : AppCompatActivity() {
         else noSectionsAvailableText.text = getString(R.string.no_sections_available_text)
 
         if (getSections.size > 0) {
-            if(!search) editTextSearchSections.isGone = false
+            if (!search) editTextSearchSections.isGone = false
             noSectionsAvailableText.visibility = View.GONE
             sectionsItemsList.visibility = View.VISIBLE
 
@@ -152,7 +150,7 @@ class AllSectionsActivity : AppCompatActivity() {
             val itemAdapter = AllSectionsItemAdapter(this, getSections, chapter)
             sectionsItemsList.adapter = itemAdapter
         } else {
-            if(!search) editTextSearchSections.isGone = true
+            if (!search) editTextSearchSections.isGone = true
             noSectionsAvailableText.visibility = View.VISIBLE
             sectionsItemsList.visibility = View.GONE
         }

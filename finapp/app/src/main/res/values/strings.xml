@@ -53,7 +53,7 @@
     <string name="search_hint_text">Cerca…</string>
 
     <!--Simulation and quiz-->
-    <string name="time_residual_text">Tempo rimanente: %s</string>
+    <string name="time_residual_text">Tempo residuo: %s</string>
     <string name="time_used_text">Tempo impiegato: %s</string>
     <string name="question_number_chapter_text">Domanda %d di %d (Capitolo %d)</string>
     <string name="question_number_text">Domanda %d di %d</string>
@@ -138,6 +138,7 @@
     <string name="reply_to_message_text">Rispondi</string>
     <string name="send_message_text">Invia</string>
     <string name="digit_something_text">Scrivi un messaggio…</string>
+    <string name="chapter_section_text">Capitolo %d · Sezione %s</string>
 
     <!--Account section-->
     <string name="no_logged_text">Non hai ancora effettuato l\'accesso</string>
@@ -222,4 +223,5 @@
     <string name="shown_first_runs_again_settings_toast">I tutorial iniziali saranno nuovamente mostrati.</string>
     <string name="delete_all_device_data_title_settings">Cancella tutti i dati</string>
     <string name="continue_delete_all_device_data_message_dialog_settings">Se continui cancellerai tutti i dati salvati dell\'app localmente, incluse le preferenze delle Impostazioni, ma non perderai i dati sincronizzati con il tuo account.\nNon potrai annullare l\'operazione una volta iniziata.</string>
+    <string name="release_version_code_text_settings">Release %s (Build #%s)</string>
 </resources>

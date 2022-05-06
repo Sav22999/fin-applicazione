@@ -46,17 +46,18 @@
                     android:id="@+id/textViewChapterMessage"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="8dp"
                     android:paddingStart="10dp"
                     android:paddingTop="5dp"
                     android:paddingEnd="10dp"
                     android:paddingBottom="5dp"
                     android:textColor="?attr/colorOnTertiary"
                     android:textSize="14sp"
+                    android:textStyle="italic"
                     app:layout_constraintEnd_toStartOf="@+id/imageViewMessage"
                     app:layout_constraintStart_toEndOf="@+id/viewStatusMessage"
                     app:layout_constraintTop_toTopOf="parent"
-                    tools:text="Capitolo 1" />
+                    tools:text="@string/chapter_section_text" />
 
                 <TextView
                     android:id="@+id/textViewSimulationDateTitle"
@@ -72,7 +73,7 @@
                     app:layout_constraintEnd_toStartOf="@+id/imageViewMessage"
                     app:layout_constraintStart_toEndOf="@+id/viewStatusMessage"
                     app:layout_constraintTop_toBottomOf="@+id/textViewChapterMessage"
-                    tools:text="Sezione 1.1" />
+                    tools:text="Title" />
 
                 <ImageView
                     android:id="@+id/imageViewMessage"

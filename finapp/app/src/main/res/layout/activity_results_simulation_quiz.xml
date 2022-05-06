@@ -7,18 +7,6 @@
     tools:context=".ui.quiz.ResultsSimulationQuizActivity">
 
     <TextView
-        android:id="@+id/titleSimulationResults"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:padding="10dp"
-        android:text="@string/title_simulation_results"
-        android:textSize="34sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
         android:id="@+id/no_results_available_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -39,7 +27,6 @@
         android:id="@+id/test_passed_or_not_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
         android:background="@color/colorTimeGreen"
         android:padding="10dp"
         android:text="@string/exam_passed_text"
@@ -50,7 +37,7 @@
         android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/titleSimulationResults"
+        app:layout_constraintTop_toTopOf="parent"
         tools:visibility="visible" />
 
     <androidx.recyclerview.widget.RecyclerView

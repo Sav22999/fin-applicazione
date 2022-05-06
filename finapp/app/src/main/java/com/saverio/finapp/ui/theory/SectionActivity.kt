@@ -70,7 +70,7 @@ class SectionActivity : AppCompatActivity() {
         if (actionBar != null) {
             //show the back button in the action bar
             actionBar.setDisplayHomeAsUpEnabled(true)
-            actionBar.title = ""
+            actionBar.title = getString(R.string.section_id_text, sectionId)
         }
     }
 
@@ -98,12 +98,10 @@ class SectionActivity : AppCompatActivity() {
         val text: TextView = findViewById(R.id.textViewSectionTextDedicated)
         val title: TextView = findViewById(R.id.textViewSectionTitleDedicated)
         val author: TextView = findViewById(R.id.textViewSectionAuthorDedicated)
-        val sectionTitle: TextView = findViewById(R.id.titleSectionDedicated)
 
         text.text = getSection.text
         title.text = getSection.title
         author.text = getString(R.string.author_text, getSection.author.toString())
-        sectionTitle.text = getString(R.string.section_id_text, section)
     }
 
     override fun onResume() {

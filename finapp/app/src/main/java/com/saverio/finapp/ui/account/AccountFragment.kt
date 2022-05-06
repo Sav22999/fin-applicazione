@@ -5,14 +5,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.isGone
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.saverio.finapp.MainActivity
 import com.saverio.finapp.databinding.FragmentAccountBinding
 import com.saverio.finapp.ui.profile.ProfileActivity
 import com.saverio.finapp.ui.settings.SettingsActivity
-import com.saverio.finapp.ui.statistics.AllSimulations
 import com.saverio.finapp.ui.statistics.StatisticsActivity
 
 class AccountFragment : Fragment() {

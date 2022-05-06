@@ -57,8 +57,9 @@ class MessagesActivity : AppCompatActivity() {
             section_id = bundle.getString("section_id")!!
         }
 
-        val sectionTitle: TextView = findViewById(R.id.titleDiscussion)
-        sectionTitle.text = getString(R.string.title_discussion_section, section_id)
+        val databaseHandler = DatabaseHandler(this)
+        val sectionDetails = databaseHandler.getSection(section_id)
+        databaseHandler.close()
 
         val networkConnection = NetworkConnection(applicationContext)
         networkConnection.observe(this, Observer { isConnected ->
@@ -135,7 +136,8 @@ class MessagesActivity : AppCompatActivity() {
         if (actionBar != null) {
             //show the back button in the action bar
             actionBar.setDisplayHomeAsUpEnabled(true)
-            actionBar.title = ""
+            actionBar.title = getString(R.string.title_discussion_section, section_id)
+            actionBar.subtitle = sectionDetails.title
         }
     }
 

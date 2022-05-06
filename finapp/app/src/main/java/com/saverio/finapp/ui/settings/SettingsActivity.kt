@@ -6,9 +6,11 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
 import android.widget.Switch
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.cardview.widget.CardView
+import com.saverio.finapp.BuildConfig
 import com.saverio.finapp.MainActivity
 import com.saverio.finapp.MainActivity.Companion.PREFERENCES_NAME
 import com.saverio.finapp.R
@@ -40,9 +42,18 @@ class SettingsActivity : AppCompatActivity() {
 
             Toast.makeText(
                 this,
-                getString(R.string.shown_first_runs_again_settings_toast), Toast.LENGTH_SHORT
+                getString(R.string.shown_first_runs_again_settings_toast), Toast.LENGTH_LONG
             ).show()
         }
+
+        val versionCode = BuildConfig.VERSION_CODE
+        val versionName = BuildConfig.VERSION_NAME
+        val textViewReleaseBuildSettings: TextView = findViewById(R.id.textViewReleaseBuildSettings)
+        textViewReleaseBuildSettings.text = getString(
+            R.string.release_version_code_text_settings,
+            versionName,
+            versionCode.toString()
+        )
 
         val cardViewDeleteData: CardView = findViewById(R.id.cardViewSettingsResetData)
         cardViewDeleteData.setOnClickListener {
@@ -80,7 +91,7 @@ class SettingsActivity : AppCompatActivity() {
         if (actionBar != null) {
             //show the back button in the action bar
             actionBar.setDisplayHomeAsUpEnabled(true)
-            actionBar.title = ""
+            actionBar.title = getString(R.string.title_settings)
         }
     }
 

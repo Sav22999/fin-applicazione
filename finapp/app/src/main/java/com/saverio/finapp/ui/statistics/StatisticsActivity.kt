@@ -1,11 +1,9 @@
 package com.saverio.finapp.ui.statistics
 
-import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.DisplayMetrics
-import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.widget.TextView
@@ -14,13 +12,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isGone
 import androidx.core.view.updateLayoutParams
 import com.saverio.finapp.R
-import com.saverio.finapp.api.ApiClient
-import com.saverio.finapp.api.statistics.StatisticsList
 import com.saverio.finapp.db.DatabaseHandler
-import com.saverio.finapp.db.StatisticsModel
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 class StatisticsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,7 +25,7 @@ class StatisticsActivity : AppCompatActivity() {
         if (actionBar != null) {
             //show the back button in the action bar
             actionBar.setDisplayHomeAsUpEnabled(true)
-            actionBar.title = ""
+            actionBar.title = getString(R.string.title_statistics)
         }
     }
 
@@ -132,7 +124,7 @@ class StatisticsActivity : AppCompatActivity() {
         val cardViewStatisticsViewAllSimulations: CardView =
             findViewById(R.id.cardViewStatisticsViewAllSimulations)
         cardViewStatisticsViewAllSimulations.setOnClickListener {
-            val intent = Intent(this, AllSimulations::class.java)
+            val intent = Intent(this, AllSimulationsActivity::class.java)
             startActivity(intent)
         }
     }
