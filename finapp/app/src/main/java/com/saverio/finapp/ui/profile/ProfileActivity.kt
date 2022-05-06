@@ -659,6 +659,7 @@ class ProfileActivity : AppCompatActivity() {
                                     databaseHandler.addStatistics(statistics)
                                 }
                             }
+                            databaseHandler.close()
                         }
                     }
                 }

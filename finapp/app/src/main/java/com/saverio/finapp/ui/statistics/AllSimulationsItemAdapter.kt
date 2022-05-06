@@ -58,6 +58,8 @@ class AllSimulationsItemAdapter(
             holder.statusBar.setBackgroundColor(holder.colorRed)
         }
 
+        databaseHandler.close()
+
         holder.cardView.setOnClickListener {
             val intent = Intent(context, ResultsSimulationQuizActivity::class.java)
             intent.putExtra("datetime", item.datetime)

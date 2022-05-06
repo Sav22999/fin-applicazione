@@ -78,7 +78,7 @@ class TheoryFragment : Fragment() {
             }
             false
         })
-
+        databaseHandler.close()
 
         return root
     }
@@ -106,6 +106,7 @@ class TheoryFragment : Fragment() {
                 getChaptersSearch.add(databaseHandler.getChapter(it.chapter!!))
             }
         }
+        databaseHandler.close()
         setupRecyclerView(clear = true, search = true, getChapters = getChaptersSearch)
     }
 

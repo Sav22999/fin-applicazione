@@ -140,6 +140,7 @@ class MainActivity : AppCompatActivity() {
                 )
                 sendStatistics(statisticsToSend)
             }
+            databaseHandler.close()
         }
     }
 
@@ -182,6 +183,7 @@ class MainActivity : AppCompatActivity() {
                                     databaseHandler.addStatistics(statistics)
                                 }
                             }
+                            databaseHandler.close()
                         }
                     }
                 }
@@ -467,6 +469,7 @@ class MainActivity : AppCompatActivity() {
                 //println("${chapter.chapter}|${chapter.title} NOT added correctly")
             }
         }
+        databaseHandler.close()
     }
 
     private fun add(section: SectionsModel) {
@@ -480,6 +483,7 @@ class MainActivity : AppCompatActivity() {
                 //println("${section.section}|${section.title} NOT added correctly")
             }
         }
+        databaseHandler.close()
     }
 
     private fun add(quiz: QuizzesModel) {
@@ -493,6 +497,7 @@ class MainActivity : AppCompatActivity() {
                 //println("${quiz.id}|${quiz.question} NOT added correctly")
             }
         }
+        databaseHandler.close()
     }
 
     private fun add(news: NewsModel) {
@@ -506,6 +511,7 @@ class MainActivity : AppCompatActivity() {
                 //println("${news.id}|${news.type}|${news.text} NOT added correctly")
             }
         }
+        databaseHandler.close()
     }
 
     fun deleteAllChapters() {
@@ -539,31 +545,41 @@ class MainActivity : AppCompatActivity() {
     fun getChapters(): ArrayList<ChaptersModel> {
         //get all chapters
         val databaseHandler = DatabaseHandler(this)
-        return databaseHandler.getChapters()
+        val chapters = databaseHandler.getChapters()
+        databaseHandler.close()
+        return chapters
     }
 
     fun getSections(): ArrayList<SectionsModel> {
         //get all chapters
         val databaseHandler = DatabaseHandler(this)
-        return databaseHandler.getSections()
+        val sections = databaseHandler.getSections()
+        databaseHandler.close()
+        return sections
     }
 
     fun getQuizzes(): ArrayList<QuizzesModel> {
         //get all chapters
         val databaseHandler = DatabaseHandler(this)
-        return databaseHandler.getQuizzes()
+        val quizzes = databaseHandler.getQuizzes()
+        databaseHandler.close()
+        return quizzes
     }
 
     fun getNews(): ArrayList<NewsModel> {
         //get all news
         val databaseHandler = DatabaseHandler(this)
-        return databaseHandler.getNews()
+        val news = databaseHandler.getNews()
+        databaseHandler.close()
+        return news
     }
 
     fun checkNews(id: Int): Boolean {
         //get all news
         val databaseHandler = DatabaseHandler(this)
-        return databaseHandler.checkNews(id = id)
+        val check = databaseHandler.checkNews(id = id)
+        databaseHandler.close()
+        return check
     }
 
     private fun setVariable(variable: String, value: String?) {

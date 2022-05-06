@@ -20,6 +20,7 @@ class AllSimulationsActivity : AppCompatActivity() {
 
         val databaseHandler = DatabaseHandler(this)
         val getSimulations = databaseHandler.getAllSimulations()
+        databaseHandler.close()
 
         setupRecyclerView(clear = true, getSimulations)
 
@@ -77,5 +78,6 @@ class AllSimulationsActivity : AppCompatActivity() {
             noResults.visibility = View.VISIBLE
             resultsItemsList.visibility = View.GONE
         }
+        databaseHandler.close()
     }
 }

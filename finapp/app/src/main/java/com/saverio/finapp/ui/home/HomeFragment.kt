@@ -119,18 +119,22 @@ class HomeFragment : Fragment() {
     }
 
     fun setupRecyclerView(main: MainActivity, clear: Boolean = false) {
-        if (clear) binding.newsItemsList.adapter = null
-        if (main.getNews().size > 0) {
-            binding.noNewsAvailableText.visibility = View.GONE
-            binding.newsItemsList.visibility = View.VISIBLE
+        try {
+            if (clear) binding.newsItemsList.adapter = null
+            if (main.getNews().size > 0) {
+                binding.noNewsAvailableText.visibility = View.GONE
+                binding.newsItemsList.visibility = View.VISIBLE
 
-            binding.newsItemsList.layoutManager = LinearLayoutManager(requireContext())
-            //binding.newsItemsList.setHasFixedSize(true)
-            val itemAdapter = NewsItemAdapter(requireContext(), main.getNews())
-            binding.newsItemsList.adapter = itemAdapter
-        } else {
-            binding.noNewsAvailableText.visibility = View.VISIBLE
-            binding.newsItemsList.visibility = View.GONE
+                binding.newsItemsList.layoutManager = LinearLayoutManager(requireContext())
+                //binding.newsItemsList.setHasFixedSize(true)
+                val itemAdapter = NewsItemAdapter(requireContext(), main.getNews())
+                binding.newsItemsList.adapter = itemAdapter
+            } else {
+                binding.noNewsAvailableText.visibility = View.VISIBLE
+                binding.newsItemsList.visibility = View.GONE
+            }
+        } catch (e: Exception) {
+
         }
     }
 }

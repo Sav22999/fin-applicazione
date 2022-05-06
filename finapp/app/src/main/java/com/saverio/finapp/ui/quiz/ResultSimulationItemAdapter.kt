@@ -50,6 +50,8 @@ class ResultSimulationItemAdapter(
         val getQuiz = databaseHandler.getQuiz(item.question_id)
         val questions = arrayOf(getQuiz.A, getQuiz.B, getQuiz.C, getQuiz.D)
 
+        databaseHandler.close()
+
         holder.questionText.text = getQuiz.question
         if (item.user_answer != item.correct_answer) {
             if (item.user_answer != "") {

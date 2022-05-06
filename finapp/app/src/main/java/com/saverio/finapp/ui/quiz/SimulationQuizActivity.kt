@@ -554,7 +554,7 @@ class SimulationQuizActivity : AppCompatActivity() {
     }
 
     override fun onResume() {
-        checkFirstRun()
+        //checkFirstRun()
         super.onResume()
     }
 

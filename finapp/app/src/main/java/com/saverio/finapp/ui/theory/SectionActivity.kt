@@ -65,6 +65,7 @@ class SectionActivity : AppCompatActivity() {
                 startActivity(intent)
             }
         }
+        databaseHandler.close()
 
         val actionBar = getSupportActionBar()
         if (actionBar != null) {

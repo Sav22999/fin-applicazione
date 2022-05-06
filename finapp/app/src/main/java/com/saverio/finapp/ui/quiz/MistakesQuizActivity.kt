@@ -18,6 +18,7 @@ class MistakesQuizActivity : AppCompatActivity() {
 
         val databaseHandler = DatabaseHandler(this)
         var getStatistics = databaseHandler.getMistakesStatistics()
+        databaseHandler.close()
 
         setupRecyclerView(clear = true, search = false, getStatistics = getStatistics)
 

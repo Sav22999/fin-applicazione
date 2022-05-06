@@ -94,11 +94,13 @@ class QuestionsQuizActivity : AppCompatActivity() {
 
         if (bundle != null) {
             chapterId = bundle.getInt("chapter_id")
-            questionId = bundle.getInt("question_id")
-            questionNumber = bundle.getInt("question_number")
             selectedQuestion = bundle.getInt("selected_question")
         }
-        if (questionNumber == -1) questionNumber = 1
+        questionNumber = 1
+        val databaseHandler = DatabaseHandler(this)
+        questionId = databaseHandler.getQuizzes(chapter = chapterId)[0].id
+        lastQuestionIdUsed = questionId
+        databaseHandler.close()
 
         checkFirstRun()
 
@@ -134,7 +136,6 @@ class QuestionsQuizActivity : AppCompatActivity() {
                 milliseconds = 0
             )
             databaseHandler.addStatistics(statistics)
-            sendStatistics(statistics)
         }
         val statistics = databaseHandler.getStatistics(question_id = questionId, type = 0)[0]
         if (statistics.user_answer != "") {
@@ -190,11 +191,18 @@ class QuestionsQuizActivity : AppCompatActivity() {
         buttonBack.setOnClickListener {
             //back button
             val databaseHandler = DatabaseHandler(this)
-            val getQuiz =
-                databaseHandler.getQuiz(id = databaseHandler.getQuizzes(chapter = chapter)[number - 2].id)
+            val question_id = databaseHandler.getQuizzes(chapter = chapter)[number - 2].id
             databaseHandler.close()
-            resetTime(getQuiz.id)
-            resetQuestionsLayout(chapter!!, number - 1, questionId = getQuiz.id)
+            resetTime(question_id)
+            resetQuestionsLayout(chapter!!, number - 1, questionId = question_id)
+        }
+        buttonForward.setOnClickListener {
+            //forward button
+            val databaseHandler = DatabaseHandler(this)
+            val question_id = databaseHandler.getQuizzes(chapter = chapter)[number].id
+            databaseHandler.close()
+            resetTime(question_id)
+            resetQuestionsLayout(chapter!!, number + 1, questionId = question_id)
         }
 
         buttonCheck.setOnClickListener {
@@ -212,16 +220,6 @@ class QuestionsQuizActivity : AppCompatActivity() {
                     update = true
                 )
             }
-        }
-
-        buttonForward.setOnClickListener {
-            //forward button
-            val databaseHandler = DatabaseHandler(this)
-            val getQuiz =
-                databaseHandler.getQuiz(id = databaseHandler.getQuizzes(chapter = chapter)[number].id)
-            databaseHandler.close()
-            resetTime(getQuiz.id)
-            resetQuestionsLayout(chapter!!, number + 1, questionId = getQuiz.id)
         }
 
         if (number == 1) buttonBack.isGone = true
@@ -250,7 +248,7 @@ class QuestionsQuizActivity : AppCompatActivity() {
         questions[2].text = getQuiz.C
         questions[3].text = getQuiz.D
 
-        if (selectedQuestion != -1) selectOption(index = selectedQuestion)
+        //if (selectedQuestion != -1) selectOption(index = selectedQuestion)
 
         questionsLayout.forEachIndexed { index, it ->
             it.setOnClickListener {
@@ -317,14 +315,13 @@ class QuestionsQuizActivity : AppCompatActivity() {
             if (!databaseHandler.checkStatistics(question = questionId, type = 0)) {
                 //no present || add
                 databaseHandler.addStatistics(statistics)
-                sendStatistics(statistics)
             } else {
                 //already present || update
                 statistics.id =
                     databaseHandler.getStatistics(question_id = questionId, type = 0)[0].id
                 databaseHandler.updateStatistics(statistics)
-                sendStatistics(statistics)
             }
+            sendStatistics(statistics)
             databaseHandler.close()
         }
     }
@@ -336,10 +333,10 @@ class QuestionsQuizActivity : AppCompatActivity() {
             //it's the first time (Quiz)
             constraintLayoutFirstRunQuizActivity.isGone = false
             firstRun(number = 1)
+            timeStopped = true
         } else {
             //it's not the first time (Quiz)
             constraintLayoutFirstRunQuizActivity.isGone = true
-            if (!alreadyAnswered) startTime(lastQuestionIdUsed)
             startQuiz()
         }
     }
@@ -353,6 +350,7 @@ class QuestionsQuizActivity : AppCompatActivity() {
         buttonSkip.setOnClickListener {
             setVariable(FIRST_RUN_QUIZ, false)
             checkFirstRun()
+            resetTime(lastQuestionIdUsed)
         }
 
         val textViewTimeUsed: TextView = findViewById(R.id.textViewTimeUsed)
@@ -466,11 +464,8 @@ class QuestionsQuizActivity : AppCompatActivity() {
             else -> {
                 //finish
                 setVariable(FIRST_RUN_QUIZ, false)
-                val constraintLayoutFirstRunQuizActivity: ConstraintLayout =
-                    findViewById(R.id.constraintLayoutFirstRunQuiz)
-                constraintLayoutFirstRunQuizActivity.isGone = true
-                resetTime(questionId)
-                startQuiz()
+                checkFirstRun()
+                resetTime(lastQuestionIdUsed)
             }
         }
     }
@@ -490,6 +485,9 @@ class QuestionsQuizActivity : AppCompatActivity() {
 
     fun resetQuestionsLayout(chapterId: Int, number: Int, questionId: Int) {
         val question: TextView = findViewById(R.id.textViewQuestionQuestion)
+
+        val buttonCheck: Button = findViewById(R.id.buttonCheck)
+        buttonCheck.isGone = true
 
         selectedQuestion = -1
 
@@ -513,6 +511,7 @@ class QuestionsQuizActivity : AppCompatActivity() {
     }
 
     override fun onResume() {
+        if (!alreadyAnswered) startTime(lastQuestionIdUsed)
         checkFirstRun()
         super.onResume()
     }
@@ -524,6 +523,7 @@ class QuestionsQuizActivity : AppCompatActivity() {
     }
 
     fun startTime(currentQuestionId: Int) {
+        println("currentQuestionId: $currentQuestionId")
         if (currentQuestionId != -1) {
             timeStopped = false
             incrementTime(currentIterator, currentQuestionId)
@@ -535,37 +535,33 @@ class QuestionsQuizActivity : AppCompatActivity() {
         val databaseHandler = DatabaseHandler(this)
         if (currentIterator == iterator && currentQuestionId != -1) {
             setTimeToShow(currentQuestionId)
-            if (databaseHandler.checkStatistics(question = currentQuestionId, type = 0)) {
-                val statistics =
-                    databaseHandler.getStatistics(question_id = currentQuestionId, type = 0)[0]
-                if (statistics.user_answer == "") {
-                    //already present and not already answered || update
-                    timePassed++
-                    statistics.milliseconds = timePassed
-
-                    if (!timeStopped) {
-                        currentRunnable = Runnable { incrementTime(iterator, currentQuestionId) }
-                        mainHandler.postDelayed(currentRunnable!!, 1000)
-                    }
-                }
-
-                databaseHandler.updateStatistics(statistics)
-                sendStatistics(statistics)
+            if (!databaseHandler.checkStatistics(question = currentQuestionId, type = 0)) {
+                //no present || add
+                val getQuiz = databaseHandler.getQuiz(currentQuestionId)
+                val statistics = StatisticsModel(
+                    id = databaseHandler.getNewIdStatistics(),
+                    type = 0,
+                    datetime = now(),
+                    question_id = currentQuestionId,
+                    correct_answer = getQuiz.correct,
+                    user_answer = "",
+                    milliseconds = timePassed
+                )
+                databaseHandler.addStatistics(statistics)
             }
-        } else {
-            //no present || add
-            val getQuiz = databaseHandler.getQuiz(currentQuestionId)
-            val statistics = StatisticsModel(
-                id = databaseHandler.getNewIdStatistics(),
-                type = 0,
-                datetime = now(),
-                question_id = currentQuestionId,
-                correct_answer = getQuiz.correct,
-                user_answer = "",
-                milliseconds = timePassed
-            )
-            databaseHandler.addStatistics(statistics)
-            sendStatistics(statistics)
+
+            val statistics =
+                databaseHandler.getStatistics(question_id = currentQuestionId, type = 0)[0]
+            if (statistics.user_answer == "") {
+                //already present and not already answered || update (increment of +1)
+                timePassed++
+                statistics.milliseconds = timePassed
+                if (!timeStopped) {
+                    currentRunnable = Runnable { incrementTime(iterator, currentQuestionId) }
+                    mainHandler.postDelayed(currentRunnable!!, 1000)
+                }
+            }
+            databaseHandler.updateStatistics(statistics)
         }
         databaseHandler.close()
     }

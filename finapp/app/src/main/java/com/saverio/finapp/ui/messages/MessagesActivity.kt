@@ -146,6 +146,9 @@ class MessagesActivity : AppCompatActivity() {
                 .putBoolean("downloading", true).apply()
 
             swipeRefreshLayout.setOnRefreshListener {
+                setDatetime("", section = section_id)
+                getSharedPreferences(NOTIFICATIONS, Context.MODE_PRIVATE).edit()
+                    .putBoolean("downloading", true).apply()
                 getAllMessages(startTask = false, section_id = section_id)
             }
             getAllMessages(startTask = true, section_id = section_id)

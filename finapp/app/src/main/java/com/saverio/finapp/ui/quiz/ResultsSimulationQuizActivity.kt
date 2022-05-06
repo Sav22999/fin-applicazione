@@ -103,6 +103,7 @@ class ResultsSimulationQuizActivity : AppCompatActivity() {
                 getSkippedAnswersStatistics.size
             )
             datetime.text = getString(R.string.datetime_details_results_text, datetimeSimulation)
+            databaseHandler.close()
         } else {
             val noResults: TextView = findViewById(R.id.no_results_available_text)
             noResults.text = getString(R.string.results_error_text)

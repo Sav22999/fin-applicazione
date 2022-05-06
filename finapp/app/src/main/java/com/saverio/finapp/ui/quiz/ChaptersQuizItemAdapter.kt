@@ -46,16 +46,11 @@ class ChaptersQuizItemAdapter(
             if (databaseHandler.getQuizzes(chapter = item.chapter).size > 0) {
                 val intent = Intent(context, QuestionsQuizActivity::class.java)
                 intent.putExtra("chapter_id", item.chapter)
-
-                intent.putExtra(
-                    "question_id",
-                    databaseHandler.getQuizzes(chapter = item.chapter)[0].id
-                )
-                intent.putExtra("selected_question", -1)
                 intent.putExtra("question_number", 1)
                 context.startActivity(intent)
             }
         }
+        databaseHandler.close()
 
         if (position % 2 == 0) {
             //even position
