@@ -68,7 +68,13 @@ class LoadMessagesNotification {
                         responseList.messages?.get(responseList.messages.size - 1)?.datetime//section datetime || we took the datetime of the last element
                     if (currentSectionDatetime == null) currentSectionDatetime = currentDatetime
 
-                    println("section: $section || currentDate: ${currentSectionDatetime} || datetimeSaved: ${getDatetime("datetime_$section")}")
+                    println(
+                        "section: $section || currentDate: ${currentSectionDatetime} || datetimeSaved: ${
+                            getDatetime(
+                                "datetime_$section"
+                            )
+                        }"
+                    )
                     val tempMessage = responseList.messages?.get(responseList.messages.size - 1)
                     println("tempMessage?.username = ${tempMessage?.username}")
                     if (getDatetime("datetime_$section") != currentSectionDatetime && getUsername() != tempMessage?.username) {
@@ -79,13 +85,21 @@ class LoadMessagesNotification {
                             section = section
                         )
                         //get notification number
-                        var notificationNumber = globalContext.getSharedPreferences(
+                        val notificationNumber = globalContext.getSharedPreferences(
                             "notifications",
                             Context.MODE_PRIVATE
                         ).getInt("notificationNumber", 0)
 
+                        val isDownloadInMessageActivity =
+                            globalContext.getSharedPreferences(NOTIFICATIONS, Context.MODE_PRIVATE)
+                                .getBoolean("downloading", true)
+
                         //send the push notification
-                        if (notificationReceiver != null && getVariable("notifications", true)) {
+                        if (notificationReceiver != null && getVariable(
+                                "notifications",
+                                true
+                            ) && !isDownloadInMessageActivity
+                        ) {
                             //println("Sending section $section notification")
                             notificationReceiver.sendNow(
                                 title = globalContext.getString(

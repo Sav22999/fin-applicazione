@@ -140,8 +140,10 @@ class MessagesActivity : AppCompatActivity() {
                     R.color.white
                 )
             )
-            
-            setDatetime(value = "", section = section_id)
+
+            setDatetime("", section = section_id)
+            getSharedPreferences(NOTIFICATIONS, Context.MODE_PRIVATE).edit()
+                .putBoolean("downloading", true).apply()
 
             swipeRefreshLayout.setOnRefreshListener {
                 getAllMessages(startTask = false, section_id = section_id)
@@ -225,6 +227,8 @@ class MessagesActivity : AppCompatActivity() {
                     call: Call<AllMessagesList>?,
                     response: Response<AllMessagesList>?
                 ) {
+                    getSharedPreferences(NOTIFICATIONS, Context.MODE_PRIVATE).edit()
+                        .putBoolean("downloading", false).apply()
                     //println("Response:\n" + response!!.body()!!)
 
                     if (response!!.isSuccessful && response.body() != null) {
@@ -257,6 +261,8 @@ class MessagesActivity : AppCompatActivity() {
                     editTextMessage.isEnabled = true
                     buttonSend.isEnabled = true
                     editTextMessage.setText("")
+                    getSharedPreferences(NOTIFICATIONS, Context.MODE_PRIVATE).edit()
+                        .putBoolean("downloading", false).apply()
                 }
 
             })
