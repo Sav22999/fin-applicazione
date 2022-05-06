@@ -2,6 +2,7 @@ package com.saverio.finapp.notification
 
 import android.content.Context
 import android.util.Log
+import com.saverio.finapp.MainActivity.Companion.NOTIFICATIONS
 import com.saverio.finapp.MainActivity.Companion.PREFERENCES_NAME
 import com.saverio.finapp.R
 import com.saverio.finapp.api.ApiClient
@@ -67,9 +68,10 @@ class LoadMessagesNotification {
                         responseList.messages?.get(responseList.messages.size - 1)?.datetime//section datetime || we took the datetime of the last element
                     if (currentSectionDatetime == null) currentSectionDatetime = currentDatetime
 
-                    //println("section: $section || currentDate: ${currentSectionDatetime} || datetimeSaved: ${getVariable("datetime_$section")}")
+                    println("section: $section || currentDate: ${currentSectionDatetime} || datetimeSaved: ${getDatetime("datetime_$section")}")
                     val tempMessage = responseList.messages?.get(responseList.messages.size - 1)
-                    if (getVariable("datetime_$section") != currentSectionDatetime && getUsername() != tempMessage?.username) {
+                    println("tempMessage?.username = ${tempMessage?.username}")
+                    if (getDatetime("datetime_$section") != currentSectionDatetime && getUsername() != tempMessage?.username) {
                         //send notification only if the saved date is different to the current date AND the username is not the same of login (so, it's not a message from the same user)
                         //println("^^^^ New message in section $section ^^^^")
                         setDatetime(
@@ -84,6 +86,7 @@ class LoadMessagesNotification {
 
                         //send the push notification
                         if (notificationReceiver != null && getVariable("notifications", true)) {
+                            //println("Sending section $section notification")
                             notificationReceiver.sendNow(
                                 title = globalContext.getString(
                                     R.string.new_message_notification,
@@ -108,7 +111,7 @@ class LoadMessagesNotification {
     }
 
     fun setDatetime(value: String, section: String) {
-        globalContext.getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE).edit()
+        globalContext.getSharedPreferences(NOTIFICATIONS, Context.MODE_PRIVATE).edit()
             .putString("datetime_" + section, value).apply()
     }
 
@@ -125,6 +128,11 @@ class LoadMessagesNotification {
                 variable,
                 default
             )
+    }
+
+    private fun getDatetime(variable: String): String? {
+        return globalContext.getSharedPreferences(NOTIFICATIONS, Context.MODE_PRIVATE)
+            .getString(variable, null)
     }
 
     fun checkLogged(): Boolean {

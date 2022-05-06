@@ -37,6 +37,7 @@ class AllMessagesItemAdapter(
     var sentFromAnotherMap: MutableMap<Int, TextView> = mutableMapOf()
     var sentFromMeMap: MutableMap<Int, TextView> = mutableMapOf()
     var cardViewImageMap: MutableMap<Int, CardView> = mutableMapOf()
+    var imageViewImageMap: MutableMap<Int, ImageView> = mutableMapOf()
 
     override fun onCreateViewHolder(parent: ViewGroup, type: Int): ItemViewHolder {
         return ItemViewHolder(
@@ -74,17 +75,27 @@ class AllMessagesItemAdapter(
                 item.datetime
             )
             holder.textViewFromAnother.text = item.text
-            val imageUrl = "https://www.gravatar.com/avatar/${item.email.toMD5()}?s=1000&r=g"
-            DownloadImageFromInternet(holder.imageViewAccount).execute(imageUrl)
             holder.sentFromAnother.isGone = false
             holder.cardViewImage.isGone = false
 
             sentFromAnotherMap[position] = holder.sentFromAnother
             cardViewImageMap[position] = holder.cardViewImage
+            imageViewImageMap[position] = holder.imageViewAccount
+
+            val imageUrl = "https://www.gravatar.com/avatar/${item.email.toMD5()}?s=1000&r=g"
+
+            println("")
 
             if (position > 0 && sentFromAnotherMap.isNotEmpty() && cardViewImageMap.isNotEmpty() && item.username == items[position - 1].username) {
                 sentFromAnotherMap[position - 1]?.isGone = true
                 cardViewImageMap[position - 1]?.isInvisible = true
+                if (imageViewImageMap[position - 1] != null) {
+                    holder.imageViewAccount.setImageDrawable(imageViewImageMap[position - 1]?.drawable)
+                } else {
+                    DownloadImageFromInternet(holder.imageViewAccount).execute(imageUrl)
+                }
+            } else {
+                DownloadImageFromInternet(holder.imageViewAccount).execute(imageUrl)
             }
         }
     }

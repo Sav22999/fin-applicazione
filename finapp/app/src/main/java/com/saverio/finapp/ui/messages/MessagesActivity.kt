@@ -21,6 +21,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.saverio.finapp.MainActivity
+import com.saverio.finapp.MainActivity.Companion.NOTIFICATIONS
 import com.saverio.finapp.MainActivity.Companion.PREFERENCES_NAME
 import com.saverio.finapp.R
 import com.saverio.finapp.api.ApiClient
@@ -31,6 +32,7 @@ import com.saverio.finapp.api.messages.MessagePostList
 import com.saverio.finapp.api.messages.MessagesSectionsList
 import com.saverio.finapp.db.DatabaseHandler
 import com.saverio.finapp.db.SectionsModel
+import com.saverio.finapp.db.StatisticsModel
 import com.saverio.finapp.internet.NetworkConnection
 import org.w3c.dom.Text
 import retrofit2.Call
@@ -40,7 +42,6 @@ import retrofit2.Response
 
 class MessagesActivity : AppCompatActivity() {
     lateinit var swipeRefreshLayout: SwipeRefreshLayout
-    lateinit var section_id: String
 
     var currentRunnable: Runnable? = null
     val mainHandler = Handler(Looper.getMainLooper())
@@ -53,14 +54,29 @@ class MessagesActivity : AppCompatActivity() {
 
         val bundle = intent.extras
 
+        var section_id = ""
+        var source = ""
         if (bundle != null) {
             section_id = bundle.getString("section_id")!!
+            if (bundle.containsKey("source")) source = bundle.getString("source")!!
         }
 
         val databaseHandler = DatabaseHandler(this)
         val sectionDetails = databaseHandler.getSection(section_id)
         databaseHandler.close()
 
+        load(section_id = section_id, section_details = sectionDetails)
+
+        val actionBar = getSupportActionBar()
+        if (actionBar != null) {
+            //show the back button in the action bar
+            actionBar.setDisplayHomeAsUpEnabled(true)
+            actionBar.title = getString(R.string.title_discussion_section, section_id)
+            actionBar.subtitle = sectionDetails.title
+        }
+    }
+
+    fun load(section_id: String, section_details: SectionsModel) {
         val networkConnection = NetworkConnection(applicationContext)
         networkConnection.observe(this, Observer { isConnected ->
             val editTextMessage: EditText = findViewById(R.id.editTextMessageText)
@@ -109,7 +125,11 @@ class MessagesActivity : AppCompatActivity() {
             buttonSend.setOnClickListener {
                 //send message action
                 if (editTextMessage.text.toString().replace(" ", "").replace("\n", "") != "") {
-                    sendMessage(reply_to = -1, text = editTextMessage.text.toString())
+                    sendMessage(
+                        reply_to = -1,
+                        text = editTextMessage.text.toString(),
+                        section_id = section_id
+                    )
                 }
             }
 
@@ -120,24 +140,16 @@ class MessagesActivity : AppCompatActivity() {
                     R.color.white
                 )
             )
-
+            
             setDatetime(value = "", section = section_id)
 
             swipeRefreshLayout.setOnRefreshListener {
-                getAllMessages(startTask = false)
+                getAllMessages(startTask = false, section_id = section_id)
             }
-            getAllMessages(startTask = true)
+            getAllMessages(startTask = true, section_id = section_id)
         } else {
             //no logged
             onBackPressed()
-        }
-
-        val actionBar = getSupportActionBar()
-        if (actionBar != null) {
-            //show the back button in the action bar
-            actionBar.setDisplayHomeAsUpEnabled(true)
-            actionBar.title = getString(R.string.title_discussion_section, section_id)
-            actionBar.subtitle = sectionDetails.title
         }
     }
 
@@ -152,7 +164,7 @@ class MessagesActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    fun sendMessage(reply_to: Int = -1, text: String) {
+    fun sendMessage(reply_to: Int = -1, text: String, section_id: String) {
         val editTextMessage: EditText = findViewById(R.id.editTextMessageText)
         val buttonSend: Button = findViewById(R.id.buttonSendMessage)
         editTextMessage.isEnabled = false
@@ -181,7 +193,7 @@ class MessagesActivity : AppCompatActivity() {
                     editTextMessage.isEnabled = true
                     buttonSend.isEnabled = true
 
-                    getAllMessages(startTask = false)
+                    getAllMessages(startTask = false, section_id = section_id)
                 }
             }
 
@@ -196,7 +208,7 @@ class MessagesActivity : AppCompatActivity() {
         })
     }
 
-    fun getAllMessages(startTask: Boolean = false) {
+    fun getAllMessages(startTask: Boolean = false, section_id: String) {
         if (connected) {
             val editTextMessage: EditText = findViewById(R.id.editTextMessageText)
             val buttonSend: Button = findViewById(R.id.buttonSendMessage)
@@ -222,7 +234,7 @@ class MessagesActivity : AppCompatActivity() {
 
                         val currentDatetime = responseList.lastUpdate?.datetime.toString()
 
-                        if (getVariable("datetime_$section_id") != currentDatetime) {
+                        if (getDatetime("datetime_$section_id") != currentDatetime) {
                             setDatetime(
                                 value = currentDatetime,
                                 section = section_id
@@ -251,7 +263,7 @@ class MessagesActivity : AppCompatActivity() {
         }
 
         if (startTask) {
-            currentRunnable = Runnable { getAllMessages(startTask = true) }
+            currentRunnable = Runnable { getAllMessages(startTask = true, section_id = section_id) }
             mainHandler.postDelayed(
                 currentRunnable!!,
                 5000
@@ -262,6 +274,25 @@ class MessagesActivity : AppCompatActivity() {
     override fun onBackPressed() {
         finish()
         super.onBackPressed()
+    }
+
+    override fun onResume() {
+        //println("Resuming")
+        val bundle = intent.extras
+
+        var section_id = ""
+        var source = ""
+        if (bundle != null) {
+            section_id = bundle.getString("section_id")!!
+            if (bundle.containsKey("source")) source = bundle.getString("source")!!
+        }
+
+        val databaseHandler = DatabaseHandler(this)
+        val sectionDetails = databaseHandler.getSection(section_id)
+        databaseHandler.close()
+
+        load(section_id = section_id, section_details = sectionDetails)
+        super.onResume()
     }
 
     override fun onDestroy() {
@@ -311,7 +342,8 @@ class MessagesActivity : AppCompatActivity() {
     }
 
     fun setDatetime(value: String, section: String) {
-        getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE).edit()
+        //println("Set datetime of $section with $value")
+        getSharedPreferences(NOTIFICATIONS, Context.MODE_PRIVATE).edit()
             .putString("datetime_" + section, value).apply()
     }
 
@@ -321,9 +353,13 @@ class MessagesActivity : AppCompatActivity() {
     }
 
     private fun getVariable(variable: String): String? {
-        return getSharedPreferences(
-            PREFERENCES_NAME,
-            Context.MODE_PRIVATE
-        ).getString(variable, null)
+        return getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE).getString(
+            variable,
+            null
+        )
+    }
+
+    private fun getDatetime(variable: String): String? {
+        return getSharedPreferences(NOTIFICATIONS, Context.MODE_PRIVATE).getString(variable, null)
     }
 }

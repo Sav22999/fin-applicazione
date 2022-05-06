@@ -12,6 +12,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.cardview.widget.CardView
 import com.saverio.finapp.BuildConfig
 import com.saverio.finapp.MainActivity
+import com.saverio.finapp.MainActivity.Companion.NOTIFICATIONS
 import com.saverio.finapp.MainActivity.Companion.PREFERENCES_NAME
 import com.saverio.finapp.R
 import com.saverio.finapp.db.DatabaseHandler
@@ -67,6 +68,7 @@ class SettingsActivity : AppCompatActivity() {
                     //delete all preferences
                     getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE).edit().clear()
                         .apply()
+                    getSharedPreferences(NOTIFICATIONS, Context.MODE_PRIVATE).edit().clear().apply()
                     val databaseHandler = DatabaseHandler(this)
                     databaseHandler.deleteAllNews()
                     databaseHandler.deleteAllQuizzes()

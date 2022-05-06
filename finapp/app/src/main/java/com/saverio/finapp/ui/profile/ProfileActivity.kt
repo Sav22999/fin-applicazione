@@ -18,6 +18,7 @@ import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isGone
 import androidx.core.widget.NestedScrollView
+import com.saverio.finapp.MainActivity
 import com.saverio.finapp.MainActivity.Companion.PREFERENCES_NAME
 import com.saverio.finapp.internet.NetworkConnection
 import com.saverio.finapp.R
@@ -133,6 +134,10 @@ class ProfileActivity : AppCompatActivity() {
             val databaseHandler = DatabaseHandler(this)
             databaseHandler.deleteAllStatistics()
             databaseHandler.close()
+
+            getSharedPreferences(MainActivity.NOTIFICATIONS, Context.MODE_PRIVATE).edit().clear()
+                .apply()
+            setVariable("notifications", false)
 
             noLoggedConstraintLayout.isGone = false
             loginConstraintLayout.isGone = true
@@ -446,6 +451,8 @@ class ProfileActivity : AppCompatActivity() {
                             Toast.LENGTH_LONG
                         ).show()
 
+                        setVariable("notifications", true)
+
                         checkStatistics()
 
                         onBackPressed()
@@ -691,5 +698,10 @@ class ProfileActivity : AppCompatActivity() {
             PREFERENCES_NAME,
             Context.MODE_PRIVATE
         ).getString(variable, null)
+    }
+
+    private fun setVariable(variable: String, value: Boolean) {
+        getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE).edit()
+            .putBoolean(variable, value).apply()
     }
 }

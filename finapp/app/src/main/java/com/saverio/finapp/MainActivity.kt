@@ -600,5 +600,6 @@ class MainActivity : AppCompatActivity() {
         const val FIRST_RUN_SIMULATION = "FIRST_RUN_SIMULATION"
         const val FIRST_RUN_MESSAGES = "FIRST_RUN_MESSAGES"
         const val PREFERENCES_NAME = "QuizNuotoPreferences"
+        const val NOTIFICATIONS = "QuizNuotoNotifications"
     }
 }

@@ -10,7 +10,6 @@ import android.media.RingtoneManager
 import android.net.Uri
 import android.os.Build
 import androidx.core.app.NotificationCompat
-import com.saverio.finapp.MainActivity
 import com.saverio.finapp.R
 import com.saverio.finapp.ui.messages.MessagesActivity
 
@@ -44,7 +43,7 @@ class NotificationReceiver : BroadcastReceiver() {
         notificationNumber: Int,
         section: String
     ) {
-        //println("trying to sending notification")
+        println("trying to sending notification || section: $section")
         val NOTIFICATION_CHANNEL_ID =
             "${context.packageName.replace(".", "_")}_notification_${notificationNumber}"
         val NOTIFICATION_CHANNEL_NAME = "${context.packageName}_notification".replace(".", "_")
@@ -64,9 +63,15 @@ class NotificationReceiver : BroadcastReceiver() {
         val intent = Intent(context, MessagesActivity::class.java)
         intent.putExtra("source", "notifications")
         intent.putExtra("section_id", section)
-        //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        println("section_id: $section || notification: $NOTIFICATION_CHANNEL_ID")
 
-        val pendingIntent = PendingIntent.getActivity(context, 0, intent, 0)
+        val requestCodeUnique: Int = (System.currentTimeMillis() and 0xfffffff).toInt()
+        val pendingIntent = PendingIntent.getActivity(
+            context,
+            requestCodeUnique,
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT
+        )
 
         val defaultSoundUri: Uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
         var notificationBuilder =
