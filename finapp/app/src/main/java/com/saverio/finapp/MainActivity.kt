@@ -80,6 +80,7 @@ class MainActivity : AppCompatActivity() {
             )
         } catch (e: Exception) {
             //Exception
+            Log.v("Exception", e.toString())
         }
     }
 

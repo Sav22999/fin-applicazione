@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.saverio.finapp.R
 import com.saverio.finapp.db.DatabaseHandler
 import com.saverio.finapp.db.StatisticsModel
+import java.lang.Exception
 
 class MistakesQuizActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -51,24 +52,28 @@ class MistakesQuizActivity : AppCompatActivity() {
         search: Boolean = false,
         getStatistics: ArrayList<StatisticsModel>
     ) {
-        val resultsItemsList: RecyclerView = findViewById(R.id.mistakes_items_list)
-        val noResults: TextView = findViewById(R.id.no_mistakes_available_text)
+        try {
+            val resultsItemsList: RecyclerView = findViewById(R.id.mistakes_items_list)
+            val noResults: TextView = findViewById(R.id.no_mistakes_available_text)
 
-        noResults.text = getString(R.string.no_mistaks_available_text)
+            noResults.text = getString(R.string.no_mistaks_available_text)
 
-        if (clear) resultsItemsList.adapter = null
+            if (clear) resultsItemsList.adapter = null
 
-        if (getStatistics.size > 0) {
-            noResults.visibility = View.GONE
-            resultsItemsList.visibility = View.VISIBLE
+            if (getStatistics.size > 0) {
+                noResults.visibility = View.GONE
+                resultsItemsList.visibility = View.VISIBLE
 
-            resultsItemsList.layoutManager = LinearLayoutManager(this)
-            //binding.newsItemsList.setHasFixedSize(true)
-            val itemAdapter = MistakesQuizItemAdapter(this, getStatistics)
-            resultsItemsList.adapter = itemAdapter
-        } else {
-            noResults.visibility = View.VISIBLE
-            resultsItemsList.visibility = View.GONE
+                resultsItemsList.layoutManager = LinearLayoutManager(this)
+                //binding.newsItemsList.setHasFixedSize(true)
+                val itemAdapter = MistakesQuizItemAdapter(this, getStatistics)
+                resultsItemsList.adapter = itemAdapter
+            } else {
+                noResults.visibility = View.VISIBLE
+                resultsItemsList.visibility = View.GONE
+            }
+        }catch (e:Exception) {
+
         }
     }
 }

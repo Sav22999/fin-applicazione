@@ -141,14 +141,13 @@ class MessagesActivity : AppCompatActivity() {
                 )
             )
 
-            setDatetime("", section = section_id)
             getSharedPreferences(NOTIFICATIONS, Context.MODE_PRIVATE).edit()
-                .putBoolean("downloading", true).apply()
+                .putBoolean("force_update", true).apply()
 
             swipeRefreshLayout.setOnRefreshListener {
                 setDatetime("", section = section_id)
                 getSharedPreferences(NOTIFICATIONS, Context.MODE_PRIVATE).edit()
-                    .putBoolean("downloading", true).apply()
+                    .putBoolean("force_update", true).apply()
                 getAllMessages(startTask = false, section_id = section_id)
             }
             getAllMessages(startTask = true, section_id = section_id)
@@ -230,8 +229,7 @@ class MessagesActivity : AppCompatActivity() {
                     call: Call<AllMessagesList>?,
                     response: Response<AllMessagesList>?
                 ) {
-                    getSharedPreferences(NOTIFICATIONS, Context.MODE_PRIVATE).edit()
-                        .putBoolean("downloading", false).apply()
+
                     //println("Response:\n" + response!!.body()!!)
 
                     if (response!!.isSuccessful && response.body() != null) {
@@ -240,8 +238,12 @@ class MessagesActivity : AppCompatActivity() {
                         swipeRefreshLayout.isRefreshing = false
 
                         val currentDatetime = responseList.lastUpdate?.datetime.toString()
+                        val forcedUpdated = getSharedPreferences(
+                            NOTIFICATIONS,
+                            Context.MODE_PRIVATE
+                        ).getBoolean("force_update", true)
 
-                        if (getDatetime("datetime_$section_id") != currentDatetime) {
+                        if (forcedUpdated || getDatetime("datetime_$section_id") != currentDatetime) {
                             setDatetime(
                                 value = currentDatetime,
                                 section = section_id
@@ -256,6 +258,8 @@ class MessagesActivity : AppCompatActivity() {
                             editTextMessage.setText("")
                         }
                     }
+                    getSharedPreferences(NOTIFICATIONS, Context.MODE_PRIVATE).edit()
+                        .putBoolean("force_update", false).apply()
                 }
 
                 override fun onFailure(call: Call<AllMessagesList>?, t: Throwable?) {
@@ -265,7 +269,7 @@ class MessagesActivity : AppCompatActivity() {
                     buttonSend.isEnabled = true
                     editTextMessage.setText("")
                     getSharedPreferences(NOTIFICATIONS, Context.MODE_PRIVATE).edit()
-                        .putBoolean("downloading", false).apply()
+                        .putBoolean("force_update", false).apply()
                 }
 
             })
@@ -313,28 +317,34 @@ class MessagesActivity : AppCompatActivity() {
         clear: Boolean = false,
         messages: List<AllMessagesItemsList>?
     ) {
-        val messagesItemsList: RecyclerView = findViewById(R.id.messages_conversation_items_list)
-        val noMessagesAvailableText: TextView = findViewById(R.id.no_messages_available_here_text)
+        try {
+            val messagesItemsList: RecyclerView =
+                findViewById(R.id.messages_conversation_items_list)
+            val noMessagesAvailableText: TextView =
+                findViewById(R.id.no_messages_available_here_text)
 
-        if (clear) messagesItemsList.adapter = null
+            if (clear) messagesItemsList.adapter = null
 
-        if (messages != null && messages.isNotEmpty()) {
-            messagesItemsList.visibility = View.VISIBLE
-            noMessagesAvailableText.isGone = true
+            if (messages != null && messages.isNotEmpty()) {
+                messagesItemsList.visibility = View.VISIBLE
+                noMessagesAvailableText.isGone = true
 
-            //messagesItemsList.layoutManager = LinearLayoutManager(this)
-            //binding.newsItemsList.setHasFixedSize(true)
-            val itemAdapter = AllMessagesItemAdapter(
-                context = this,
-                items = messages,
-                username = getUsername()
-            )
-            messagesItemsList.adapter = itemAdapter
-            messagesItemsList.scrollToPosition(itemAdapter.itemCount - 1);
-        } else {
-            messagesItemsList.visibility = View.GONE
-            noMessagesAvailableText.text = getString(R.string.no_messages_available_here_text)
-            noMessagesAvailableText.isGone = false
+                //messagesItemsList.layoutManager = LinearLayoutManager(this)
+                //binding.newsItemsList.setHasFixedSize(true)
+                val itemAdapter = AllMessagesItemAdapter(
+                    context = this,
+                    items = messages,
+                    username = getUsername()
+                )
+                messagesItemsList.adapter = itemAdapter
+                messagesItemsList.scrollToPosition(itemAdapter.itemCount - 1);
+            } else {
+                messagesItemsList.visibility = View.GONE
+                noMessagesAvailableText.text = getString(R.string.no_messages_available_here_text)
+                noMessagesAvailableText.isGone = false
+            }
+        } catch (e: Exception) {
+            Log.v("Exception", e.toString())
         }
     }
 

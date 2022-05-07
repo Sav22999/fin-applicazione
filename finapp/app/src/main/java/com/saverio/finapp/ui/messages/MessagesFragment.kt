@@ -188,7 +188,7 @@ class MessagesFragment : Fragment() {
 
                 })
             } catch (e: Exception) {
-
+                Log.v("Exception", e.toString())
             }
         }
         if (startTask) {
@@ -206,23 +206,27 @@ class MessagesFragment : Fragment() {
         getSections: ArrayList<SectionsModel>,
         sectionsJoined: ArrayList<String>
     ) {
-        if (clear) binding.messagesItemsList.adapter = null
+        try {
+            if (clear) binding.messagesItemsList.adapter = null
 
-        if (getSections.size > 0) {
-            binding.messagesItemsList.visibility = View.VISIBLE
-            binding.noMessagesAvailableText.isGone = true
+            if (getSections.size > 0) {
+                binding.messagesItemsList.visibility = View.VISIBLE
+                binding.noMessagesAvailableText.isGone = true
 
-            binding.messagesItemsList.layoutManager = LinearLayoutManager(requireContext())
-            //binding.newsItemsList.setHasFixedSize(true)
-            val itemAdapter = SectionsMessagesItemAdapter(
-                context = requireContext(),
-                items = getSections,
-                sectionsJoined = sectionsJoined
-            )
-            binding.messagesItemsList.adapter = itemAdapter
-        } else {
-            binding.messagesItemsList.visibility = View.GONE
-            binding.noMessagesAvailableText.isGone = false
+                binding.messagesItemsList.layoutManager = LinearLayoutManager(requireContext())
+                //binding.newsItemsList.setHasFixedSize(true)
+                val itemAdapter = SectionsMessagesItemAdapter(
+                    context = requireContext(),
+                    items = getSections,
+                    sectionsJoined = sectionsJoined
+                )
+                binding.messagesItemsList.adapter = itemAdapter
+            } else {
+                binding.messagesItemsList.visibility = View.GONE
+                binding.noMessagesAvailableText.isGone = false
+            }
+        }catch (e:Exception) {
+
         }
     }
 

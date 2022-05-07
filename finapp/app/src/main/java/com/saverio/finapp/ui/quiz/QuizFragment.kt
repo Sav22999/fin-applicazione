@@ -92,24 +92,28 @@ class QuizFragment : Fragment() {
         search: Boolean = false,
         getChapters: ArrayList<ChaptersModel>
     ) {
-        if (clear) binding.chaptersQuizItemsList.adapter = null
+        try {
+            if (clear) binding.chaptersQuizItemsList.adapter = null
 
-        if (search) binding.noChaptersQuizAvailableText.text =
-            getString(R.string.no_results_chapter_text)
-        else binding.noChaptersQuizAvailableText.text =
-            getString(R.string.no_chapters_available_text)
+            if (search) binding.noChaptersQuizAvailableText.text =
+                getString(R.string.no_results_chapter_text)
+            else binding.noChaptersQuizAvailableText.text =
+                getString(R.string.no_chapters_available_text)
 
-        if (getChapters.size > 0) {
-            binding.noChaptersQuizAvailableText.visibility = View.GONE
-            binding.chaptersQuizItemsList.visibility = View.VISIBLE
+            if (getChapters.size > 0) {
+                binding.noChaptersQuizAvailableText.visibility = View.GONE
+                binding.chaptersQuizItemsList.visibility = View.VISIBLE
 
-            binding.chaptersQuizItemsList.layoutManager = LinearLayoutManager(requireContext())
-            //binding.newsItemsList.setHasFixedSize(true)
-            val itemAdapter = ChaptersQuizItemAdapter(requireContext(), getChapters)
-            binding.chaptersQuizItemsList.adapter = itemAdapter
-        } else {
-            binding.noChaptersQuizAvailableText.visibility = View.VISIBLE
-            binding.chaptersQuizItemsList.visibility = View.GONE
+                binding.chaptersQuizItemsList.layoutManager = LinearLayoutManager(requireContext())
+                //binding.newsItemsList.setHasFixedSize(true)
+                val itemAdapter = ChaptersQuizItemAdapter(requireContext(), getChapters)
+                binding.chaptersQuizItemsList.adapter = itemAdapter
+            } else {
+                binding.noChaptersQuizAvailableText.visibility = View.VISIBLE
+                binding.chaptersQuizItemsList.visibility = View.GONE
+            }
+        }catch (e:Exception) {
+
         }
     }
 }

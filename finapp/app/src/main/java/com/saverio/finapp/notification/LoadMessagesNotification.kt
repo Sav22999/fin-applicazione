@@ -90,16 +90,8 @@ class LoadMessagesNotification {
                             Context.MODE_PRIVATE
                         ).getInt("notificationNumber", 0)
 
-                        val isDownloadInMessageActivity =
-                            globalContext.getSharedPreferences(NOTIFICATIONS, Context.MODE_PRIVATE)
-                                .getBoolean("downloading", true)
-
                         //send the push notification
-                        if (notificationReceiver != null && getVariable(
-                                "notifications",
-                                true
-                            ) && !isDownloadInMessageActivity
-                        ) {
+                        if (notificationReceiver != null && getVariable("notifications", true)) {
                             //println("Sending section $section notification")
                             notificationReceiver.sendNow(
                                 title = globalContext.getString(

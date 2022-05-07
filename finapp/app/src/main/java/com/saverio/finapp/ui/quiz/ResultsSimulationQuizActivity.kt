@@ -141,24 +141,28 @@ class ResultsSimulationQuizActivity : AppCompatActivity() {
         search: Boolean = false,
         getStatistics: ArrayList<StatisticsModel>
     ) {
-        val resultsItemsList: RecyclerView = findViewById(R.id.simulation_results_items_list)
-        val noResults: TextView = findViewById(R.id.no_results_available_text)
+        try {
+            val resultsItemsList: RecyclerView = findViewById(R.id.simulation_results_items_list)
+            val noResults: TextView = findViewById(R.id.no_results_available_text)
 
-        noResults.text = getString(R.string.no_results_available_text)
+            noResults.text = getString(R.string.no_results_available_text)
 
-        if (clear) resultsItemsList.adapter = null
+            if (clear) resultsItemsList.adapter = null
 
-        if (getStatistics.size > 0) {
-            noResults.visibility = View.GONE
-            resultsItemsList.visibility = View.VISIBLE
+            if (getStatistics.size > 0) {
+                noResults.visibility = View.GONE
+                resultsItemsList.visibility = View.VISIBLE
 
-            resultsItemsList.layoutManager = LinearLayoutManager(this)
-            //binding.newsItemsList.setHasFixedSize(true)
-            val itemAdapter = ResultSimulationItemAdapter(this, getStatistics)
-            resultsItemsList.adapter = itemAdapter
-        } else {
-            noResults.visibility = View.VISIBLE
-            resultsItemsList.visibility = View.GONE
+                resultsItemsList.layoutManager = LinearLayoutManager(this)
+                //binding.newsItemsList.setHasFixedSize(true)
+                val itemAdapter = ResultSimulationItemAdapter(this, getStatistics)
+                resultsItemsList.adapter = itemAdapter
+            } else {
+                noResults.visibility = View.VISIBLE
+                resultsItemsList.visibility = View.GONE
+            }
+        }catch (e:Exception){
+
         }
     }
 

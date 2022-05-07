@@ -52,32 +52,36 @@ class AllSimulationsActivity : AppCompatActivity() {
         clear: Boolean = false,
         getSimulations: ArrayList<String>
     ) {
-        val resultsItemsList: RecyclerView = findViewById(R.id.all_simulations_items_list)
-        val noResults: TextView = findViewById(R.id.no_simulations_available_text)
-        val databaseHandler = DatabaseHandler(this)
+        try {
+            val resultsItemsList: RecyclerView = findViewById(R.id.all_simulations_items_list)
+            val noResults: TextView = findViewById(R.id.no_simulations_available_text)
+            val databaseHandler = DatabaseHandler(this)
 
-        noResults.text = getString(R.string.no_simulations_available_text)
+            noResults.text = getString(R.string.no_simulations_available_text)
 
-        if (clear) resultsItemsList.adapter = null
+            if (clear) resultsItemsList.adapter = null
 
-        if (getSimulations.size > 0) {
-            noResults.visibility = View.GONE
-            resultsItemsList.visibility = View.VISIBLE
+            if (getSimulations.size > 0) {
+                noResults.visibility = View.GONE
+                resultsItemsList.visibility = View.VISIBLE
 
-            resultsItemsList.layoutManager = LinearLayoutManager(this)
-            //binding.newsItemsList.setHasFixedSize(true)
-            var getStatistics = ArrayList<StatisticsModel>()
-            getSimulations.forEach {
-                val getStatisticsTemp = databaseHandler.getStatistics(datetime = it)[0]
-                println(getStatisticsTemp.id)
-                getStatistics.add(getStatisticsTemp)
+                resultsItemsList.layoutManager = LinearLayoutManager(this)
+                //binding.newsItemsList.setHasFixedSize(true)
+                var getStatistics = ArrayList<StatisticsModel>()
+                getSimulations.forEach {
+                    val getStatisticsTemp = databaseHandler.getStatistics(datetime = it)[0]
+                    println(getStatisticsTemp.id)
+                    getStatistics.add(getStatisticsTemp)
+                }
+                val itemAdapter = AllSimulationsItemAdapter(this, getStatistics)
+                resultsItemsList.adapter = itemAdapter
+            } else {
+                noResults.visibility = View.VISIBLE
+                resultsItemsList.visibility = View.GONE
             }
-            val itemAdapter = AllSimulationsItemAdapter(this, getStatistics)
-            resultsItemsList.adapter = itemAdapter
-        } else {
-            noResults.visibility = View.VISIBLE
-            resultsItemsList.visibility = View.GONE
+            databaseHandler.close()
+        }catch (e:Exception) {
+
         }
-        databaseHandler.close()
     }
 }

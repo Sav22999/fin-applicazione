@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.saverio.finapp.R
 import com.saverio.finapp.db.DatabaseHandler
 import com.saverio.finapp.db.SectionsModel
+import java.lang.Exception
 
 
 class AllSectionsActivity : AppCompatActivity() {
@@ -129,30 +130,34 @@ class AllSectionsActivity : AppCompatActivity() {
         chapter: Int? = null,
         getSections: ArrayList<SectionsModel>
     ) {
-        val sectionsItemsList: RecyclerView = findViewById(R.id.sections_items_list)
-        val noSectionsAvailableText: TextView = findViewById(R.id.no_sections_available_text)
-        val editTextSearchSections: EditText = findViewById(R.id.editTextSearchSections)
+        try {
+            val sectionsItemsList: RecyclerView = findViewById(R.id.sections_items_list)
+            val noSectionsAvailableText: TextView = findViewById(R.id.no_sections_available_text)
+            val editTextSearchSections: EditText = findViewById(R.id.editTextSearchSections)
 
-        //val getSections = DatabaseHandler(this).getSections(chapter = chapter)
+            //val getSections = DatabaseHandler(this).getSections(chapter = chapter)
 
-        if (clear) sectionsItemsList.adapter = null
+            if (clear) sectionsItemsList.adapter = null
 
-        if (search) noSectionsAvailableText.text = getString(R.string.no_results_section_text)
-        else noSectionsAvailableText.text = getString(R.string.no_sections_available_text)
+            if (search) noSectionsAvailableText.text = getString(R.string.no_results_section_text)
+            else noSectionsAvailableText.text = getString(R.string.no_sections_available_text)
 
-        if (getSections.size > 0) {
-            if (!search) editTextSearchSections.isGone = false
-            noSectionsAvailableText.visibility = View.GONE
-            sectionsItemsList.visibility = View.VISIBLE
+            if (getSections.size > 0) {
+                if (!search) editTextSearchSections.isGone = false
+                noSectionsAvailableText.visibility = View.GONE
+                sectionsItemsList.visibility = View.VISIBLE
 
-            sectionsItemsList.layoutManager = LinearLayoutManager(this)
-            //newsItemsList.setHasFixedSize(true)
-            val itemAdapter = AllSectionsItemAdapter(this, getSections, chapter)
-            sectionsItemsList.adapter = itemAdapter
-        } else {
-            if (!search) editTextSearchSections.isGone = true
-            noSectionsAvailableText.visibility = View.VISIBLE
-            sectionsItemsList.visibility = View.GONE
+                sectionsItemsList.layoutManager = LinearLayoutManager(this)
+                //newsItemsList.setHasFixedSize(true)
+                val itemAdapter = AllSectionsItemAdapter(this, getSections, chapter)
+                sectionsItemsList.adapter = itemAdapter
+            } else {
+                if (!search) editTextSearchSections.isGone = true
+                noSectionsAvailableText.visibility = View.VISIBLE
+                sectionsItemsList.visibility = View.GONE
+            }
+        }catch (e:Exception) {
+
         }
     }
 

@@ -120,29 +120,34 @@ class TheoryFragment : Fragment() {
         search: Boolean = false,
         getChapters: ArrayList<ChaptersModel>
     ) {
-        if (clear) binding.chaptersItemsList.adapter = null
+        try {
+            if (clear) binding.chaptersItemsList.adapter = null
 
-        if (search) binding.noChaptersAvailableText.text =
-            getString(R.string.no_results_chapter_text)
-        else binding.noChaptersAvailableText.text = getString(R.string.no_chapters_available_text)
+            if (search) binding.noChaptersAvailableText.text =
+                getString(R.string.no_results_chapter_text)
+            else binding.noChaptersAvailableText.text =
+                getString(R.string.no_chapters_available_text)
 
-        if (getChapters.size > 0) {
-            if (!search) binding.editTextSearchChapters.isGone = false
-            binding.noChaptersAvailableText.visibility = View.GONE
-            binding.chaptersItemsList.visibility = View.VISIBLE
+            if (getChapters.size > 0) {
+                if (!search) binding.editTextSearchChapters.isGone = false
+                binding.noChaptersAvailableText.visibility = View.GONE
+                binding.chaptersItemsList.visibility = View.VISIBLE
 
-            binding.chaptersItemsList.layoutManager = LinearLayoutManager(requireContext())
-            //binding.newsItemsList.setHasFixedSize(true)
-            val itemAdapter = ChaptersItemAdapter(
-                context = requireContext(),
-                items = getChapters,
-                search = binding.editTextSearchChapters.text.toString()
-            )
-            binding.chaptersItemsList.adapter = itemAdapter
-        } else {
-            if (!search) binding.editTextSearchChapters.isGone = true
-            binding.noChaptersAvailableText.visibility = View.VISIBLE
-            binding.chaptersItemsList.visibility = View.GONE
+                binding.chaptersItemsList.layoutManager = LinearLayoutManager(requireContext())
+                //binding.newsItemsList.setHasFixedSize(true)
+                val itemAdapter = ChaptersItemAdapter(
+                    context = requireContext(),
+                    items = getChapters,
+                    search = binding.editTextSearchChapters.text.toString()
+                )
+                binding.chaptersItemsList.adapter = itemAdapter
+            } else {
+                if (!search) binding.editTextSearchChapters.isGone = true
+                binding.noChaptersAvailableText.visibility = View.VISIBLE
+                binding.chaptersItemsList.visibility = View.GONE
+            }
+        }catch (e:Exception) {
+
         }
     }
 }
