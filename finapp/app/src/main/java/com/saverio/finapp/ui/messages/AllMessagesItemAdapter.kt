@@ -82,9 +82,7 @@ class AllMessagesItemAdapter(
             cardViewImageMap[position] = holder.cardViewImage
             imageViewImageMap[position] = holder.imageViewAccount
 
-            val imageUrl = "https://www.gravatar.com/avatar/${item.email.toMD5()}?s=1000&r=g"
-
-            println("")
+            val imageUrl = "https://www.gravatar.com/avatar/${item.email.toMD5()}?s=50&r=g"
 
             if (position > 0 && sentFromAnotherMap.isNotEmpty() && cardViewImageMap.isNotEmpty() && item.username == items[position - 1].username) {
                 sentFromAnotherMap[position - 1]?.isGone = true

@@ -40,7 +40,8 @@ class AllSimulationsItemAdapter(
         val item = items[position]
 
 
-        holder.title.text = holder.simulation_text.replace("%s", item.datetime)
+        holder.title.text =
+            holder.itemView.resources.getString(R.string.simulation_date_text, item.datetime)
 
         val databaseHandler = DatabaseHandler(context)
 
@@ -77,7 +78,6 @@ class AllSimulationsItemAdapter(
         val statusBar: View = view.findViewById(R.id.viewStatusSimulation)
         val cardView: CardView = view.findViewById(R.id.cardViewSimulation)
 
-        val simulation_text = view.resources.getString(R.string.simulation_date_text)
         val passed_text = view.resources.getString(R.string.exam_passed_text)
         val not_passed_text = view.resources.getString(R.string.exam_not_passed_text)
         val colorRed = view.resources.getColor(R.color.colorTimeRed)

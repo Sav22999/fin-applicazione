@@ -39,7 +39,8 @@ class AllSectionsItemAdapter(
         } else {
             holder.title.isGone = true
         }
-        holder.section_id.text = holder.section_text.replace("%s", item.section)
+        holder.section_id.text =
+            holder.itemView.resources.getString(R.string.section_id_text, item.section)
 
         holder.sectionCard.setOnClickListener {
             val intent = Intent(context, SectionActivity::class.java)
@@ -57,7 +58,5 @@ class AllSectionsItemAdapter(
         val section_id: TextView = view.findViewById(R.id.textViewSectionSection)
         val title: TextView = view.findViewById(R.id.textViewSectionTitle)
         val sectionCard: CardView = view.findViewById(R.id.cardViewSection)
-
-        val section_text = view.resources.getString(R.string.section_id_text)
     }
 }

@@ -43,7 +43,7 @@ class NotificationReceiver : BroadcastReceiver() {
         notificationNumber: Int,
         section: String
     ) {
-        println("trying to sending notification || section: $section")
+        //println("trying to sending notification || section: $section")
         val NOTIFICATION_CHANNEL_ID =
             "${context.packageName.replace(".", "_")}_notification_${notificationNumber}"
         val NOTIFICATION_CHANNEL_NAME = "${context.packageName}_notification".replace(".", "_")
@@ -63,7 +63,7 @@ class NotificationReceiver : BroadcastReceiver() {
         val intent = Intent(context, MessagesActivity::class.java)
         intent.putExtra("source", "notifications")
         intent.putExtra("section_id", section)
-        println("section_id: $section || notification: $NOTIFICATION_CHANNEL_ID")
+        //println("section_id: $section || notification: $NOTIFICATION_CHANNEL_ID")
 
         val requestCodeUnique: Int = (System.currentTimeMillis() and 0xfffffff).toInt()
         val pendingIntent = PendingIntent.getActivity(

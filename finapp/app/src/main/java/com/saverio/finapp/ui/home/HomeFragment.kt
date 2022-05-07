@@ -78,7 +78,7 @@ class HomeFragment : Fragment() {
                         binding.newsItemsList.isGone = false
                     } else {
                         //not connected
-                        println("No connection available")
+                        //println("No connection available")
                         binding.newsItemsList.isGone = true
                         binding.constraintLayoutNoInternetConnectionFragmentHome.isGone = false
                         swipeRefreshLayout.isRefreshing = false

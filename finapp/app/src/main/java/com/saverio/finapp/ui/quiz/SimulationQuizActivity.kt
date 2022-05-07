@@ -561,7 +561,7 @@ class SimulationQuizActivity : AppCompatActivity() {
     fun sendStatistics(statistics: StatisticsModel) {
         if (checkLogged()) {
             //logged
-            println("Prepare to sending")
+            //println("Prepare to sending")
             val statisticsToSend = StatisticsPostList(
                 userid = getUserid(),
                 type = statistics.type,
@@ -592,13 +592,13 @@ class SimulationQuizActivity : AppCompatActivity() {
                 call: Call<PostResponseList>?,
                 response: Response<PostResponseList>?
             ) {
-                println("Response:\n" + response!!.body()!!)
+                //println("Response:\n" + response!!.body()!!)
 
                 if (response!!.isSuccessful && response.body() != null) {
                     val responseList = response.body()!!
 
                     if (responseList.code == 200) {
-                        println("${responseList.code} || ${responseList.description}")
+                        //println("${responseList.code} || ${responseList.description}")
                     } else {
                         Log.v("Error", responseList.description)
                     }

@@ -70,7 +70,7 @@ class AllSimulationsActivity : AppCompatActivity() {
                 var getStatistics = ArrayList<StatisticsModel>()
                 getSimulations.forEach {
                     val getStatisticsTemp = databaseHandler.getStatistics(datetime = it)[0]
-                    println(getStatisticsTemp.id)
+                    //println(getStatisticsTemp.id)
                     getStatistics.add(getStatisticsTemp)
                 }
                 val itemAdapter = AllSimulationsItemAdapter(this, getStatistics)

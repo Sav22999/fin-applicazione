@@ -41,7 +41,7 @@ class ChaptersItemAdapter(
             holder.title.isGone = true
         }
         holder.chapterId.text =
-            holder.chapter_text.replace("%d", item.chapter.toString())
+            holder.itemView.resources.getString(R.string.chapter_id_text, item.chapter)
 
         holder.chapterCard.setOnClickListener {
             val intent = Intent(context, AllSectionsActivity::class.java)
@@ -59,7 +59,5 @@ class ChaptersItemAdapter(
         val chapterId: TextView = view.findViewById(R.id.textViewChapterChapter)
         val title: TextView = view.findViewById(R.id.textViewChapterTitle)
         val chapterCard: CardView = view.findViewById(R.id.cardViewSection)
-
-        val chapter_text = view.resources.getString(R.string.chapter_id_text)
     }
 }

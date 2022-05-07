@@ -392,13 +392,13 @@ class ProfileActivity : AppCompatActivity() {
                 call: Call<PostResponseList>?,
                 response: Response<PostResponseList>?
             ) {
-                println("Response:\n" + response!!.body()!!)
+                //println("Response:\n" + response!!.body()!!)
 
                 if (response!!.isSuccessful && response.body() != null) {
                     val responseList = response.body()!!
 
                     if (responseList.code == 200) {
-                        println("${responseList.code} || ${responseList.description} || ${responseList.userid}")
+                        //println("${responseList.code} || ${responseList.description} || ${responseList.userid}")
 
                         //everything ok
                         Toast.makeText(
@@ -435,7 +435,7 @@ class ProfileActivity : AppCompatActivity() {
                 call: Call<PostResponseList>?,
                 response: Response<PostResponseList>?
             ) {
-                println("Response:\n" + response!!.body()!!)
+                //println("Response:\n" + response!!.body()!!)
 
                 if (response!!.isSuccessful && response.body() != null) {
                     val responseList = response.body()!!
@@ -488,7 +488,7 @@ class ProfileActivity : AppCompatActivity() {
                 call: Call<PostResponseList>?,
                 response: Response<PostResponseList>?
             ) {
-                println("Response:\n" + response!!.body()!!)
+                //println("Response:\n" + response!!.body()!!)
 
                 if (response!!.isSuccessful && response.body() != null) {
                     val responseList = response.body()!!
@@ -549,7 +549,7 @@ class ProfileActivity : AppCompatActivity() {
                 call: Call<UsersList>?,
                 response: Response<UsersList>?
             ) {
-                println("Response:\n" + response!!.body()!!)
+                //println("Response:\n" + response!!.body()!!)
 
                 if (response!!.isSuccessful && response.body() != null) {
                     val responseList = response.body()!!
@@ -602,7 +602,7 @@ class ProfileActivity : AppCompatActivity() {
 
         override fun doInBackground(vararg urls: String): Bitmap? {
             val imageURL = urls[0]
-            println(imageURL)
+            //println(imageURL)
             var image: Bitmap? = null
             try {
                 val `in` = java.net.URL(imageURL).openStream()

@@ -38,7 +38,10 @@ class MistakesQuizItemAdapter(
         val item = items[position]
 
         holder.chapterIdText.text =
-            holder.chapter_n_text.replace("%d", item.question_id.toString())
+            holder.itemView.resources.getString(
+                R.string.chapter_id_text,
+                item.question_id.toString()
+            )
 
         val databaseHandler = DatabaseHandler(context)
 
@@ -76,7 +79,5 @@ class MistakesQuizItemAdapter(
             view.findViewById<TextView>(R.id.textViewQuestion3Mistakes),
             view.findViewById<TextView>(R.id.textViewQuestion4Mistakes)
         )
-
-        val chapter_n_text = view.resources.getString(R.string.chapter_id_text)
     }
 }

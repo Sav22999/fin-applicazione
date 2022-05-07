@@ -154,7 +154,7 @@ class NewsItemAdapter(private val context: Context, private val items: ArrayList
 
         override fun doInBackground(vararg urls: String): Bitmap? {
             val imageURL = urls[0]
-            println(imageURL)
+            //println(imageURL)
             var image: Bitmap? = null
             try {
                 val `in` = java.net.URL(imageURL).openStream()

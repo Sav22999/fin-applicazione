@@ -39,7 +39,7 @@ class ResultSimulationItemAdapter(
 
 
         holder.questionNumber.text =
-            holder.question_n_text.replace("%d", (position + 1).toString())
+            holder.itemView.resources.getString(R.string.question_n_text, position + 1)
 
         val databaseHandler = DatabaseHandler(context)
 
@@ -93,7 +93,6 @@ class ResultSimulationItemAdapter(
         val textQuestion2Results: TextView = view.findViewById(R.id.textViewQuestion2Results)
         val imageQuestion2Results: ImageView = view.findViewById(R.id.imageViewQuestion2Results)
 
-        val question_n_text = view.resources.getString(R.string.question_n_text)
         val correct_text = view.resources.getString(R.string.correct_text)
         val wrong_text = view.resources.getString(R.string.wrong_text)
         val skipped_text = view.resources.getString(R.string.skipped_text)

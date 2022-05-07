@@ -1,15 +1,12 @@
 package com.saverio.finapp.ui.quiz
 
 import android.content.Context
-import android.content.DialogInterface
 import android.content.Intent
 import android.content.res.ColorStateList
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.sax.Element
-import android.util.DisplayMetrics
 import android.util.Log
 import android.view.MenuItem
 import android.view.View
@@ -17,11 +14,9 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.appcompat.app.AlertDialog
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.*
 import androidx.core.widget.NestedScrollView
-import com.saverio.finapp.MainActivity
 import com.saverio.finapp.MainActivity.Companion.FIRST_RUN_QUIZ
 import com.saverio.finapp.MainActivity.Companion.PREFERENCES_NAME
 import com.saverio.finapp.R
@@ -31,16 +26,12 @@ import com.saverio.finapp.api.statistics.StatisticsPostList
 import com.saverio.finapp.db.DatabaseHandler
 import com.saverio.finapp.db.QuizzesModel
 import com.saverio.finapp.db.StatisticsModel
-import com.saverio.finapp.ui.firstrun.FirstRunActivity
 import com.saverio.finapp.ui.theory.SectionActivity
-import org.w3c.dom.Text
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.ArrayList
-import kotlin.random.Random
 
 class QuestionsQuizActivity : AppCompatActivity() {
     var selectedQuestion: Int = -1
@@ -113,10 +104,10 @@ class QuestionsQuizActivity : AppCompatActivity() {
     }
 
     fun startQuiz() {
-        start(chapterId!!, number = questionNumber, questionId)
+        load(chapterId!!, number = questionNumber, questionId)
     }
 
-    fun start(chapterId: Int, number: Int, questionId: Int) {
+    fun load(chapterId: Int, number: Int, questionId: Int) {
         val databaseHandler = DatabaseHandler(this)
         val getQuiz = databaseHandler.getQuiz(id = questionId)
         setupQuiz(
@@ -175,6 +166,7 @@ class QuestionsQuizActivity : AppCompatActivity() {
         number: Int,
         total: Int
     ) {
+        questionNumber = number
         lastQuestionIdUsed = getQuiz.id
         setTimeToShow(lastQuestionIdUsed)
 
@@ -503,7 +495,7 @@ class QuestionsQuizActivity : AppCompatActivity() {
             it.setTextColor(question.textColors)
         }
 
-        start(chapterId!!, number = number, questionId)
+        load(chapterId!!, number = number, questionId)
     }
 
     fun now(): String {
@@ -523,7 +515,7 @@ class QuestionsQuizActivity : AppCompatActivity() {
     }
 
     fun startTime(currentQuestionId: Int) {
-        println("currentQuestionId: $currentQuestionId")
+        //println("currentQuestionId: $currentQuestionId")
         if (currentQuestionId != -1) {
             timeStopped = false
             incrementTime(currentIterator, currentQuestionId)
@@ -645,13 +637,13 @@ class QuestionsQuizActivity : AppCompatActivity() {
                 call: Call<PostResponseList>?,
                 response: Response<PostResponseList>?
             ) {
-                println("Response:\n" + response!!.body()!!)
+                //println("Response:\n" + response!!.body()!!)
 
                 if (response!!.isSuccessful && response.body() != null) {
                     val responseList = response.body()!!
 
                     if (responseList.code == 200) {
-                        println("${responseList.code} || ${responseList.description}")
+                        //println("${responseList.code} || ${responseList.description}")
                     } else {
                         Log.v("Error", responseList.description)
                     }

@@ -29,7 +29,7 @@ class SettingsActivity : AppCompatActivity() {
         }
         switchNotification.setOnCheckedChangeListener { buttonView, isChecked ->
             setVariable("notifications", isChecked)
-            println(isChecked)
+            //println(isChecked)
         }
         switchNotification.isChecked = getVariable("notifications", true)
 

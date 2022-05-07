@@ -38,7 +38,8 @@ class ChaptersQuizItemAdapter(
         } else {
             holder.title.isGone = true
         }
-        holder.chapterId.text = holder.chapter_text.replace("%d", item.chapter.toString())
+        holder.chapterId.text =
+            holder.itemView.resources.getString(R.string.chapter_id_text, item.chapter)
 
         val databaseHandler = DatabaseHandler(context)
 
@@ -67,7 +68,5 @@ class ChaptersQuizItemAdapter(
         val chapterId: TextView = view.findViewById(R.id.textViewChapterChapter)
         val title: TextView = view.findViewById(R.id.textViewChapterTitle)
         val chapterCard: CardView = view.findViewById(R.id.cardViewSection)
-
-        val chapter_text = view.resources.getString(R.string.chapter_id_text)
     }
 }
