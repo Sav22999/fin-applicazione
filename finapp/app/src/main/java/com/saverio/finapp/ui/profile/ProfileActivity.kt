@@ -238,7 +238,7 @@ class ProfileActivity : AppCompatActivity() {
                     this,
                     DatePickerDialog.OnDateSetListener { view, year, month, dayOfMonth ->
                         born.setText(
-                            "$year-($month+1)-$dayOfMonth"
+                            "$year-${month+1}-$dayOfMonth"
                         )
                     },
                     today.get(Calendar.YEAR),
