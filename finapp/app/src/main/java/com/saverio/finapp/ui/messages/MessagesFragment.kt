@@ -67,7 +67,9 @@ class MessagesFragment : Fragment() {
         )
 
         swipeRefreshLayout.setOnRefreshListener {
-            getMessagesSections(startTask = false)
+            //getMessagesSections(startTask = false)
+            swipeRefreshLayout.isRefreshing = false
+            load(startTask = false)
         }
 
         binding.imageViewAllDiscussionsHelp.setOnClickListener {
@@ -81,7 +83,7 @@ class MessagesFragment : Fragment() {
         return root
     }
 
-    fun load() {
+    fun load(startTask: Boolean = true) {
         val networkConnection = NetworkConnection(requireContext())
         networkConnection.observe(this, Observer { isConnected ->
             connected = isConnected
@@ -96,7 +98,7 @@ class MessagesFragment : Fragment() {
                         binding.buttonLoginMessages.isGone = true
                         binding.noLoggedMessagesText.isGone = true
                         binding.messagesItemsList.isGone = false
-                        getMessagesSections(startTask = true)
+                        getMessagesSections(startTask = startTask)
                     } else {
                         //no logged
                         binding.noMessagesAvailableText.isGone = true
@@ -225,7 +227,7 @@ class MessagesFragment : Fragment() {
                 binding.messagesItemsList.visibility = View.GONE
                 binding.noMessagesAvailableText.isGone = false
             }
-        }catch (e:Exception) {
+        } catch (e: Exception) {
 
         }
     }
