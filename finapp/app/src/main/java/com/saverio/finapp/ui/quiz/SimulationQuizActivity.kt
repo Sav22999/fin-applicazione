@@ -80,7 +80,7 @@ class SimulationQuizActivity : AppCompatActivity() {
         val textViewTimePassed: TextView = findViewById(R.id.textViewTimePassed)
         textViewTimePassed.isGone = false
         textViewTimePassed.text =
-            getString(R.string.time_spent_details_results_text, getTimeFormatted(passed = 787))
+            getString(R.string.time_residual_details_results_text, getTimeFormatted(passed = 787))
         setProgressBar(passed = 787)
 
         val textViewQuestionNumber: TextView = findViewById(R.id.textViewQuestionNumberSimulation)
