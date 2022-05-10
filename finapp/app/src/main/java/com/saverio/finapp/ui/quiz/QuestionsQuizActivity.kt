@@ -319,6 +319,8 @@ class QuestionsQuizActivity : AppCompatActivity() {
     }
 
     fun checkFirstRun() {
+        val buttonCheck: Button = findViewById(R.id.buttonCheck)
+        buttonCheck.isGone = true
         val constraintLayoutFirstRunQuizActivity: ConstraintLayout =
             findViewById(R.id.constraintLayoutFirstRunQuiz)
         if (getVariable(FIRST_RUN_QUIZ, default = true)!!) {

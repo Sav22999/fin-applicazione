@@ -38,10 +38,7 @@ class MistakesQuizItemAdapter(
         val item = items[position]
 
         holder.chapterIdText.text =
-            holder.itemView.resources.getString(
-                R.string.chapter_id_text,
-                item.question_id.toString()
-            )
+            holder.itemView.resources.getString(R.string.question_n_text, item.question_id)
 
         val databaseHandler = DatabaseHandler(context)
 

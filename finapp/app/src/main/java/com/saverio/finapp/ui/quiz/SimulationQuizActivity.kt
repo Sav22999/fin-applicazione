@@ -384,7 +384,7 @@ class SimulationQuizActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        if (getVariable(FIRST_RUN_SIMULATION, default = false)!!) {
+        if (getVariable(FIRST_RUN_SIMULATION, default = false) == false) {
             val builder: AlertDialog.Builder = AlertDialog.Builder(this)
             builder.setTitle(R.string.closing_alert_dialog_title)
             builder.setMessage(R.string.sure_to_close_and_cancel_simulation_alert_dialog_text)
