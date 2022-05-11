@@ -56,7 +56,7 @@ class AllMessagesItemAdapter(
             holder.constraintLayoutUser.isGone = true
             holder.sentFromMe.text = holder.itemView.resources.getString(
                 R.string.sent_message_text,
-                item.username,
+                holder.itemView.resources.getString(R.string.you_message_text),
                 item.datetime
             )
             holder.textViewFromMe.text = item.text
