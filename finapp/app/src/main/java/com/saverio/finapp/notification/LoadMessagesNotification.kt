@@ -68,15 +68,15 @@ class LoadMessagesNotification {
                         responseList.messages?.get(responseList.messages.size - 1)?.datetime//section datetime || we took the datetime of the last element
                     if (currentSectionDatetime == null) currentSectionDatetime = currentDatetime
 
-                    println(
+                    /*println(
                         "section: $section || currentDate: ${currentSectionDatetime} || datetimeSaved: ${
                             getDatetime(
                                 "datetime_$section"
                             )
                         }"
-                    )
+                    )*/
                     val tempMessage = responseList.messages?.get(responseList.messages.size - 1)
-                    println("tempMessage?.username = ${tempMessage?.username}")
+                    //println("tempMessage?.username = ${tempMessage?.username}")
                     if (getDatetime("datetime_$section") != currentSectionDatetime && getUsername() != tempMessage?.username) {
                         //send notification only if the saved date is different to the current date AND the username is not the same of login (so, it's not a message from the same user)
                         //println("^^^^ New message in section $section ^^^^")

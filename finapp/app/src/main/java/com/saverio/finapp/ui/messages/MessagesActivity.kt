@@ -171,8 +171,10 @@ class MessagesActivity : AppCompatActivity() {
     fun sendMessage(reply_to: Int = -1, text: String, section_id: String) {
         val editTextMessage: EditText = findViewById(R.id.editTextMessageText)
         val buttonSend: Button = findViewById(R.id.buttonSendMessage)
+        val sendingTextView: TextView = findViewById(R.id.textViewSendingMessage)
         editTextMessage.isEnabled = false
         buttonSend.isEnabled = false
+        sendingTextView.isGone = false
         val call: Call<PostMessageResponseList> =
             ApiClient.client.postMessageInfo(
                 userid = getUserid(),
@@ -196,6 +198,7 @@ class MessagesActivity : AppCompatActivity() {
 
                     editTextMessage.isEnabled = true
                     buttonSend.isEnabled = true
+                    sendingTextView.isGone = true
 
                     getAllMessages(startTask = false, section_id = section_id)
                 }

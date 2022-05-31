@@ -138,6 +138,7 @@
     <string name="reply_to_message_text">Rispondi</string>
     <string name="send_message_text">Invia</string>
     <string name="digit_something_text">Scrivi un messaggio…</string>
+    <string name="sending_message_text">Invio in corso…</string>
     <string name="chapter_section_text">Capitolo %d · Sezione %s</string>
 
     <!--Account section-->

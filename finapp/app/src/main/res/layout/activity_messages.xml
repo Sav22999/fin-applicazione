@@ -52,7 +52,7 @@
         android:backgroundTint="?android:attr/colorBackground"
         android:paddingStart="10dp"
         android:paddingTop="10dp"
-        android:paddingEnd="10dp"
+        android:paddingEnd="5dp"
         android:paddingBottom="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -62,6 +62,7 @@
             android:id="@+id/buttonSendMessage"
             android:layout_width="40dp"
             android:layout_height="40dp"
+            android:layout_marginEnd="5dp"
             android:background="@drawable/border_radius_25dp"
             android:backgroundTint="?attr/colorPrimary"
             android:contentDescription="@string/send_message_text"
@@ -69,11 +70,9 @@
             android:visibility="gone"
             app:icon="@drawable/ic_send"
             app:iconGravity="end"
-            app:iconPadding="0dp"
             app:iconTint="?attr/colorOnPrimary"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/textViewSendingMessage"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/no_logged_messages_text"
             tools:ignore="TouchTargetSizeCheck"
             tools:visibility="visible" />
 
@@ -89,11 +88,25 @@
             android:hint="@string/digit_something_text"
             android:inputType="textMultiLine|text"
             android:padding="10dp"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/textViewSendingMessage"
             app:layout_constraintEnd_toStartOf="@+id/buttonSendMessage"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:ignore="TouchTargetSizeCheck" />
+
+        <TextView
+            android:id="@+id/textViewSendingMessage"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:text="@string/sending_message_text"
+            android:textColor="?attr/colorOnTertiary"
+            android:textSize="8sp"
+            android:textStyle="italic"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:visibility="visible" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
