@@ -14,3 +14,5 @@ This app is not related with FIN (Federazione Italiana Nuoto), it's totally open
 
 To read more about the developing of the app, or its features, please read the final report (in Italian) that you can find in the "Release" section.
 You can download the .apk file in the same section.
+
+After the exam, some features (such as the sending of messages) could be disabled via server.
