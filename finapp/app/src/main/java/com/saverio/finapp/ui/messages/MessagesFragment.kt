@@ -97,7 +97,9 @@ class MessagesFragment : Fragment() {
                         binding.noMessagesAvailableText.isGone = false
                         binding.buttonLoginMessages.isGone = true
                         binding.noLoggedMessagesText.isGone = true
-                        binding.messagesItemsList.isGone = false
+                        binding.noMessagesAvailableText.text =
+                            getString(R.string.loading_discussions_text)
+                        binding.messagesItemsList.isGone = true
                         getMessagesSections(startTask = startTask)
                     } else {
                         //no logged
@@ -144,42 +146,47 @@ class MessagesFragment : Fragment() {
                         response: Response<MessagesSectionsList>?
                     ) {
                         //println("Response:\n" + response!!.body()!!)
+                        try {
+                            val currentFragmentCondition =
+                                (activity as MainActivity).currentFragment == "messages"
+                            if (response!!.isSuccessful && response.body() != null && currentFragmentCondition) {
+                                val responseList = response.body()!!
 
-                        if (response!!.isSuccessful && response.body() != null) {
-                            val responseList = response.body()!!
+                                val databaseHandler = DatabaseHandler(requireContext())
+                                val allSectionsSaved = databaseHandler.getSections()
 
-                            val databaseHandler = DatabaseHandler(requireContext())
-                            val allSectionsSaved = databaseHandler.getSections()
-
-                            var sectionsJoined = ArrayList<String>()
-                            var sectionsNotJoinedToPass = ArrayList<SectionsModel>()
-                            var sectionsToPass = ArrayList<SectionsModel>()
-                            responseList.sections?.forEach {
-                                val sectionTempSaved =
-                                    databaseHandler.getSection(section = it.section)
-                                sectionsToPass.add(sectionTempSaved)
-                                sectionsJoined.add(it.section)
-                            }
-                            allSectionsSaved.forEach {
-                                if (sectionsJoined.indexOf(it.section) != -1) {
-                                    //present in the "sectionsJoined" database, so don't add to the "general sections messages"
-                                    //(already added in the recyclerview "joined")
-                                } else {
-                                    //add to the other recyclerview ("noJoined")
+                                var sectionsJoined = ArrayList<String>()
+                                var sectionsNotJoinedToPass = ArrayList<SectionsModel>()
+                                var sectionsToPass = ArrayList<SectionsModel>()
+                                responseList.sections?.forEach {
                                     val sectionTempSaved =
                                         databaseHandler.getSection(section = it.section)
                                     sectionsToPass.add(sectionTempSaved)
+                                    sectionsJoined.add(it.section)
                                 }
+                                allSectionsSaved.forEach {
+                                    if (sectionsJoined.indexOf(it.section) != -1) {
+                                        //present in the "sectionsJoined" database, so don't add to the "general sections messages"
+                                        //(already added in the recyclerview "joined")
+                                    } else {
+                                        //add to the other recyclerview ("noJoined")
+                                        val sectionTempSaved =
+                                            databaseHandler.getSection(section = it.section)
+                                        sectionsToPass.add(sectionTempSaved)
+                                    }
+                                }
+                                databaseHandler.close()
+
+                                swipeRefreshLayout.isRefreshing = false
+
+                                this@MessagesFragment.setupRecyclerView(
+                                    clear = true,
+                                    getSections = sectionsToPass,
+                                    sectionsJoined = sectionsJoined
+                                )
                             }
-                            databaseHandler.close()
-
-                            swipeRefreshLayout.isRefreshing = false
-
-                            this@MessagesFragment.setupRecyclerView(
-                                clear = true,
-                                getSections = sectionsToPass,
-                                sectionsJoined = sectionsJoined
-                            )
+                        } catch (e: Exception) {
+                            Log.v("Exception", e.toString())
                         }
                     }
 
@@ -211,6 +218,8 @@ class MessagesFragment : Fragment() {
         try {
             if (clear) binding.messagesItemsList.adapter = null
 
+            binding.noMessagesAvailableText.text =
+                getString(R.string.no_messages_available_text)
             if (getSections.size > 0) {
                 binding.messagesItemsList.visibility = View.VISIBLE
                 binding.noMessagesAvailableText.isGone = true
